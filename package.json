@@ -1,9 +1,6 @@
 {
-  "name": "monorepo-template",
+  "name": "dododo",
   "version": "0.0.0",
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {},
   "devDependencies": {
     "@tsconfig/node22": "^22",
@@ -11,5 +8,9 @@
   },
   "dependencies": {
     "sst": "^3"
+  },
+  "packageManager": "pnpm@10.6.1",
+  "volta": {
+    "node": "22.11.0"
   }
 }
