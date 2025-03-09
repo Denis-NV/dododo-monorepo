@@ -1,7 +1,9 @@
 {
   "name": "dododo",
   "version": "0.0.0",
-  "scripts": {},
+  "scripts": {
+    "sso": "aws sso login --sso-session=dododo"
+  },
   "devDependencies": {
     "@tsconfig/node22": "^22",
     "typescript": "^5"
