@@ -10,7 +10,11 @@ declare module "sst" {
       "type": "sst.aws.Function"
       "url": string
     }
-    "MyBucket": {
+    "dododoAssesment": {
+      "type": "sst.aws.Remix"
+      "url": string
+    }
+    "dododoStorage": {
       "name": string
       "type": "sst.aws.Bucket"
     }
