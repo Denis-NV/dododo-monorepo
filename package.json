@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "sso": "aws sso login --sso-session=dododo",
-    "dev": "pnpm sst dev"
+    "dev": "pnpm sst dev",
+    "deploy:prod": "pnpm sst deploy --stage production"
   },
   "devDependencies": {
     "@tsconfig/node22": "^22",
