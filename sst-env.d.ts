@@ -5,9 +5,8 @@
 
 declare module "sst" {
   export interface Resource {
-    "MyApi": {
-      "name": string
-      "type": "sst.aws.Function"
+    "dododoApi": {
+      "type": "sst.aws.ApiGatewayV2"
       "url": string
     }
     "dododoAssesment": {

@@ -25,6 +25,9 @@ importers:
         specifier: '*'
         version: 3.9.31
     devDependencies:
+      '@types/aws-lambda':
+        specifier: ^8
+        version: 8.10.147
       vitest:
         specifier: ^2
         version: 2.1.9(@types/node@22.13.9)
