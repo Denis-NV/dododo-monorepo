@@ -1,13 +1,8 @@
-// import { bucket } from "./storage";
-
-// export const myApi = new sst.aws.Function("MyApi", {
-//   url: true,
-//   link: [bucket],
-//   handler: "packages/functions/src/api.handler"
-// });
+import { bucket } from "./storage";
 
 // Create the API
 export const api = new sst.aws.ApiGatewayV2("dododoApi", {
+  link: [bucket],
   transform: {
     route: {
       // handler: {
@@ -20,5 +15,4 @@ export const api = new sst.aws.ApiGatewayV2("dododoApi", {
   },
 });
 
-api.route("POST /assesment", "packages/functions/src/createAssesment.main");
-api.route("GET /assesment", "packages/functions/src/listAssesments.main");
+api.route("ANY /{proxy+}", "packages/functions/src/api/server.handler");

@@ -4,9 +4,12 @@
   "type": "module",
   "dependencies": {
     "@dododo/core": "workspace:*",
+    "express": "^4.21.2",
+    "serverless-http": "^3.2.0",
     "sst": "*"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8"
+    "@types/aws-lambda": "^8",
+    "@types/express": "^5.0.0"
   }
 }
