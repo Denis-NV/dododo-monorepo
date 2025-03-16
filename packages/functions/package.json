@@ -4,12 +4,15 @@
   "type": "module",
   "dependencies": {
     "@dododo/core": "workspace:*",
+    "drizzle-orm": "^0.40.0",
     "express": "^4.21.2",
+    "postgres": "^3.4.5",
     "serverless-http": "^3.2.0",
     "sst": "*"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8",
-    "@types/express": "^5.0.0"
+    "@types/express": "^5.0.0",
+    "drizzle-kit": "^0.30.5"
   }
 }

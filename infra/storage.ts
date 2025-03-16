@@ -13,7 +13,7 @@ sst.Linkable.wrap(supabase.Project, function (project) {
       password: project.databasePassword,
       host: $interpolate`aws-0-${project.region}.pooler.supabase.com`,
       database: "postgres",
-      port: 5432,
+      port: 6543,
     },
   };
 });
@@ -26,6 +26,7 @@ export const database: supabase.Project = new supabase.Project(
     organizationId: SupbaseOrgId.value,
     databasePassword: new random.RandomString("DatabasePassword", {
       length: 16,
+      special: false,
     }).result,
   }
 );
