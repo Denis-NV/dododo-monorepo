@@ -1,0 +1,1678 @@
+{
+    "version": 3,
+    "checkpoint": {
+        "stack": "organization/dododo/denis",
+        "latest": {
+            "manifest": {
+                "time": "2025-03-15T12:35:02.381462Z",
+                "magic": "77be084e65c763fde87b290a0a6ba5aaacad687cde41d20d76768df34b0db77a",
+                "version": "v3.146.0"
+            },
+            "secrets_providers": {
+                "type": "passphrase",
+                "state": {
+                    "salt": "v1:0Mn4hM+zStA=:v1:0jEM8pB6z5gTs2jS:jPL2t6OPOJpmtX2RbDBjPvzdCCx7Fg=="
+                }
+            },
+            "resources": [
+                {
+                    "urn": "urn:pulumi:denis::dododo::pulumi:pulumi:Stack::dododo-denis",
+                    "custom": false,
+                    "type": "pulumi:pulumi:Stack",
+                    "outputs": {
+                        "Region": "eu-west-2",
+                        "_protect": false,
+                        "uploads": "dododo-denis-dododostoragebucket-fcvdxnhz"
+                    },
+                    "created": "2025-03-13T16:54:04.69121Z",
+                    "modified": "2025-03-13T16:54:04.69121Z",
+                    "sourcePosition": "project:///../../platform/node_modules/@pulumi/runtime/stack.ts#38,23"
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:Bucket::dododoStorage",
+                    "custom": false,
+                    "type": "sst:aws:Bucket",
+                    "parent": "urn:pulumi:denis::dododo::pulumi:pulumi:Stack::dododo-denis",
+                    "created": "2025-03-13T16:54:07.702861Z",
+                    "modified": "2025-03-13T16:54:07.702861Z",
+                    "sourcePosition": "project:///../../../file:/Users/denis/Sites/dododo-monorepo/.sst/platform/src/components/aws/bucket.ts#538,5"
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:sst:LinkRef::dododoAssesmentLinkRef",
+                    "custom": false,
+                    "type": "sst:sst:LinkRef",
+                    "outputs": {
+                        "properties": {
+                            "type": "sst.aws.Remix",
+                            "url": "http://url-unavailable-in-dev.mode"
+                        },
+                        "target": "dododoAssesment"
+                    },
+                    "parent": "urn:pulumi:denis::dododo::pulumi:pulumi:Stack::dododo-denis",
+                    "created": "2025-03-13T16:54:07.699891Z",
+                    "modified": "2025-03-13T16:54:07.699891Z",
+                    "sourcePosition": "project:///../../../file:/Users/denis/Sites/dododo-monorepo/.sst/platform/src/components/link.ts#25,7"
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:Remix::dododoAssesment",
+                    "custom": false,
+                    "type": "sst:aws:Remix",
+                    "outputs": {
+                        "_dev": {
+                            "autostart": true,
+                            "aws": {
+                                "role": "arn:aws:iam::881490114773:role/dododo-denis-dododoAssesmentDevServerRole-rtkbbubm"
+                            },
+                            "command": "npm run dev",
+                            "directory": "packages/frontApp",
+                            "links": [
+                                "dododoStorage"
+                            ]
+                        },
+                        "_metadata": {
+                            "edge": false,
+                            "mode": "placeholder",
+                            "path": "packages/frontApp",
+                            "server": {
+                                "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                                "ciphertext": "v1:BY96bIxzO5FhcG7Q:VngcGSMYmXZ/B9cSqyyML3wJfnMyWbF2hiCekNSLZKh/m+a2jwq2HsMcrcerxc5i7qTeGxgkG8LFSCQNV80eRqhamqPUH2ZUSHwvWHrr9GBqJabpeuY/9bZVTcp7H+n/UGuUoByifNH+MEP4MzrfP6nqLyUf2RE="
+                            }
+                        }
+                    },
+                    "parent": "urn:pulumi:denis::dododo::pulumi:pulumi:Stack::dododo-denis",
+                    "created": "2025-03-13T16:54:07.709905Z",
+                    "modified": "2025-03-13T16:54:07.709905Z",
+                    "sourcePosition": "project:///../../../file:/Users/denis/Sites/dododo-monorepo/.sst/platform/src/components/aws/remix.ts#367,5"
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:sst:LinkRef::dododoApiLinkRef",
+                    "custom": false,
+                    "type": "sst:sst:LinkRef",
+                    "outputs": {
+                        "properties": {
+                            "type": "sst.aws.ApiGatewayV2",
+                            "url": "https://ets80ptgi7.execute-api.eu-west-2.amazonaws.com"
+                        },
+                        "target": "dododoApi"
+                    },
+                    "parent": "urn:pulumi:denis::dododo::pulumi:pulumi:Stack::dododo-denis",
+                    "created": "2025-03-14T07:06:26.722692Z",
+                    "modified": "2025-03-14T07:06:26.722692Z",
+                    "sourcePosition": "project:///../../../file:/Users/denis/Sites/dododo-monorepo/.sst/platform/src/components/link.ts#25,7"
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute::dododoApiRouteTzvnft",
+                    "custom": false,
+                    "type": "sst:aws:ApiGatewayV2LambdaRoute",
+                    "parent": "urn:pulumi:denis::dododo::pulumi:pulumi:Stack::dododo-denis",
+                    "created": "2025-03-15T12:08:47.029286Z",
+                    "modified": "2025-03-15T12:08:47.029286Z",
+                    "sourcePosition": "project:///../../../file:/Users/denis/Sites/dododo-monorepo/.sst/platform/src/components/aws/apigatewayv2-lambda-route.ts#51,5"
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2::dododoApi",
+                    "custom": false,
+                    "type": "sst:aws:ApiGatewayV2",
+                    "outputs": {
+                        "_hint": "https://ets80ptgi7.execute-api.eu-west-2.amazonaws.com"
+                    },
+                    "parent": "urn:pulumi:denis::dododo::pulumi:pulumi:Stack::dododo-denis",
+                    "created": "2025-03-14T07:06:26.728543Z",
+                    "modified": "2025-03-14T07:06:26.728543Z",
+                    "sourcePosition": "project:///../../../file:/Users/denis/Sites/dododo-monorepo/.sst/platform/src/components/aws/apigatewayv2.ts#683,5"
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:sst:LinkRef::dododoStorageLinkRef",
+                    "custom": false,
+                    "type": "sst:sst:LinkRef",
+                    "outputs": {
+                        "include": [
+                            {
+                                "actions": [
+                                    "s3:*"
+                                ],
+                                "resources": [
+                                    "arn:aws:s3:::dododo-denis-dododostoragebucket-fcvdxnhz",
+                                    "arn:aws:s3:::dododo-denis-dododostoragebucket-fcvdxnhz/*"
+                                ],
+                                "type": "aws.permission"
+                            }
+                        ],
+                        "properties": {
+                            "name": "dododo-denis-dododostoragebucket-fcvdxnhz",
+                            "type": "sst.aws.Bucket"
+                        },
+                        "target": "dododoStorage"
+                    },
+                    "parent": "urn:pulumi:denis::dododo::pulumi:pulumi:Stack::dododo-denis",
+                    "created": "2025-03-13T16:54:07.701406Z",
+                    "modified": "2025-03-13T16:54:07.701406Z",
+                    "sourcePosition": "project:///../../../file:/Users/denis/Sites/dododo-monorepo/.sst/platform/src/components/link.ts#25,7"
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::pulumi:providers:aws::default_6_66_2",
+                    "custom": true,
+                    "id": "f6381699-2671-4c47-b979-1bae4b8048a7",
+                    "type": "pulumi:providers:aws",
+                    "inputs": {
+                        "__internal": {},
+                        "defaultTags": "{\"tags\":{\"sst:app\":\"dododo\",\"sst:stage\":\"denis\"}}",
+                        "region": "eu-west-2",
+                        "skipCredentialsValidation": "false",
+                        "skipRegionValidation": "true",
+                        "version": "6.66.2"
+                    },
+                    "outputs": {
+                        "defaultTags": "{\"tags\":{\"sst:app\":\"dododo\",\"sst:stage\":\"denis\"}}",
+                        "region": "eu-west-2",
+                        "skipCredentialsValidation": "false",
+                        "skipRegionValidation": "true",
+                        "version": "6.66.2"
+                    },
+                    "created": "2025-03-13T16:54:07.704579Z",
+                    "modified": "2025-03-13T16:54:07.704579Z"
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function::dododoApiRouteTzvnftHandler",
+                    "custom": false,
+                    "type": "sst:aws:Function",
+                    "outputs": {
+                        "_live": {
+                            "copyFiles": [],
+                            "functionID": "dododoApiRouteTzvnftHandler",
+                            "handler": "packages/functions/src/api/server.handler",
+                            "links": [
+                                "dododoStorage"
+                            ],
+                            "runtime": "nodejs20.x"
+                        },
+                        "_metadata": {
+                            "dev": true,
+                            "handler": "packages/functions/src/api/server.handler"
+                        }
+                    },
+                    "parent": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute::dododoApiRouteTzvnft",
+                    "created": "2025-03-15T12:08:47.221051Z",
+                    "modified": "2025-03-15T12:08:47.221051Z",
+                    "sourcePosition": "project:///../../../file:/Users/denis/Sites/dododo-monorepo/.sst/platform/src/components/aws/function.ts#1334,5"
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::pulumi:providers:random::default_4_16_6",
+                    "custom": true,
+                    "id": "357689ce-86c2-402d-b6a5-e2ff45b88439",
+                    "type": "pulumi:providers:random",
+                    "inputs": {
+                        "__internal": {},
+                        "version": "4.16.6"
+                    },
+                    "outputs": {
+                        "version": "4.16.6"
+                    },
+                    "created": "2025-03-13T16:54:07.901677Z",
+                    "modified": "2025-03-13T16:54:07.901677Z"
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:Remix$sst:aws:Function::dododoAssesmentDevServer",
+                    "custom": false,
+                    "type": "sst:aws:Function",
+                    "outputs": {
+                        "_metadata": {
+                            "dev": false,
+                            "handler": "index.handler"
+                        }
+                    },
+                    "parent": "urn:pulumi:denis::dododo::sst:aws:Remix::dododoAssesment",
+                    "created": "2025-03-13T16:54:07.902354Z",
+                    "modified": "2025-03-13T16:54:07.902354Z",
+                    "sourcePosition": "project:///../../../file:/Users/denis/Sites/dododo-monorepo/.sst/platform/src/components/aws/function.ts#1334,5"
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketV2:BucketV2::dododoStorageBucket",
+                    "custom": true,
+                    "id": "dododo-denis-dododostoragebucket-fcvdxnhz",
+                    "type": "aws:s3/bucketV2:BucketV2",
+                    "inputs": {
+                        "__defaults": [],
+                        "bucket": "dododo-denis-dododostoragebucket-fcvdxnhz",
+                        "forceDestroy": true,
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        }
+                    },
+                    "outputs": {
+                        "__meta": "{\"e2bfb730-ecaa-11e6-8f88-34363bc7c4c0\":{\"create\":1200000000000,\"delete\":3600000000000,\"read\":1200000000000,\"update\":1200000000000}}",
+                        "accelerationStatus": "",
+                        "acl": null,
+                        "arn": "arn:aws:s3:::dododo-denis-dododostoragebucket-fcvdxnhz",
+                        "bucket": "dododo-denis-dododostoragebucket-fcvdxnhz",
+                        "bucketDomainName": "dododo-denis-dododostoragebucket-fcvdxnhz.s3.amazonaws.com",
+                        "bucketPrefix": "",
+                        "bucketRegionalDomainName": "dododo-denis-dododostoragebucket-fcvdxnhz.s3.eu-west-2.amazonaws.com",
+                        "corsRules": [],
+                        "forceDestroy": true,
+                        "grants": [
+                            {
+                                "id": "a23251fe35efe2c2895641caa9bc03810f7ec219e7f87404fa482eabdf916769",
+                                "permissions": [
+                                    "FULL_CONTROL"
+                                ],
+                                "type": "CanonicalUser",
+                                "uri": ""
+                            }
+                        ],
+                        "hostedZoneId": "Z3GKZC51ZF0DB4",
+                        "id": "dododo-denis-dododostoragebucket-fcvdxnhz",
+                        "lifecycleRules": [],
+                        "loggings": [],
+                        "objectLockConfiguration": null,
+                        "objectLockEnabled": false,
+                        "policy": "",
+                        "region": "eu-west-2",
+                        "replicationConfigurations": [],
+                        "requestPayer": "BucketOwner",
+                        "serverSideEncryptionConfigurations": [
+                            {
+                                "rules": [
+                                    {
+                                        "applyServerSideEncryptionByDefaults": [
+                                            {
+                                                "kmsMasterKeyId": "",
+                                                "sseAlgorithm": "AES256"
+                                            }
+                                        ],
+                                        "bucketKeyEnabled": false
+                                    }
+                                ]
+                            }
+                        ],
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "versionings": [
+                            {
+                                "enabled": false,
+                                "mfaDelete": false
+                            }
+                        ],
+                        "websiteDomain": null,
+                        "websiteEndpoint": null,
+                        "websites": []
+                    },
+                    "parent": "urn:pulumi:denis::dododo::sst:aws:Bucket::dododoStorage",
+                    "provider": "urn:pulumi:denis::dododo::pulumi:providers:aws::default_6_66_2::f6381699-2671-4c47-b979-1bae4b8048a7",
+                    "propertyDependencies": {
+                        "bucket": [],
+                        "forceDestroy": []
+                    },
+                    "created": "2025-03-13T16:54:09.869974Z",
+                    "modified": "2025-03-13T16:54:09.869974Z",
+                    "sourcePosition": "project:///../../../file:/Users/denis/Sites/dododo-monorepo/.sst/platform/src/components/aws/bucket.ts#570,14",
+                    "ignoreChanges": [
+                        "bucket"
+                    ]
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::random:index/randomBytes:RandomBytes::LambdaEncryptionKey",
+                    "custom": true,
+                    "id": "O3GbOJUv7rjVp3qljsdu61q0VB+uuS4rL48SscB581U=",
+                    "type": "random:index/randomBytes:RandomBytes",
+                    "inputs": {
+                        "length": 32
+                    },
+                    "outputs": {
+                        "base64": {
+                            "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                            "ciphertext": "v1:PncwGiK+PGPKfQf7:LpbDeO14/OedJwYoDbpnswZZYz+u4ROGtVs6piGT+6ekFyHSxe6XaZZ4tnN+EvRbqSAJqhi5IzLQPDH36f4="
+                        },
+                        "hex": {
+                            "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                            "ciphertext": "v1:5YgDlRbrAPvbQtSn:6LsAxnODSxBfCvKxINTZA2qqIZDLWXdYiZr1+5tIKPCZVZ8fRKR91rdim8Or1gxb8YcKp4mFrgKt270OLxy6TWrnjHPRlUp3gv5dXCoz61BpOQ=="
+                        },
+                        "length": 32
+                    },
+                    "parent": "urn:pulumi:denis::dododo::pulumi:pulumi:Stack::dododo-denis",
+                    "provider": "urn:pulumi:denis::dododo::pulumi:providers:random::default_4_16_6::357689ce-86c2-402d-b6a5-e2ff45b88439",
+                    "propertyDependencies": {
+                        "length": []
+                    },
+                    "additionalSecretOutputs": [
+                        "base64",
+                        "hex"
+                    ],
+                    "created": "2025-03-13T16:54:07.910331Z",
+                    "modified": "2025-03-13T16:54:07.910331Z",
+                    "sourcePosition": "project:///../../../file:/Users/denis/Sites/dododo-monorepo/.sst/platform/src/util/lazy.ts#8,16"
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2$aws:cloudwatch/logGroup:LogGroup::dododoApiAccessLog",
+                    "custom": true,
+                    "id": "/aws/vendedlogs/apis/dododo-denis-dododoApi-zvktdzef",
+                    "type": "aws:cloudwatch/logGroup:LogGroup",
+                    "inputs": {
+                        "__defaults": [
+                            "skipDestroy"
+                        ],
+                        "name": "/aws/vendedlogs/apis/dododo-denis-dododoApi-zvktdzef",
+                        "retentionInDays": 30,
+                        "skipDestroy": false,
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        }
+                    },
+                    "outputs": {
+                        "arn": "arn:aws:logs:eu-west-2:881490114773:log-group:/aws/vendedlogs/apis/dododo-denis-dododoApi-zvktdzef",
+                        "id": "/aws/vendedlogs/apis/dododo-denis-dododoApi-zvktdzef",
+                        "kmsKeyId": "",
+                        "logGroupClass": "STANDARD",
+                        "name": "/aws/vendedlogs/apis/dododo-denis-dododoApi-zvktdzef",
+                        "namePrefix": "",
+                        "retentionInDays": 30,
+                        "skipDestroy": false,
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        }
+                    },
+                    "parent": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2::dododoApi",
+                    "provider": "urn:pulumi:denis::dododo::pulumi:providers:aws::default_6_66_2::f6381699-2671-4c47-b979-1bae4b8048a7",
+                    "propertyDependencies": {
+                        "name": [],
+                        "retentionInDays": []
+                    },
+                    "created": "2025-03-14T07:06:27.762951Z",
+                    "modified": "2025-03-14T07:06:27.762951Z",
+                    "sourcePosition": "project:///../../../file:/Users/denis/Sites/dododo-monorepo/.sst/platform/src/components/aws/apigatewayv2.ts#820,14",
+                    "ignoreChanges": [
+                        "name"
+                    ]
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2$aws:apigatewayv2/api:Api::dododoApiApi",
+                    "custom": true,
+                    "id": "ets80ptgi7",
+                    "type": "aws:apigatewayv2/api:Api",
+                    "inputs": {
+                        "__defaults": [
+                            "apiKeySelectionExpression",
+                            "routeSelectionExpression"
+                        ],
+                        "apiKeySelectionExpression": "$request.header.x-api-key",
+                        "corsConfiguration": {
+                            "__defaults": [],
+                            "allowHeaders": [
+                                "*"
+                            ],
+                            "allowMethods": [
+                                "*"
+                            ],
+                            "allowOrigins": [
+                                "*"
+                            ]
+                        },
+                        "name": "dododo-denis-dododoApiApi-uxtwwnkn",
+                        "protocolType": "HTTP",
+                        "routeSelectionExpression": "$request.method $request.path",
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        }
+                    },
+                    "outputs": {
+                        "apiEndpoint": "https://ets80ptgi7.execute-api.eu-west-2.amazonaws.com",
+                        "apiKeySelectionExpression": "$request.header.x-api-key",
+                        "arn": "arn:aws:apigateway:eu-west-2::/apis/ets80ptgi7",
+                        "body": null,
+                        "corsConfiguration": {
+                            "allowCredentials": false,
+                            "allowHeaders": [
+                                "*"
+                            ],
+                            "allowMethods": [
+                                "*"
+                            ],
+                            "allowOrigins": [
+                                "*"
+                            ],
+                            "exposeHeaders": null,
+                            "maxAge": 0
+                        },
+                        "credentialsArn": null,
+                        "description": "",
+                        "disableExecuteApiEndpoint": false,
+                        "executionArn": "arn:aws:execute-api:eu-west-2:881490114773:ets80ptgi7",
+                        "failOnWarnings": null,
+                        "id": "ets80ptgi7",
+                        "name": "dododo-denis-dododoApiApi-uxtwwnkn",
+                        "protocolType": "HTTP",
+                        "routeKey": null,
+                        "routeSelectionExpression": "$request.method $request.path",
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "target": null,
+                        "version": ""
+                    },
+                    "parent": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2::dododoApi",
+                    "provider": "urn:pulumi:denis::dododo::pulumi:providers:aws::default_6_66_2::f6381699-2671-4c47-b979-1bae4b8048a7",
+                    "propertyDependencies": {
+                        "corsConfiguration": [],
+                        "name": [],
+                        "protocolType": []
+                    },
+                    "created": "2025-03-14T07:06:28.363934Z",
+                    "modified": "2025-03-14T07:06:28.363934Z",
+                    "sourcePosition": "project:///../../../file:/Users/denis/Sites/dododo-monorepo/.sst/platform/src/components/aws/apigatewayv2.ts#806,14",
+                    "ignoreChanges": [
+                        "name"
+                    ]
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:Remix$sst:aws:Function$aws:cloudwatch/logGroup:LogGroup::dododoAssesmentDevServerLogGroup",
+                    "custom": true,
+                    "id": "/aws/lambda/dododo-denis-dododoAssesmentDevServerFunction-wcaexfhd",
+                    "type": "aws:cloudwatch/logGroup:LogGroup",
+                    "inputs": {
+                        "__defaults": [
+                            "skipDestroy"
+                        ],
+                        "name": "/aws/lambda/dododo-denis-dododoAssesmentDevServerFunction-wcaexfhd",
+                        "retentionInDays": 30,
+                        "skipDestroy": false,
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        }
+                    },
+                    "outputs": {
+                        "arn": "arn:aws:logs:eu-west-2:881490114773:log-group:/aws/lambda/dododo-denis-dododoAssesmentDevServerFunction-wcaexfhd",
+                        "id": "/aws/lambda/dododo-denis-dododoAssesmentDevServerFunction-wcaexfhd",
+                        "kmsKeyId": "",
+                        "logGroupClass": "STANDARD",
+                        "name": "/aws/lambda/dododo-denis-dododoAssesmentDevServerFunction-wcaexfhd",
+                        "namePrefix": "",
+                        "retentionInDays": 30,
+                        "skipDestroy": false,
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        }
+                    },
+                    "parent": "urn:pulumi:denis::dododo::sst:aws:Remix$sst:aws:Function::dododoAssesmentDevServer",
+                    "provider": "urn:pulumi:denis::dododo::pulumi:providers:aws::default_6_66_2::f6381699-2671-4c47-b979-1bae4b8048a7",
+                    "propertyDependencies": {
+                        "name": [],
+                        "retentionInDays": []
+                    },
+                    "created": "2025-03-13T16:54:08.56339Z",
+                    "modified": "2025-03-13T16:54:08.56339Z",
+                    "sourcePosition": "project:///../../platform/node_modules/@pulumi/cloudwatch/logGroup.ts#139,9",
+                    "ignoreChanges": [
+                        "name"
+                    ]
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function$aws:cloudwatch/logGroup:LogGroup::dododoApiRouteTzvnftHandlerLogGroup",
+                    "custom": true,
+                    "id": "/aws/lambda/dododo-denis-dododoApiRouteTzvnftHandlerFunction-hhtfmwzx",
+                    "type": "aws:cloudwatch/logGroup:LogGroup",
+                    "inputs": {
+                        "__defaults": [
+                            "skipDestroy"
+                        ],
+                        "name": "/aws/lambda/dododo-denis-dododoApiRouteTzvnftHandlerFunction-hhtfmwzx",
+                        "retentionInDays": 30,
+                        "skipDestroy": false,
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        }
+                    },
+                    "outputs": {
+                        "arn": "arn:aws:logs:eu-west-2:881490114773:log-group:/aws/lambda/dododo-denis-dododoApiRouteTzvnftHandlerFunction-hhtfmwzx",
+                        "id": "/aws/lambda/dododo-denis-dododoApiRouteTzvnftHandlerFunction-hhtfmwzx",
+                        "kmsKeyId": "",
+                        "logGroupClass": "STANDARD",
+                        "name": "/aws/lambda/dododo-denis-dododoApiRouteTzvnftHandlerFunction-hhtfmwzx",
+                        "namePrefix": "",
+                        "retentionInDays": 30,
+                        "skipDestroy": false,
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        }
+                    },
+                    "parent": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function::dododoApiRouteTzvnftHandler",
+                    "provider": "urn:pulumi:denis::dododo::pulumi:providers:aws::default_6_66_2::f6381699-2671-4c47-b979-1bae4b8048a7",
+                    "propertyDependencies": {
+                        "name": [],
+                        "retentionInDays": []
+                    },
+                    "created": "2025-03-15T12:08:48.081565Z",
+                    "modified": "2025-03-15T12:08:48.081565Z",
+                    "sourcePosition": "project:///../../platform/node_modules/@pulumi/cloudwatch/logGroup.ts#139,9",
+                    "ignoreChanges": [
+                        "name"
+                    ]
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketPublicAccessBlock:BucketPublicAccessBlock::dododoStoragePublicAccessBlock",
+                    "custom": true,
+                    "id": "dododo-denis-dododostoragebucket-fcvdxnhz",
+                    "type": "aws:s3/bucketPublicAccessBlock:BucketPublicAccessBlock",
+                    "inputs": {
+                        "__defaults": [],
+                        "blockPublicAcls": true,
+                        "blockPublicPolicy": true,
+                        "bucket": "dododo-denis-dododostoragebucket-fcvdxnhz",
+                        "ignorePublicAcls": true,
+                        "restrictPublicBuckets": true
+                    },
+                    "outputs": {
+                        "blockPublicAcls": true,
+                        "blockPublicPolicy": true,
+                        "bucket": "dododo-denis-dododostoragebucket-fcvdxnhz",
+                        "id": "dododo-denis-dododostoragebucket-fcvdxnhz",
+                        "ignorePublicAcls": true,
+                        "restrictPublicBuckets": true
+                    },
+                    "parent": "urn:pulumi:denis::dododo::sst:aws:Bucket::dododoStorage",
+                    "dependencies": [
+                        "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketV2:BucketV2::dododoStorageBucket"
+                    ],
+                    "provider": "urn:pulumi:denis::dododo::pulumi:providers:aws::default_6_66_2::f6381699-2671-4c47-b979-1bae4b8048a7",
+                    "propertyDependencies": {
+                        "blockPublicAcls": [],
+                        "blockPublicPolicy": [],
+                        "bucket": [
+                            "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketV2:BucketV2::dododoStorageBucket"
+                        ],
+                        "ignorePublicAcls": [],
+                        "restrictPublicBuckets": []
+                    },
+                    "created": "2025-03-13T16:54:10.045063Z",
+                    "modified": "2025-03-13T16:54:10.045063Z",
+                    "sourcePosition": "project:///../../../file:/Users/denis/Sites/dododo-monorepo/.sst/platform/src/components/aws/bucket.ts#605,14"
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketCorsConfigurationV2:BucketCorsConfigurationV2::dododoStorageCors",
+                    "custom": true,
+                    "id": "dododo-denis-dododostoragebucket-fcvdxnhz",
+                    "type": "aws:s3/bucketCorsConfigurationV2:BucketCorsConfigurationV2",
+                    "inputs": {
+                        "__defaults": [],
+                        "bucket": "dododo-denis-dododostoragebucket-fcvdxnhz",
+                        "corsRules": [
+                            {
+                                "__defaults": [],
+                                "allowedHeaders": [
+                                    "*"
+                                ],
+                                "allowedMethods": [
+                                    "DELETE",
+                                    "GET",
+                                    "HEAD",
+                                    "POST",
+                                    "PUT"
+                                ],
+                                "allowedOrigins": [
+                                    "*"
+                                ],
+                                "maxAgeSeconds": 0
+                            }
+                        ]
+                    },
+                    "outputs": {
+                        "bucket": "dododo-denis-dododostoragebucket-fcvdxnhz",
+                        "corsRules": [
+                            {
+                                "allowedHeaders": [
+                                    "*"
+                                ],
+                                "allowedMethods": [
+                                    "DELETE",
+                                    "GET",
+                                    "HEAD",
+                                    "POST",
+                                    "PUT"
+                                ],
+                                "allowedOrigins": [
+                                    "*"
+                                ],
+                                "exposeHeaders": [],
+                                "id": "",
+                                "maxAgeSeconds": 0
+                            }
+                        ],
+                        "expectedBucketOwner": "",
+                        "id": "dododo-denis-dododostoragebucket-fcvdxnhz"
+                    },
+                    "parent": "urn:pulumi:denis::dododo::sst:aws:Bucket::dododoStorage",
+                    "dependencies": [
+                        "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketV2:BucketV2::dododoStorageBucket"
+                    ],
+                    "provider": "urn:pulumi:denis::dododo::pulumi:providers:aws::default_6_66_2::f6381699-2671-4c47-b979-1bae4b8048a7",
+                    "propertyDependencies": {
+                        "bucket": [
+                            "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketV2:BucketV2::dododoStorageBucket"
+                        ],
+                        "corsRules": []
+                    },
+                    "created": "2025-03-13T16:54:10.379801Z",
+                    "modified": "2025-03-13T16:54:10.379801Z",
+                    "sourcePosition": "project:///../../platform/node_modules/@pulumi/s3/bucketCorsConfigurationV2.ts#132,9"
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2$aws:apigatewayv2/stage:Stage::dododoApiStage",
+                    "custom": true,
+                    "id": "$default",
+                    "type": "aws:apigatewayv2/stage:Stage",
+                    "inputs": {
+                        "__defaults": [],
+                        "accessLogSettings": {
+                            "__defaults": [],
+                            "destinationArn": "arn:aws:logs:eu-west-2:881490114773:log-group:/aws/vendedlogs/apis/dododo-denis-dododoApi-zvktdzef",
+                            "format": "{\"requestTime\":\"\\\"$context.requestTime\\\"\",\"requestId\":\"\\\"$context.requestId\\\"\",\"httpMethod\":\"\\\"$context.httpMethod\\\"\",\"path\":\"\\\"$context.path\\\"\",\"routeKey\":\"\\\"$context.routeKey\\\"\",\"status\":\"$context.status\",\"responseLatency\":\"$context.responseLatency\",\"integrationRequestId\":\"\\\"$context.integration.requestId\\\"\",\"integrationStatus\":\"\\\"$context.integration.status\\\"\",\"integrationLatency\":\"\\\"$context.integration.latency\\\"\",\"integrationServiceStatus\":\"\\\"$context.integration.integrationStatus\\\"\",\"ip\":\"\\\"$context.identity.sourceIp\\\"\",\"userAgent\":\"\\\"$context.identity.userAgent\\\"\"}"
+                        },
+                        "apiId": "ets80ptgi7",
+                        "autoDeploy": true,
+                        "name": "$default",
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        }
+                    },
+                    "outputs": {
+                        "accessLogSettings": {
+                            "destinationArn": "arn:aws:logs:eu-west-2:881490114773:log-group:/aws/vendedlogs/apis/dododo-denis-dododoApi-zvktdzef",
+                            "format": "{\"requestTime\":\"\\\"$context.requestTime\\\"\",\"requestId\":\"\\\"$context.requestId\\\"\",\"httpMethod\":\"\\\"$context.httpMethod\\\"\",\"path\":\"\\\"$context.path\\\"\",\"routeKey\":\"\\\"$context.routeKey\\\"\",\"status\":\"$context.status\",\"responseLatency\":\"$context.responseLatency\",\"integrationRequestId\":\"\\\"$context.integration.requestId\\\"\",\"integrationStatus\":\"\\\"$context.integration.status\\\"\",\"integrationLatency\":\"\\\"$context.integration.latency\\\"\",\"integrationServiceStatus\":\"\\\"$context.integration.integrationStatus\\\"\",\"ip\":\"\\\"$context.identity.sourceIp\\\"\",\"userAgent\":\"\\\"$context.identity.userAgent\\\"\"}"
+                        },
+                        "apiId": "ets80ptgi7",
+                        "arn": "arn:aws:apigateway:eu-west-2::/apis/ets80ptgi7/stages/$default",
+                        "autoDeploy": true,
+                        "clientCertificateId": "",
+                        "defaultRouteSettings": {
+                            "dataTraceEnabled": false,
+                            "detailedMetricsEnabled": false,
+                            "loggingLevel": "",
+                            "throttlingBurstLimit": 0,
+                            "throttlingRateLimit": 0
+                        },
+                        "deploymentId": "",
+                        "description": "",
+                        "executionArn": "arn:aws:execute-api:eu-west-2:881490114773:ets80ptgi7/$default",
+                        "id": "$default",
+                        "invokeUrl": "https://ets80ptgi7.execute-api.eu-west-2.amazonaws.com/",
+                        "name": "$default",
+                        "routeSettings": [],
+                        "stageVariables": null,
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        }
+                    },
+                    "parent": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2::dododoApi",
+                    "dependencies": [
+                        "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2$aws:apigatewayv2/api:Api::dododoApiApi",
+                        "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2$aws:cloudwatch/logGroup:LogGroup::dododoApiAccessLog"
+                    ],
+                    "provider": "urn:pulumi:denis::dododo::pulumi:providers:aws::default_6_66_2::f6381699-2671-4c47-b979-1bae4b8048a7",
+                    "propertyDependencies": {
+                        "accessLogSettings": [
+                            "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2$aws:cloudwatch/logGroup:LogGroup::dododoApiAccessLog"
+                        ],
+                        "apiId": [
+                            "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2$aws:apigatewayv2/api:Api::dododoApiApi"
+                        ],
+                        "autoDeploy": [],
+                        "name": []
+                    },
+                    "created": "2025-03-14T07:06:30.119975Z",
+                    "modified": "2025-03-14T07:06:30.119975Z",
+                    "sourcePosition": "project:///../../../file:/Users/denis/Sites/dododo-monorepo/.sst/platform/src/components/aws/apigatewayv2.ts#836,14"
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketPolicy:BucketPolicy::dododoStoragePolicy",
+                    "custom": true,
+                    "id": "dododo-denis-dododostoragebucket-fcvdxnhz",
+                    "type": "aws:s3/bucketPolicy:BucketPolicy",
+                    "inputs": {
+                        "__defaults": [],
+                        "bucket": "dododo-denis-dododostoragebucket-fcvdxnhz",
+                        "policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Effect\": \"Deny\",\n      \"Action\": \"s3:*\",\n      \"Resource\": [\n        \"arn:aws:s3:::dododo-denis-dododostoragebucket-fcvdxnhz/*\",\n        \"arn:aws:s3:::dododo-denis-dododostoragebucket-fcvdxnhz\"\n      ],\n      \"Principal\": \"*\",\n      \"Condition\": {\n        \"Bool\": {\n          \"aws:SecureTransport\": \"false\"\n        }\n      }\n    }\n  ]\n}"
+                    },
+                    "outputs": {
+                        "bucket": "dododo-denis-dododostoragebucket-fcvdxnhz",
+                        "id": "dododo-denis-dododostoragebucket-fcvdxnhz",
+                        "policy": "{\"Statement\":[{\"Action\":\"s3:*\",\"Condition\":{\"Bool\":{\"aws:SecureTransport\":\"false\"}},\"Effect\":\"Deny\",\"Principal\":\"*\",\"Resource\":[\"arn:aws:s3:::dododo-denis-dododostoragebucket-fcvdxnhz/*\",\"arn:aws:s3:::dododo-denis-dododostoragebucket-fcvdxnhz\"]}],\"Version\":\"2012-10-17\"}"
+                    },
+                    "parent": "urn:pulumi:denis::dododo::sst:aws:Bucket::dododoStorage",
+                    "dependencies": [
+                        "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketPublicAccessBlock:BucketPublicAccessBlock::dododoStoragePublicAccessBlock",
+                        "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketV2:BucketV2::dododoStorageBucket"
+                    ],
+                    "provider": "urn:pulumi:denis::dododo::pulumi:providers:aws::default_6_66_2::f6381699-2671-4c47-b979-1bae4b8048a7",
+                    "propertyDependencies": {
+                        "bucket": [
+                            "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketV2:BucketV2::dododoStorageBucket"
+                        ],
+                        "policy": [
+                            "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketV2:BucketV2::dododoStorageBucket"
+                        ]
+                    },
+                    "created": "2025-03-13T16:54:10.600733Z",
+                    "modified": "2025-03-13T16:54:10.600733Z",
+                    "sourcePosition": "project:///../../platform/node_modules/@pulumi/s3/bucketPolicy.ts#117,9"
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:Remix$sst:aws:Function$aws:iam/role:Role::dododoAssesmentDevServerRole",
+                    "custom": true,
+                    "id": "dododo-denis-dododoAssesmentDevServerRole-rtkbbubm",
+                    "type": "aws:iam/role:Role",
+                    "inputs": {
+                        "__defaults": [
+                            "forceDetachPolicies",
+                            "maxSessionDuration",
+                            "path"
+                        ],
+                        "assumeRolePolicy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Effect\": \"Allow\",\n      \"Action\": \"sts:AssumeRole\",\n      \"Principal\": {\n        \"AWS\": \"arn:aws:iam::881490114773:root\",\n        \"Service\": \"lambda.amazonaws.com\"\n      }\n    }\n  ]\n}",
+                        "forceDetachPolicies": false,
+                        "inlinePolicies": [
+                            {
+                                "__defaults": [],
+                                "name": "inline",
+                                "policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Effect\": \"Allow\",\n      \"Action\": \"s3:*\",\n      \"Resource\": [\n        \"arn:aws:s3:::dododo-denis-dododostoragebucket-fcvdxnhz/*\",\n        \"arn:aws:s3:::dododo-denis-dododostoragebucket-fcvdxnhz\"\n      ]\n    }\n  ]\n}"
+                            }
+                        ],
+                        "managedPolicyArns": [
+                            "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                        ],
+                        "maxSessionDuration": 3600,
+                        "name": "dododo-denis-dododoAssesmentDevServerRole-rtkbbubm",
+                        "path": "/",
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        }
+                    },
+                    "outputs": {
+                        "arn": "arn:aws:iam::881490114773:role/dododo-denis-dododoAssesmentDevServerRole-rtkbbubm",
+                        "assumeRolePolicy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::881490114773:root\",\"Service\":\"lambda.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+                        "createDate": "2025-03-13T16:54:10Z",
+                        "description": "",
+                        "forceDetachPolicies": false,
+                        "id": "dododo-denis-dododoAssesmentDevServerRole-rtkbbubm",
+                        "inlinePolicies": [
+                            {
+                                "name": "inline",
+                                "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"s3:*\",\"Effect\":\"Allow\",\"Resource\":[\"arn:aws:s3:::dododo-denis-dododostoragebucket-fcvdxnhz/*\",\"arn:aws:s3:::dododo-denis-dododostoragebucket-fcvdxnhz\"]}]}"
+                            }
+                        ],
+                        "managedPolicyArns": [
+                            "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                        ],
+                        "maxSessionDuration": 3600,
+                        "name": "dododo-denis-dododoAssesmentDevServerRole-rtkbbubm",
+                        "namePrefix": "",
+                        "path": "/",
+                        "permissionsBoundary": "",
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "uniqueId": "AROA42PHHXDKXXGW7OAQ2"
+                    },
+                    "parent": "urn:pulumi:denis::dododo::sst:aws:Remix$sst:aws:Function::dododoAssesmentDevServer",
+                    "dependencies": [
+                        "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketV2:BucketV2::dododoStorageBucket"
+                    ],
+                    "provider": "urn:pulumi:denis::dododo::pulumi:providers:aws::default_6_66_2::f6381699-2671-4c47-b979-1bae4b8048a7",
+                    "propertyDependencies": {
+                        "assumeRolePolicy": [],
+                        "inlinePolicies": [
+                            "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketV2:BucketV2::dododoStorageBucket"
+                        ],
+                        "managedPolicyArns": [],
+                        "name": []
+                    },
+                    "created": "2025-03-13T16:54:12.708414Z",
+                    "modified": "2025-03-13T16:54:12.708414Z",
+                    "sourcePosition": "project:///../../../file:/Users/denis/Sites/dododo-monorepo/.sst/platform/src/components/aws/function.ts#1803,14",
+                    "ignoreChanges": [
+                        "name"
+                    ]
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:Remix$sst:aws:Function$aws:s3/bucketObjectv2:BucketObjectv2::dododoAssesmentDevServerCode",
+                    "custom": true,
+                    "id": "assets/dododoAssesmentDevServer-code-b0f979d0b5fa694dc8e7aa23e85accc6c59c58b178030ed44c2095f7cfa5ec7a.zip",
+                    "type": "aws:s3/bucketObjectv2:BucketObjectv2",
+                    "inputs": {
+                        "__defaults": [
+                            "forceDestroy"
+                        ],
+                        "bucket": "sst-asset-bfabefnanerm",
+                        "forceDestroy": false,
+                        "key": "assets/dododoAssesmentDevServer-code-b0f979d0b5fa694dc8e7aa23e85accc6c59c58b178030ed44c2095f7cfa5ec7a.zip",
+                        "source": {
+                            "4dabf18193072939515e22adb298388d": "0def7320c3a5731c473e5ecbe6d01bc7",
+                            "hash": "d62f0844eaea09718c3953cc8a9a2666bdd2789476675b90b6b2f06e4772030d",
+                            "path": "/Users/denis/Sites/dododo-monorepo/.sst/artifacts/dododoAssesmentDevServer/code.zip"
+                        },
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        }
+                    },
+                    "outputs": {
+                        "acl": null,
+                        "arn": "arn:aws:s3:::sst-asset-bfabefnanerm/assets/dododoAssesmentDevServer-code-b0f979d0b5fa694dc8e7aa23e85accc6c59c58b178030ed44c2095f7cfa5ec7a.zip",
+                        "bucket": "sst-asset-bfabefnanerm",
+                        "bucketKeyEnabled": false,
+                        "cacheControl": "",
+                        "checksumAlgorithm": null,
+                        "checksumCrc32": "",
+                        "checksumCrc32c": "",
+                        "checksumSha1": "",
+                        "checksumSha256": "",
+                        "content": null,
+                        "contentBase64": null,
+                        "contentDisposition": "",
+                        "contentEncoding": "",
+                        "contentLanguage": "",
+                        "contentType": "application/octet-stream",
+                        "etag": "f72a4fd46871adad75011378fbfd6ba0",
+                        "forceDestroy": false,
+                        "id": "assets/dododoAssesmentDevServer-code-b0f979d0b5fa694dc8e7aa23e85accc6c59c58b178030ed44c2095f7cfa5ec7a.zip",
+                        "key": "assets/dododoAssesmentDevServer-code-b0f979d0b5fa694dc8e7aa23e85accc6c59c58b178030ed44c2095f7cfa5ec7a.zip",
+                        "kmsKeyId": null,
+                        "metadata": null,
+                        "objectLockLegalHoldStatus": "",
+                        "objectLockMode": "",
+                        "objectLockRetainUntilDate": "",
+                        "overrideProvider": null,
+                        "serverSideEncryption": "AES256",
+                        "source": {
+                            "4dabf18193072939515e22adb298388d": "0def7320c3a5731c473e5ecbe6d01bc7",
+                            "hash": "d62f0844eaea09718c3953cc8a9a2666bdd2789476675b90b6b2f06e4772030d",
+                            "path": "/Users/denis/Sites/dododo-monorepo/.sst/artifacts/dododoAssesmentDevServer/code.zip"
+                        },
+                        "sourceHash": null,
+                        "storageClass": "STANDARD",
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "versionId": "",
+                        "websiteRedirect": ""
+                    },
+                    "parent": "urn:pulumi:denis::dododo::sst:aws:Remix$sst:aws:Function::dododoAssesmentDevServer",
+                    "provider": "urn:pulumi:denis::dododo::pulumi:providers:aws::default_6_66_2::f6381699-2671-4c47-b979-1bae4b8048a7",
+                    "propertyDependencies": {
+                        "bucket": [],
+                        "key": [],
+                        "source": []
+                    },
+                    "created": "2025-03-13T16:54:10.154124Z",
+                    "modified": "2025-03-13T16:54:10.154124Z",
+                    "sourcePosition": "project:///../../platform/node_modules/@pulumi/s3/bucketObjectv2.ts#429,9"
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:Remix$sst:aws:Function$aws:lambda/function:Function::dododoAssesmentDevServerFunction",
+                    "custom": true,
+                    "id": "dododo-denis-dododoAssesmentDevServerFunction-kxvxnmox",
+                    "type": "aws:lambda/function:Function",
+                    "inputs": {
+                        "__defaults": [
+                            "reservedConcurrentExecutions",
+                            "skipDestroy"
+                        ],
+                        "architectures": [
+                            "x86_64"
+                        ],
+                        "description": "dododoAssesment dev server",
+                        "environment": {
+                            "__defaults": [],
+                            "variables": {
+                                "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                                "ciphertext": "v1:85Fr0CEVPsqeicS9:g+XP8AgrSLTqWjOl0THzIWGx7P/Vs0sn5UlSAhB+X9g421JPw8NiOjlPQzRY45uy5d1kL8IzoGBnFAAgccmcuFu7TGYx5BXbRcOL1UFZ/uSPEt1CyvCb9nOGc8xMhSCgF1P+LIz9bBEfdIW5lsLniBTN8GMtfkHIu6JiGHszuoezA/C2PXTB+Ol23brTP1SEiSFFpOyUXg4ghUbDaAGkqDyNS8w1bx0="
+                            }
+                        },
+                        "ephemeralStorage": {
+                            "__defaults": [],
+                            "size": 512
+                        },
+                        "handler": "index.handler",
+                        "loggingConfig": {
+                            "__defaults": [
+                                "applicationLogLevel",
+                                "systemLogLevel"
+                            ],
+                            "applicationLogLevel": "",
+                            "logFormat": "Text",
+                            "logGroup": "/aws/lambda/dododo-denis-dododoAssesmentDevServerFunction-wcaexfhd",
+                            "systemLogLevel": ""
+                        },
+                        "memorySize": 128,
+                        "name": "dododo-denis-dododoAssesmentDevServerFunction-kxvxnmox",
+                        "packageType": "Zip",
+                        "publish": false,
+                        "reservedConcurrentExecutions": -1,
+                        "role": "arn:aws:iam::881490114773:role/dododo-denis-dododoAssesmentDevServerRole-rtkbbubm",
+                        "runtime": "nodejs20.x",
+                        "s3Bucket": "sst-asset-bfabefnanerm",
+                        "s3Key": "assets/dododoAssesmentDevServer-code-b0f979d0b5fa694dc8e7aa23e85accc6c59c58b178030ed44c2095f7cfa5ec7a.zip",
+                        "skipDestroy": false,
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "timeout": 20
+                    },
+                    "outputs": {
+                        "__meta": "{\"e2bfb730-ecaa-11e6-8f88-34363bc7c4c0\":{\"create\":600000000000,\"delete\":600000000000,\"update\":600000000000}}",
+                        "architectures": [
+                            "x86_64"
+                        ],
+                        "arn": "arn:aws:lambda:eu-west-2:881490114773:function:dododo-denis-dododoAssesmentDevServerFunction-kxvxnmox",
+                        "code": null,
+                        "codeSha256": "1i8IROrqCXGMOVPMipomZr3SeJR2Z1uQtrLwbkdyAw0=",
+                        "codeSigningConfigArn": "",
+                        "deadLetterConfig": null,
+                        "description": "dododoAssesment dev server",
+                        "environment": {
+                            "variables": {
+                                "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                                "ciphertext": "v1:Fn14oc3/K4UIR5gy:AGixcl1T3Q8L2JtY5rvyWImE9cNLE3kLukcW3u0uPi52kmCkdj6kh5glzluA7UdgrdTpwOuZxsa8AT5XeMGQ3A63COZHkRX61IZiyq/vZ4uQAIzOXF8E9WF4ocy+5/SaLFbxsZf3HH47urViHt1xMNYkwdHyqQKfdXlxeYPeWb7CbRr3eAZ0wmSh8B8NcT1QH8WB0QSthya89SfbIQYzu6klIl8ZDac="
+                            }
+                        },
+                        "ephemeralStorage": {
+                            "size": 512
+                        },
+                        "fileSystemConfig": null,
+                        "handler": "index.handler",
+                        "id": "dododo-denis-dododoAssesmentDevServerFunction-kxvxnmox",
+                        "imageConfig": null,
+                        "imageUri": "",
+                        "invokeArn": "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:881490114773:function:dododo-denis-dododoAssesmentDevServerFunction-kxvxnmox/invocations",
+                        "kmsKeyArn": "",
+                        "lastModified": "2025-03-13T16:54:17.522+0000",
+                        "layers": null,
+                        "loggingConfig": {
+                            "applicationLogLevel": "",
+                            "logFormat": "Text",
+                            "logGroup": "/aws/lambda/dododo-denis-dododoAssesmentDevServerFunction-wcaexfhd",
+                            "systemLogLevel": ""
+                        },
+                        "memorySize": 128,
+                        "name": "dododo-denis-dododoAssesmentDevServerFunction-kxvxnmox",
+                        "packageType": "Zip",
+                        "publish": false,
+                        "qualifiedArn": "arn:aws:lambda:eu-west-2:881490114773:function:dododo-denis-dododoAssesmentDevServerFunction-kxvxnmox:$LATEST",
+                        "qualifiedInvokeArn": "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:881490114773:function:dododo-denis-dododoAssesmentDevServerFunction-kxvxnmox:$LATEST/invocations",
+                        "replaceSecurityGroupsOnDestroy": null,
+                        "replacementSecurityGroupIds": null,
+                        "reservedConcurrentExecutions": -1,
+                        "role": "arn:aws:iam::881490114773:role/dododo-denis-dododoAssesmentDevServerRole-rtkbbubm",
+                        "runtime": "nodejs20.x",
+                        "s3Bucket": "sst-asset-bfabefnanerm",
+                        "s3Key": "assets/dododoAssesmentDevServer-code-b0f979d0b5fa694dc8e7aa23e85accc6c59c58b178030ed44c2095f7cfa5ec7a.zip",
+                        "s3ObjectVersion": null,
+                        "signingJobArn": "",
+                        "signingProfileVersionArn": "",
+                        "skipDestroy": false,
+                        "snapStart": null,
+                        "sourceCodeHash": "",
+                        "sourceCodeSize": 485,
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "timeout": 20,
+                        "tracingConfig": {
+                            "mode": "PassThrough"
+                        },
+                        "version": "$LATEST",
+                        "vpcConfig": null
+                    },
+                    "parent": "urn:pulumi:denis::dododo::sst:aws:Remix$sst:aws:Function::dododoAssesmentDevServer",
+                    "dependencies": [
+                        "urn:pulumi:denis::dododo::random:index/randomBytes:RandomBytes::LambdaEncryptionKey",
+                        "urn:pulumi:denis::dododo::sst:aws:Remix$sst:aws:Function$aws:cloudwatch/logGroup:LogGroup::dododoAssesmentDevServerLogGroup",
+                        "urn:pulumi:denis::dododo::sst:aws:Remix$sst:aws:Function$aws:iam/role:Role::dododoAssesmentDevServerRole",
+                        "urn:pulumi:denis::dododo::sst:aws:Remix$sst:aws:Function$aws:s3/bucketObjectv2:BucketObjectv2::dododoAssesmentDevServerCode"
+                    ],
+                    "provider": "urn:pulumi:denis::dododo::pulumi:providers:aws::default_6_66_2::f6381699-2671-4c47-b979-1bae4b8048a7",
+                    "propertyDependencies": {
+                        "architectures": [],
+                        "description": [],
+                        "environment": [
+                            "urn:pulumi:denis::dododo::random:index/randomBytes:RandomBytes::LambdaEncryptionKey"
+                        ],
+                        "ephemeralStorage": [],
+                        "handler": [],
+                        "loggingConfig": [
+                            "urn:pulumi:denis::dododo::sst:aws:Remix$sst:aws:Function$aws:cloudwatch/logGroup:LogGroup::dododoAssesmentDevServerLogGroup"
+                        ],
+                        "memorySize": [],
+                        "name": [],
+                        "packageType": [],
+                        "publish": [],
+                        "role": [
+                            "urn:pulumi:denis::dododo::sst:aws:Remix$sst:aws:Function$aws:iam/role:Role::dododoAssesmentDevServerRole"
+                        ],
+                        "runtime": [],
+                        "s3Bucket": [
+                            "urn:pulumi:denis::dododo::sst:aws:Remix$sst:aws:Function$aws:s3/bucketObjectv2:BucketObjectv2::dododoAssesmentDevServerCode"
+                        ],
+                        "s3Key": [
+                            "urn:pulumi:denis::dododo::sst:aws:Remix$sst:aws:Function$aws:s3/bucketObjectv2:BucketObjectv2::dododoAssesmentDevServerCode"
+                        ],
+                        "timeout": []
+                    },
+                    "created": "2025-03-13T16:54:23.180463Z",
+                    "modified": "2025-03-13T16:54:23.180463Z",
+                    "sourcePosition": "project:///../../platform/node_modules/@pulumi/lambda/function.ts#551,9",
+                    "ignoreChanges": [
+                        "name"
+                    ]
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function$aws:s3/bucketObjectv2:BucketObjectv2::dododoApiRouteTzvnftHandlerCode",
+                    "custom": true,
+                    "id": "assets/dododoApiRouteTzvnftHandler-code-33facb7b1d1ce3383acfe5deeb31d5ce0855eca2f39e4708e2339f835614e1c9.zip",
+                    "type": "aws:s3/bucketObjectv2:BucketObjectv2",
+                    "inputs": {
+                        "__defaults": [
+                            "forceDestroy"
+                        ],
+                        "bucket": "sst-asset-bfabefnanerm",
+                        "forceDestroy": false,
+                        "key": "assets/dododoApiRouteTzvnftHandler-code-33facb7b1d1ce3383acfe5deeb31d5ce0855eca2f39e4708e2339f835614e1c9.zip",
+                        "source": {
+                            "4dabf18193072939515e22adb298388d": "0def7320c3a5731c473e5ecbe6d01bc7",
+                            "hash": "2d0d52f57ef8295bb642d933d6266a13b4a7c153b7cce836a5d20909acb91366",
+                            "path": "/Users/denis/Sites/dododo-monorepo/.sst/artifacts/dododoApiRouteTzvnftHandler/code.zip"
+                        },
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        }
+                    },
+                    "outputs": {
+                        "acl": null,
+                        "arn": "arn:aws:s3:::sst-asset-bfabefnanerm/assets/dododoApiRouteTzvnftHandler-code-33facb7b1d1ce3383acfe5deeb31d5ce0855eca2f39e4708e2339f835614e1c9.zip",
+                        "bucket": "sst-asset-bfabefnanerm",
+                        "bucketKeyEnabled": false,
+                        "cacheControl": "",
+                        "checksumAlgorithm": null,
+                        "checksumCrc32": "",
+                        "checksumCrc32c": "",
+                        "checksumSha1": "",
+                        "checksumSha256": "",
+                        "content": null,
+                        "contentBase64": null,
+                        "contentDisposition": "",
+                        "contentEncoding": "",
+                        "contentLanguage": "",
+                        "contentType": "binary/octet-stream",
+                        "etag": "1b99b06915ac2fccab004be364625603-2",
+                        "forceDestroy": false,
+                        "id": "assets/dododoApiRouteTzvnftHandler-code-33facb7b1d1ce3383acfe5deeb31d5ce0855eca2f39e4708e2339f835614e1c9.zip",
+                        "key": "assets/dododoApiRouteTzvnftHandler-code-33facb7b1d1ce3383acfe5deeb31d5ce0855eca2f39e4708e2339f835614e1c9.zip",
+                        "kmsKeyId": null,
+                        "metadata": null,
+                        "objectLockLegalHoldStatus": "",
+                        "objectLockMode": "",
+                        "objectLockRetainUntilDate": "",
+                        "overrideProvider": null,
+                        "serverSideEncryption": "AES256",
+                        "source": {
+                            "4dabf18193072939515e22adb298388d": "0def7320c3a5731c473e5ecbe6d01bc7",
+                            "hash": "2d0d52f57ef8295bb642d933d6266a13b4a7c153b7cce836a5d20909acb91366",
+                            "path": "/Users/denis/Sites/dododo-monorepo/.sst/artifacts/dododoApiRouteTzvnftHandler/code.zip"
+                        },
+                        "sourceHash": null,
+                        "storageClass": "STANDARD",
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "versionId": "",
+                        "websiteRedirect": ""
+                    },
+                    "parent": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function::dododoApiRouteTzvnftHandler",
+                    "provider": "urn:pulumi:denis::dododo::pulumi:providers:aws::default_6_66_2::f6381699-2671-4c47-b979-1bae4b8048a7",
+                    "propertyDependencies": {
+                        "bucket": [],
+                        "key": [],
+                        "source": []
+                    },
+                    "created": "2025-03-15T12:08:57.158145Z",
+                    "modified": "2025-03-15T12:08:57.158145Z",
+                    "sourcePosition": "project:///../../platform/node_modules/@pulumi/s3/bucketObjectv2.ts#429,9"
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function$aws:iam/role:Role::dododoApiRouteTzvnftHandlerRole",
+                    "custom": true,
+                    "id": "dododo-denis-dododoApiRouteTzvnftHandlerRole-dzkbrzoe",
+                    "type": "aws:iam/role:Role",
+                    "inputs": {
+                        "__defaults": [
+                            "forceDetachPolicies",
+                            "maxSessionDuration",
+                            "path"
+                        ],
+                        "assumeRolePolicy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Effect\": \"Allow\",\n      \"Action\": \"sts:AssumeRole\",\n      \"Principal\": {\n        \"AWS\": \"arn:aws:iam::881490114773:root\",\n        \"Service\": \"lambda.amazonaws.com\"\n      }\n    }\n  ]\n}",
+                        "forceDetachPolicies": false,
+                        "inlinePolicies": [
+                            {
+                                "__defaults": [],
+                                "name": "inline",
+                                "policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Effect\": \"Allow\",\n      \"Action\": \"s3:*\",\n      \"Resource\": [\n        \"arn:aws:s3:::dododo-denis-dododostoragebucket-fcvdxnhz/*\",\n        \"arn:aws:s3:::dododo-denis-dododostoragebucket-fcvdxnhz\"\n      ]\n    },\n    {\n      \"Effect\": \"Allow\",\n      \"Action\": \"appsync:*\",\n      \"Resource\": \"*\"\n    },\n    {\n      \"Effect\": \"Allow\",\n      \"Action\": \"iot:*\",\n      \"Resource\": \"*\"\n    },\n    {\n      \"Effect\": \"Allow\",\n      \"Action\": \"s3:*\",\n      \"Resource\": [\n        \"arn:aws:s3:::sst-asset-bfabefnanerm/*\",\n        \"arn:aws:s3:::sst-asset-bfabefnanerm\"\n      ]\n    }\n  ]\n}"
+                            }
+                        ],
+                        "managedPolicyArns": [
+                            "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                        ],
+                        "maxSessionDuration": 3600,
+                        "name": "dododo-denis-dododoApiRouteTzvnftHandlerRole-dzkbrzoe",
+                        "path": "/",
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        }
+                    },
+                    "outputs": {
+                        "arn": "arn:aws:iam::881490114773:role/dododo-denis-dododoApiRouteTzvnftHandlerRole-dzkbrzoe",
+                        "assumeRolePolicy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::881490114773:root\",\"Service\":\"lambda.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+                        "createDate": "2025-03-15T12:08:48Z",
+                        "description": "",
+                        "forceDetachPolicies": false,
+                        "id": "dododo-denis-dododoApiRouteTzvnftHandlerRole-dzkbrzoe",
+                        "inlinePolicies": [
+                            {
+                                "name": "inline",
+                                "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"s3:*\",\"Effect\":\"Allow\",\"Resource\":[\"arn:aws:s3:::dododo-denis-dododostoragebucket-fcvdxnhz/*\",\"arn:aws:s3:::dododo-denis-dododostoragebucket-fcvdxnhz\"]},{\"Action\":\"appsync:*\",\"Effect\":\"Allow\",\"Resource\":\"*\"},{\"Action\":\"iot:*\",\"Effect\":\"Allow\",\"Resource\":\"*\"},{\"Action\":\"s3:*\",\"Effect\":\"Allow\",\"Resource\":[\"arn:aws:s3:::sst-asset-bfabefnanerm/*\",\"arn:aws:s3:::sst-asset-bfabefnanerm\"]}]}"
+                            }
+                        ],
+                        "managedPolicyArns": [
+                            "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                        ],
+                        "maxSessionDuration": 3600,
+                        "name": "dododo-denis-dododoApiRouteTzvnftHandlerRole-dzkbrzoe",
+                        "namePrefix": "",
+                        "path": "/",
+                        "permissionsBoundary": "",
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "uniqueId": "AROA42PHHXDKUYIYQ2BI3"
+                    },
+                    "parent": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function::dododoApiRouteTzvnftHandler",
+                    "dependencies": [
+                        "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketV2:BucketV2::dododoStorageBucket"
+                    ],
+                    "provider": "urn:pulumi:denis::dododo::pulumi:providers:aws::default_6_66_2::f6381699-2671-4c47-b979-1bae4b8048a7",
+                    "propertyDependencies": {
+                        "assumeRolePolicy": [],
+                        "inlinePolicies": [
+                            "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketV2:BucketV2::dododoStorageBucket"
+                        ],
+                        "managedPolicyArns": [],
+                        "name": []
+                    },
+                    "created": "2025-03-15T12:08:51.610299Z",
+                    "modified": "2025-03-15T12:35:02.277449Z",
+                    "sourcePosition": "project:///../../../file:/Users/denis/Sites/dododo-monorepo/.sst/platform/src/components/aws/function.ts#1803,14",
+                    "ignoreChanges": [
+                        "name"
+                    ]
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function$aws:lambda/function:Function::dododoApiRouteTzvnftHandlerFunction",
+                    "custom": true,
+                    "id": "dododo-denis-dododoApiRouteTzvnftHandlerFunction-ubuuhvhn",
+                    "type": "aws:lambda/function:Function",
+                    "inputs": {
+                        "__defaults": [
+                            "reservedConcurrentExecutions",
+                            "skipDestroy"
+                        ],
+                        "architectures": [
+                            "x86_64"
+                        ],
+                        "description": "dododoApi route ANY /{proxy+} (live)",
+                        "environment": {
+                            "__defaults": [],
+                            "variables": {
+                                "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                                "ciphertext": "v1:EtRIz1JQ3/SqqKhZ:PSku1V003yFYYm2s8+Za0HAlZj87pv+g3EzqtC82Pf2jKGUpzUr2uCTgjImzzc4Nucq5OyO4rijLOWotHidiTphOvyTQOFddFwNGbDdc8XyXVgybhPeQxphUKkw4YUT7O3LbK7zMJoYqzTSsTcxVTDUYjdHX1GDWAPhtb9bE4Eq4A2TB/X7HQfTwyrL8MMERqP1xYbew222qkVJMo/gYvMxGWrSNEvmJPt4vL5TybQ+q5dtnJlQ+mf5HuLDW0PTt4U8PUIQcbVeaodyqo1QDZvnHeK15vIP1ZXCOkDXwMs7BN6mYCQPzHbbg/67l4UMutWrSWmYbUxXbqSedjll8bVcbZvaahQ+m19VBuwZmW7+ZqzS/9uc9rZQKuoKXtgqx1+vtpoObNjqVDSYwwFBmh7CBqdOpy+cQLc5+zFVrxpWyWHSgGverUUx9mgQ9sHwHdgriBqzqJf8W4llBmp6YH0Uy2UMj1fwwDSPs94gBmr7OAuLfyGU4KqIgzZuQpe+JXekBVVeOC0DnLWK8wbf2Z6ogMi4+OMsGFEOIryuAYyL6Ry8IHVQ6LfslJa781nyKbRQpig+AOf1lIIf5z3ZB60yFvdbGxjGbieKoBZnoFq/dzxWKsv2VlScSwBOmrJaslpmVGOW8f8fDX1upGjUvLc8H4pOVTHUx"
+                            }
+                        },
+                        "ephemeralStorage": {
+                            "__defaults": [],
+                            "size": 512
+                        },
+                        "handler": "bootstrap",
+                        "loggingConfig": {
+                            "__defaults": [
+                                "applicationLogLevel",
+                                "systemLogLevel"
+                            ],
+                            "applicationLogLevel": "",
+                            "logFormat": "Text",
+                            "logGroup": "/aws/lambda/dododo-denis-dododoApiRouteTzvnftHandlerFunction-hhtfmwzx",
+                            "systemLogLevel": ""
+                        },
+                        "memorySize": 1024,
+                        "name": "dododo-denis-dododoApiRouteTzvnftHandlerFunction-ubuuhvhn",
+                        "packageType": "Zip",
+                        "publish": false,
+                        "reservedConcurrentExecutions": -1,
+                        "role": "arn:aws:iam::881490114773:role/dododo-denis-dododoApiRouteTzvnftHandlerRole-dzkbrzoe",
+                        "runtime": "provided.al2023",
+                        "s3Bucket": "sst-asset-bfabefnanerm",
+                        "s3Key": "assets/dododoApiRouteTzvnftHandler-code-33facb7b1d1ce3383acfe5deeb31d5ce0855eca2f39e4708e2339f835614e1c9.zip",
+                        "skipDestroy": false,
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "timeout": 20
+                    },
+                    "outputs": {
+                        "__meta": "{\"e2bfb730-ecaa-11e6-8f88-34363bc7c4c0\":{\"create\":600000000000,\"delete\":600000000000,\"update\":600000000000}}",
+                        "architectures": [
+                            "x86_64"
+                        ],
+                        "arn": "arn:aws:lambda:eu-west-2:881490114773:function:dododo-denis-dododoApiRouteTzvnftHandlerFunction-ubuuhvhn",
+                        "code": null,
+                        "codeSha256": "LQ1S9X74KVu2Qtkz1iZqE7SnwVO3zOg2pdIJCay5E2Y=",
+                        "codeSigningConfigArn": "",
+                        "deadLetterConfig": null,
+                        "description": "dododoApi route ANY /{proxy+} (live)",
+                        "environment": {
+                            "variables": {
+                                "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                                "ciphertext": "v1:3Q76w6PoRVPj4+hV:J5lW1vgcU6yelP/UEOTF94OjO33ydXUNTe7oCjCtuHhct1q5ITe4rKV/FVSBPOwToxVuw4YGDlnd08ORj6mPjeszPQflem1jyzxAE8qxYFA4J9hIzNO6ktVsd/qVl7FXXNF7wkPu3+IDso8AYCTafX0zDfkc3cyN/h1ASCZEuTROrtVVxsMcB3PDEhyg47OCBIX55JHezGg8SQ8MiBR3ZKW96Gc+rJhXLFgblMp3X+JTH+YGaEa9um0oaNt8m7N8VSTr3y2yNfRPy8iTwkYBsGqPCzd95O0Z00/gbBXfNG7l5kvRA2b6TBhvTrRbjGon1V0pqdXOcqJ6dLhxBmTQ23uZLVcUIPQ6PaGBp5f22mDKrFBAuBT1tivpIvekMs5Gl9/5AHmNZsLCR4uAbsa2b9+kOJLaOG1hdE02eQ2v/syNN2Di2RoU7ATFseGhYMkffVChhjRwB4OrFOnqPQmOWh06TdxsTi+QW3PRQJW7uNXXCgmAOWkiOe64gd35lCPWmB+5CecBdb888QBzyUu5dQ8YbhKxq70L9RarIsR1OOhidL/SFt6lCrPHQl2Qj/UktA+gqEnuEvRuexXExmstG1zD9Yo7CGUe4rlQavfKrjrBrae3NpTHqdub7G14pv9ChIP7MXlJkLhEK6LA1OFwbK3hQg524SMY"
+                            }
+                        },
+                        "ephemeralStorage": {
+                            "size": 512
+                        },
+                        "fileSystemConfig": null,
+                        "handler": "bootstrap",
+                        "id": "dododo-denis-dododoApiRouteTzvnftHandlerFunction-ubuuhvhn",
+                        "imageConfig": null,
+                        "imageUri": "",
+                        "invokeArn": "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:881490114773:function:dododo-denis-dododoApiRouteTzvnftHandlerFunction-ubuuhvhn/invocations",
+                        "kmsKeyArn": "",
+                        "lastModified": "2025-03-15T12:08:57.702+0000",
+                        "layers": null,
+                        "loggingConfig": {
+                            "applicationLogLevel": "",
+                            "logFormat": "Text",
+                            "logGroup": "/aws/lambda/dododo-denis-dododoApiRouteTzvnftHandlerFunction-hhtfmwzx",
+                            "systemLogLevel": ""
+                        },
+                        "memorySize": 1024,
+                        "name": "dododo-denis-dododoApiRouteTzvnftHandlerFunction-ubuuhvhn",
+                        "packageType": "Zip",
+                        "publish": false,
+                        "qualifiedArn": "arn:aws:lambda:eu-west-2:881490114773:function:dododo-denis-dododoApiRouteTzvnftHandlerFunction-ubuuhvhn:$LATEST",
+                        "qualifiedInvokeArn": "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:881490114773:function:dododo-denis-dododoApiRouteTzvnftHandlerFunction-ubuuhvhn:$LATEST/invocations",
+                        "replaceSecurityGroupsOnDestroy": null,
+                        "replacementSecurityGroupIds": null,
+                        "reservedConcurrentExecutions": -1,
+                        "role": "arn:aws:iam::881490114773:role/dododo-denis-dododoApiRouteTzvnftHandlerRole-dzkbrzoe",
+                        "runtime": "provided.al2023",
+                        "s3Bucket": "sst-asset-bfabefnanerm",
+                        "s3Key": "assets/dododoApiRouteTzvnftHandler-code-33facb7b1d1ce3383acfe5deeb31d5ce0855eca2f39e4708e2339f835614e1c9.zip",
+                        "s3ObjectVersion": null,
+                        "signingJobArn": "",
+                        "signingProfileVersionArn": "",
+                        "skipDestroy": false,
+                        "snapStart": null,
+                        "sourceCodeHash": "",
+                        "sourceCodeSize": 6550118,
+                        "tags": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "tagsAll": {
+                            "sst:app": "dododo",
+                            "sst:stage": "denis"
+                        },
+                        "timeout": 20,
+                        "tracingConfig": {
+                            "mode": "PassThrough"
+                        },
+                        "version": "$LATEST",
+                        "vpcConfig": null
+                    },
+                    "parent": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function::dododoApiRouteTzvnftHandler",
+                    "dependencies": [
+                        "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2$aws:apigatewayv2/api:Api::dododoApiApi",
+                        "urn:pulumi:denis::dododo::random:index/randomBytes:RandomBytes::LambdaEncryptionKey",
+                        "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function$aws:cloudwatch/logGroup:LogGroup::dododoApiRouteTzvnftHandlerLogGroup",
+                        "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function$aws:iam/role:Role::dododoApiRouteTzvnftHandlerRole",
+                        "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function$aws:s3/bucketObjectv2:BucketObjectv2::dododoApiRouteTzvnftHandlerCode"
+                    ],
+                    "provider": "urn:pulumi:denis::dododo::pulumi:providers:aws::default_6_66_2::f6381699-2671-4c47-b979-1bae4b8048a7",
+                    "propertyDependencies": {
+                        "architectures": [],
+                        "description": [
+                            "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2$aws:apigatewayv2/api:Api::dododoApiApi"
+                        ],
+                        "environment": [
+                            "urn:pulumi:denis::dododo::random:index/randomBytes:RandomBytes::LambdaEncryptionKey"
+                        ],
+                        "ephemeralStorage": [],
+                        "handler": [],
+                        "loggingConfig": [
+                            "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function$aws:cloudwatch/logGroup:LogGroup::dododoApiRouteTzvnftHandlerLogGroup"
+                        ],
+                        "memorySize": [],
+                        "name": [],
+                        "packageType": [],
+                        "publish": [],
+                        "role": [
+                            "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function$aws:iam/role:Role::dododoApiRouteTzvnftHandlerRole"
+                        ],
+                        "runtime": [],
+                        "s3Bucket": [
+                            "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function$aws:s3/bucketObjectv2:BucketObjectv2::dododoApiRouteTzvnftHandlerCode"
+                        ],
+                        "s3Key": [
+                            "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function$aws:s3/bucketObjectv2:BucketObjectv2::dododoApiRouteTzvnftHandlerCode"
+                        ],
+                        "timeout": []
+                    },
+                    "created": "2025-03-15T12:09:03.592147Z",
+                    "modified": "2025-03-15T12:09:03.592147Z",
+                    "sourcePosition": "project:///../../platform/node_modules/@pulumi/lambda/function.ts#551,9",
+                    "ignoreChanges": [
+                        "name"
+                    ]
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$aws:lambda/permission:Permission::dododoApiRouteTzvnftPermissions",
+                    "custom": true,
+                    "id": "dododoApiRouteTzvnftPermissions-5c3fbb4",
+                    "type": "aws:lambda/permission:Permission",
+                    "inputs": {
+                        "__defaults": [
+                            "statementId"
+                        ],
+                        "action": "lambda:InvokeFunction",
+                        "function": "arn:aws:lambda:eu-west-2:881490114773:function:dododo-denis-dododoApiRouteTzvnftHandlerFunction-ubuuhvhn",
+                        "principal": "apigateway.amazonaws.com",
+                        "sourceArn": "arn:aws:execute-api:eu-west-2:881490114773:ets80ptgi7/*",
+                        "statementId": "dododoApiRouteTzvnftPermissions-5c3fbb4"
+                    },
+                    "outputs": {
+                        "action": "lambda:InvokeFunction",
+                        "eventSourceToken": null,
+                        "function": "arn:aws:lambda:eu-west-2:881490114773:function:dododo-denis-dododoApiRouteTzvnftHandlerFunction-ubuuhvhn",
+                        "functionUrlAuthType": null,
+                        "id": "dododoApiRouteTzvnftPermissions-5c3fbb4",
+                        "principal": "apigateway.amazonaws.com",
+                        "principalOrgId": null,
+                        "qualifier": "",
+                        "sourceAccount": null,
+                        "sourceArn": "arn:aws:execute-api:eu-west-2:881490114773:ets80ptgi7/*",
+                        "statementId": "dododoApiRouteTzvnftPermissions-5c3fbb4",
+                        "statementIdPrefix": ""
+                    },
+                    "parent": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute::dododoApiRouteTzvnft",
+                    "dependencies": [
+                        "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function$aws:cloudwatch/logGroup:LogGroup::dododoApiRouteTzvnftHandlerLogGroup",
+                        "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function$aws:lambda/function:Function::dododoApiRouteTzvnftHandlerFunction",
+                        "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2$aws:apigatewayv2/api:Api::dododoApiApi",
+                        "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketV2:BucketV2::dododoStorageBucket",
+                        "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketPublicAccessBlock:BucketPublicAccessBlock::dododoStoragePublicAccessBlock",
+                        "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketCorsConfigurationV2:BucketCorsConfigurationV2::dododoStorageCors",
+                        "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketPolicy:BucketPolicy::dododoStoragePolicy"
+                    ],
+                    "provider": "urn:pulumi:denis::dododo::pulumi:providers:aws::default_6_66_2::f6381699-2671-4c47-b979-1bae4b8048a7",
+                    "propertyDependencies": {
+                        "action": [],
+                        "function": [
+                            "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketCorsConfigurationV2:BucketCorsConfigurationV2::dododoStorageCors",
+                            "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketPolicy:BucketPolicy::dododoStoragePolicy",
+                            "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function$aws:cloudwatch/logGroup:LogGroup::dododoApiRouteTzvnftHandlerLogGroup",
+                            "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function$aws:lambda/function:Function::dododoApiRouteTzvnftHandlerFunction",
+                            "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketV2:BucketV2::dododoStorageBucket",
+                            "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketPublicAccessBlock:BucketPublicAccessBlock::dododoStoragePublicAccessBlock"
+                        ],
+                        "principal": [],
+                        "sourceArn": [
+                            "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2$aws:apigatewayv2/api:Api::dododoApiApi"
+                        ]
+                    },
+                    "created": "2025-03-15T12:09:03.75709Z",
+                    "modified": "2025-03-15T12:09:03.75709Z",
+                    "sourcePosition": "project:///../../../file:/Users/denis/Sites/dododo-monorepo/.sst/platform/src/components/aws/apigatewayv2-lambda-route.ts#81,14"
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$aws:apigatewayv2/integration:Integration::dododoApiRouteTzvnftIntegration",
+                    "custom": true,
+                    "id": "tibf4er",
+                    "type": "aws:apigatewayv2/integration:Integration",
+                    "inputs": {
+                        "__defaults": [
+                            "connectionType",
+                            "passthroughBehavior"
+                        ],
+                        "apiId": "ets80ptgi7",
+                        "connectionType": "INTERNET",
+                        "integrationType": "AWS_PROXY",
+                        "integrationUri": "arn:aws:lambda:eu-west-2:881490114773:function:dododo-denis-dododoApiRouteTzvnftHandlerFunction-ubuuhvhn",
+                        "passthroughBehavior": "WHEN_NO_MATCH",
+                        "payloadFormatVersion": "2.0"
+                    },
+                    "outputs": {
+                        "apiId": "ets80ptgi7",
+                        "connectionId": "",
+                        "connectionType": "INTERNET",
+                        "contentHandlingStrategy": "",
+                        "credentialsArn": "",
+                        "description": "",
+                        "id": "tibf4er",
+                        "integrationMethod": "POST",
+                        "integrationResponseSelectionExpression": "",
+                        "integrationSubtype": "",
+                        "integrationType": "AWS_PROXY",
+                        "integrationUri": "arn:aws:lambda:eu-west-2:881490114773:function:dododo-denis-dododoApiRouteTzvnftHandlerFunction-ubuuhvhn",
+                        "passthroughBehavior": "",
+                        "payloadFormatVersion": "2.0",
+                        "requestParameters": null,
+                        "requestTemplates": null,
+                        "responseParameters": [],
+                        "templateSelectionExpression": "",
+                        "timeoutMilliseconds": 30000,
+                        "tlsConfig": null
+                    },
+                    "parent": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute::dododoApiRouteTzvnft",
+                    "dependencies": [
+                        "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$aws:lambda/permission:Permission::dododoApiRouteTzvnftPermissions",
+                        "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2$aws:apigatewayv2/api:Api::dododoApiApi",
+                        "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketV2:BucketV2::dododoStorageBucket",
+                        "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketPublicAccessBlock:BucketPublicAccessBlock::dododoStoragePublicAccessBlock",
+                        "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketCorsConfigurationV2:BucketCorsConfigurationV2::dododoStorageCors",
+                        "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketPolicy:BucketPolicy::dododoStoragePolicy",
+                        "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function$aws:cloudwatch/logGroup:LogGroup::dododoApiRouteTzvnftHandlerLogGroup",
+                        "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function$aws:lambda/function:Function::dododoApiRouteTzvnftHandlerFunction"
+                    ],
+                    "provider": "urn:pulumi:denis::dododo::pulumi:providers:aws::default_6_66_2::f6381699-2671-4c47-b979-1bae4b8048a7",
+                    "propertyDependencies": {
+                        "apiId": [
+                            "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2$aws:apigatewayv2/api:Api::dododoApiApi"
+                        ],
+                        "integrationType": [],
+                        "integrationUri": [
+                            "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketV2:BucketV2::dododoStorageBucket",
+                            "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketPublicAccessBlock:BucketPublicAccessBlock::dododoStoragePublicAccessBlock",
+                            "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketCorsConfigurationV2:BucketCorsConfigurationV2::dododoStorageCors",
+                            "urn:pulumi:denis::dododo::sst:aws:Bucket$aws:s3/bucketPolicy:BucketPolicy::dododoStoragePolicy",
+                            "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function$aws:cloudwatch/logGroup:LogGroup::dododoApiRouteTzvnftHandlerLogGroup",
+                            "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$sst:aws:Function$aws:lambda/function:Function::dododoApiRouteTzvnftHandlerFunction"
+                        ],
+                        "payloadFormatVersion": []
+                    },
+                    "created": "2025-03-15T12:09:04.177625Z",
+                    "modified": "2025-03-15T12:09:04.177625Z",
+                    "sourcePosition": "project:///../../../file:/Users/denis/Sites/dododo-monorepo/.sst/platform/src/components/aws/apigatewayv2-lambda-route.ts#94,14"
+                },
+                {
+                    "urn": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$aws:apigatewayv2/route:Route::dododoApiRouteTzvnftRoute",
+                    "custom": true,
+                    "id": "uyufnap",
+                    "type": "aws:apigatewayv2/route:Route",
+                    "inputs": {
+                        "__defaults": [
+                            "apiKeyRequired"
+                        ],
+                        "apiId": "ets80ptgi7",
+                        "apiKeyRequired": false,
+                        "authorizationType": "NONE",
+                        "routeKey": "ANY /{proxy+}",
+                        "target": "integrations/tibf4er"
+                    },
+                    "outputs": {
+                        "apiId": "ets80ptgi7",
+                        "apiKeyRequired": false,
+                        "authorizationScopes": null,
+                        "authorizationType": "NONE",
+                        "authorizerId": "",
+                        "id": "uyufnap",
+                        "modelSelectionExpression": "",
+                        "operationName": "",
+                        "requestModels": null,
+                        "requestParameters": [],
+                        "routeKey": "ANY /{proxy+}",
+                        "routeResponseSelectionExpression": "",
+                        "target": "integrations/tibf4er"
+                    },
+                    "parent": "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute::dododoApiRouteTzvnft",
+                    "dependencies": [
+                        "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2$aws:apigatewayv2/api:Api::dododoApiApi",
+                        "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$aws:apigatewayv2/integration:Integration::dododoApiRouteTzvnftIntegration"
+                    ],
+                    "provider": "urn:pulumi:denis::dododo::pulumi:providers:aws::default_6_66_2::f6381699-2671-4c47-b979-1bae4b8048a7",
+                    "propertyDependencies": {
+                        "apiId": [
+                            "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2$aws:apigatewayv2/api:Api::dododoApiApi"
+                        ],
+                        "authorizationType": [],
+                        "routeKey": [],
+                        "target": [
+                            "urn:pulumi:denis::dododo::sst:aws:ApiGatewayV2LambdaRoute$aws:apigatewayv2/integration:Integration::dododoApiRouteTzvnftIntegration"
+                        ]
+                    },
+                    "created": "2025-03-15T12:09:04.45573Z",
+                    "modified": "2025-03-15T12:09:04.45573Z",
+                    "sourcePosition": "project:///../../platform/node_modules/@pulumi/apigatewayv2/route.ts#192,9"
+                }
+            ],
+            "metadata": {}
+        }
+    }
+}

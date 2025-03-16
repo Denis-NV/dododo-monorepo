@@ -5,6 +5,10 @@
 
 declare module "sst" {
   export interface Resource {
+    "SupabaseOrgId": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "dododoApi": {
       "type": "sst.aws.ApiGatewayV2"
       "url": string
@@ -12,6 +16,14 @@ declare module "sst" {
     "dododoAssesment": {
       "type": "sst.aws.Remix"
       "url": string
+    }
+    "dododoDatabase": {
+      "database": string
+      "host": string
+      "password": string
+      "port": number
+      "type": "supabase.index/project.Project"
+      "user": string
     }
     "dododoStorage": {
       "name": string

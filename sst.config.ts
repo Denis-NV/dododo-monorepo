@@ -12,6 +12,10 @@ export default $config({
           profile:
             input.stage === "production" ? "dododo-production" : "dododo-dev",
         },
+        supabase: {
+          version: "1.4.1",
+          accessToken: process.env.SUPABASE_ACCESS_TOKEN,
+        },
       },
     };
   },
