@@ -2,9 +2,13 @@
   "name": "@dododo/functions",
   "version": "0.0.0",
   "type": "module",
+  "scripts": {
+    "generate": "pnpm drizzle-kit generate --config=drizzle.config.ts"
+  },
   "dependencies": {
     "@dododo/core": "workspace:*",
     "drizzle-orm": "^0.40.0",
+    "drizzle-zod": "^0.7.0",
     "express": "^4.21.2",
     "postgres": "^3.4.5",
     "serverless-http": "^3.2.0",

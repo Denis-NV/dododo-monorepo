@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { index } from "./controller";
+import { getAll } from "./controller";
 
 const router = Router();
 
-router.get("/assesment", index);
+router.get("/assesment", getAll);
 
 export default router;
