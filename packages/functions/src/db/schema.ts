@@ -1,4 +1,4 @@
-import { integer, pgTable, text, varchar } from "drizzle-orm/pg-core";
+import { integer, pgTable, text } from "drizzle-orm/pg-core";
 // import { createInsertSchema } from "drizzle-zod";
 
 import { timestamps } from "@/utils/columns.helpers";
@@ -6,8 +6,6 @@ import { timestamps } from "@/utils/columns.helpers";
 export const AssessmentTable = pgTable("assessments", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   description: text(),
-  firstName: varchar(),
-  lastName: varchar(),
   ...timestamps,
 });
 

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { sql } from "drizzle-orm";
 
-import { db } from "@/db";
+import { db } from "@/db/client";
 
 export const getAll = async (req: Request, res: Response) => {
   const query = await db.execute(sql`SELECT NOW()`);

@@ -19,7 +19,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 const handleRequest = serverless(app);
 
-export const handler: Handler = async (
+export const main: Handler = async (
   event: APIGatewayProxyEvent,
   context: Context
 ) => {
