@@ -12,6 +12,10 @@ export default $config({
           profile:
             input.stage === "production" ? "dododo-production" : "dododo-dev",
         },
+        supabase: {
+          version: "1.4.1",
+          accessToken: process.env.SUPABASE_ACCESS_TOKEN,
+        },
       },
     };
   },
@@ -21,7 +25,8 @@ export default $config({
     await import("./infra/frontApp");
 
     return {
-      MyBucket: storage.bucket.name,
+      uploads: storage.bucket.name,
+      Region: aws.getRegionOutput().name,
     };
   },
 });

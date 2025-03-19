@@ -12,3 +12,11 @@ For SSO login run:
 ```
 aws sso login --sso-session=dododo
 ```
+
+## ENV variables
+
+You need the following ENV variables listed in your local `.env` file
+
+```
+SUPABASE_ACCESS_TOKEN=<access_token>
+```

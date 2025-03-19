@@ -5,19 +5,6 @@
 
 declare module "sst" {
   export interface Resource {
-    "MyApi": {
-      "name": string
-      "type": "sst.aws.Function"
-      "url": string
-    }
-    "dododoAssesment": {
-      "type": "sst.aws.Remix"
-      "url": string
-    }
-    "dododoStorage": {
-      "name": string
-      "type": "sst.aws.Bucket"
-    }
   }
 }
 /// <reference path="sst-env.d.ts" />
