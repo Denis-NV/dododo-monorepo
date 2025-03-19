@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "generate": "pnpm sst shell -- drizzle-kit generate --config=drizzle.config.ts",
-    "migrate": "pnpm sst shell -- drizzle-kit migrate --config=drizzle.config.ts"
+    "migrate": "pnpm sst shell -- drizzle-kit migrate --config=drizzle.config.ts",
+    "migrate:staging": "pnpm sst shell --stage staging -- drizzle-kit migrate --config=drizzle.config.ts"
   },
   "dependencies": {
     "@dododo/core": "workspace:*",

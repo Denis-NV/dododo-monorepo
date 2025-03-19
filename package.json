@@ -4,6 +4,10 @@
   "scripts": {
     "sso": "aws sso login --sso-session=dododo",
     "dev": "pnpm sst dev",
+    "gen:schema": "pnpm -F functions generate",
+    "mig:schema": "pnpm -F functions migrate",
+    "mig:schema:staging": "pnpm -F functions migrate:staging",
+    "deploy:staging": "pnpm sst deploy --stage staging",
     "deploy:prod": "pnpm sst deploy --stage production"
   },
   "devDependencies": {
