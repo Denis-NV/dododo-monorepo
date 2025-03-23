@@ -2,7 +2,7 @@ import { Context, APIGatewayProxyEvent } from "aws-lambda";
 
 type TLambda = (evt: APIGatewayProxyEvent, context: Context) => Promise<string>;
 
-export const handler =
+export const handle =
   (lambda: TLambda) =>
   async (event: APIGatewayProxyEvent, context: Context) => {
     let body: string, statusCode: number;
