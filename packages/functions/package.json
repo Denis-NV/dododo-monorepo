@@ -19,6 +19,7 @@
   "devDependencies": {
     "@types/aws-lambda": "^8",
     "@types/express": "^5.0.0",
-    "drizzle-kit": "^0.30.5"
+    "drizzle-kit": "^0.30.5",
+    "zod": "^3.24.2"
   }
 }

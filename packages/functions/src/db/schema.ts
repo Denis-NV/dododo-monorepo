@@ -1,16 +1,38 @@
-import { integer, pgTable, text } from "drizzle-orm/pg-core";
-// import { createInsertSchema } from "drizzle-zod";
+import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
+import { z } from "zod";
 
 import { timestamps } from "@/utils/columns.helpers";
 
+export const userTable = pgTable("user", {
+  id: integer().generatedAlwaysAsIdentity().primaryKey(),
+});
+
+export const sessionTable = pgTable("session", {
+  id: text("id").primaryKey(),
+  userId: integer("user_id")
+    .notNull()
+    .references(() => userTable.id),
+  expiresAt: timestamp("expires_at", {
+    withTimezone: true,
+    mode: "date",
+  }).notNull(),
+});
+
 export const AssessmentTable = pgTable("assessments", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  id: integer().generatedAlwaysAsIdentity().primaryKey(),
   description: text(),
   ...timestamps,
 });
 
-// export const insertAssessmentTableSchema = createInsertSchema(AssessmentTable, {
-//   email: (schema) => schema.email.email(),
-//   firstName: (schema) => schema.firstName.min(2).max(150).optional(),
-//   lastName: (schema) => schema.lastName.min(2).max(150).optional(),
-// });
+// Validation
+
+export const insertUserTableSchema = createInsertSchema(userTable);
+export const insertSessionTableSchema = createInsertSchema(sessionTable);
+export const insertAssessmentTableSchema = createInsertSchema(AssessmentTable);
+
+// Types
+
+export type TUser = z.infer<typeof insertUserTableSchema>;
+export type TSession = z.infer<typeof insertSessionTableSchema>;
+export type TAssessment = z.infer<typeof insertAssessmentTableSchema>;
