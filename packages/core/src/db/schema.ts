@@ -5,10 +5,10 @@ import {
   timestamp,
   boolean,
 } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
-import { z } from "zod";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 import { timestamps } from "@/db/columns.helpers";
+import { InferInsertModel, InferSelectModel } from "drizzle-orm";
 
 export const userTable = pgTable("user", {
   id: integer().generatedAlwaysAsIdentity().primaryKey(),
@@ -42,11 +42,23 @@ export const AssessmentTable = pgTable("assessments", {
 // Validation
 
 export const insertUserTableSchema = createInsertSchema(userTable);
+export const selectUserTableSchema = createSelectSchema(userTable);
 export const insertSessionTableSchema = createInsertSchema(sessionTable);
 export const insertAssessmentTableSchema = createInsertSchema(AssessmentTable);
 
 // Types
 
-export type TUser = z.infer<typeof insertUserTableSchema>;
-export type TSession = z.infer<typeof insertSessionTableSchema>;
-export type TAssessment = z.infer<typeof insertAssessmentTableSchema>;
+export type TInsertUser = InferInsertModel<typeof userTable>;
+export type TSelectUser = InferSelectModel<typeof userTable>;
+
+export type TInsertSession = InferInsertModel<typeof sessionTable>;
+export type TSelectSession = InferSelectModel<typeof sessionTable>;
+
+export type TInsertAssessment = InferInsertModel<typeof AssessmentTable>;
+export type TSelectAssessment = InferSelectModel<typeof AssessmentTable>;
+
+export type TSimpleType = TInsertUser & {
+  id: number;
+  name: string;
+  age: number;
+};

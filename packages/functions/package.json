@@ -5,7 +5,6 @@
   "scripts": {},
   "dependencies": {
     "@dododo/core": "workspace:*",
-    "drizzle-orm": "^0.40.0",
     "express": "^4.21.2",
     "serverless-http": "^3.2.0",
     "sst": "*"
