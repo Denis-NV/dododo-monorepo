@@ -1,4 +1,6 @@
 import { ActionFunctionArgs } from "@remix-run/node";
+import { Resource } from "sst";
+
 import { verifyPasswordStrength } from "@/utils/password";
 
 const action = async ({ request }: ActionFunctionArgs) => {
@@ -27,8 +29,11 @@ const action = async ({ request }: ActionFunctionArgs) => {
     };
   }
 
+  // TODO: Consider moving this check to the API
   const password = typeof payload.password === "string" ? payload.password : "";
   const strongPassword = await verifyPasswordStrength(password);
+
+  // Consider hashing the password before sending it to the server
 
   if (!strongPassword) {
     return {
@@ -39,6 +44,17 @@ const action = async ({ request }: ActionFunctionArgs) => {
       },
     };
   }
+
+  const response = await fetch(`${Resource.dododoApi.url}/user`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  const responseBody = await response.json();
+
+  console.log(">", responseBody);
 
   return null;
 };

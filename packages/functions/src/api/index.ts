@@ -2,14 +2,16 @@ import { APIGatewayProxyEvent, Context, Handler } from "aws-lambda";
 import express, { Request, Response, NextFunction } from "express";
 import serverless from "serverless-http";
 
-import assesments from "./resources/assessments/routes";
+import assessments from "./resources/assessments/routes";
+import users from "./resources/users/routes";
 
 const app = express();
 
 app.use(express.json());
 
 // routes
-app.use(assesments);
+app.use(assessments);
+app.use(users);
 
 // middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

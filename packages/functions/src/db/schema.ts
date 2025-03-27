@@ -1,4 +1,10 @@
-import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  integer,
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+} from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -6,6 +12,12 @@ import { timestamps } from "@/utils/columns.helpers";
 
 export const userTable = pgTable("user", {
   id: integer().generatedAlwaysAsIdentity().primaryKey(),
+  email: text().unique().notNull(),
+  username: text().notNull(),
+  passwordHash: text().notNull(),
+  recoveryCode: text().notNull(),
+  emailVerified: boolean().notNull().default(false),
+  ...timestamps,
 });
 
 export const sessionTable = pgTable("session", {
@@ -17,6 +29,7 @@ export const sessionTable = pgTable("session", {
     withTimezone: true,
     mode: "date",
   }).notNull(),
+  ...timestamps,
 });
 
 export const AssessmentTable = pgTable("assessments", {
