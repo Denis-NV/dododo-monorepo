@@ -8,7 +8,7 @@ import {
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-import { timestamps } from "@/utils/columns.helpers";
+import { timestamps } from "@/db/columns.helpers";
 
 export const userTable = pgTable("user", {
   id: integer().generatedAlwaysAsIdentity().primaryKey(),
@@ -35,6 +35,7 @@ export const sessionTable = pgTable("session", {
 export const AssessmentTable = pgTable("assessments", {
   id: integer().generatedAlwaysAsIdentity().primaryKey(),
   description: text(),
+  gender: text(),
   ...timestamps,
 });
 

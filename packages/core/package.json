@@ -3,7 +3,10 @@
   "type": "module",
   "version": "0.0.0",
   "scripts": {
-    "test": "sst shell vitest"
+    "test": "sst shell vitest",
+    "gen:schema": "pnpm sst shell -- drizzle-kit generate --config=drizzle.config.ts",
+    "mig:schema": "pnpm sst shell -- drizzle-kit migrate --config=drizzle.config.ts",
+    "mig:schema:staging": "pnpm sst shell --stage staging -- drizzle-kit migrate --config=drizzle.config.ts"
   },
   "exports": {
     "./*": [
@@ -12,11 +15,15 @@
     ]
   },
   "dependencies": {
-    "@oslojs/encoding": "^1.1.0",
+    "drizzle-orm": "^0.40.0",
+    "drizzle-zod": "^0.7.0",
+    "postgres": "^3.4.5",
     "sst": "*"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8",
-    "vitest": "^2"
+    "drizzle-kit": "^0.30.5",
+    "vitest": "^2",
+    "zod": "^3.24.2"
   }
 }

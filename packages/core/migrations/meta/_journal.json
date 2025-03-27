@@ -43,6 +43,13 @@
       "when": 1742975015774,
       "tag": "0005_naive_valeria_richards",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1743059101803,
+      "tag": "0006_romantic_warstar",
+      "breakpoints": true
     }
   ]
 }
