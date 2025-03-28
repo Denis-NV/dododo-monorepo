@@ -58,10 +58,14 @@ module.exports = {
       settings: {
         "import/internal-regex": "^@/",
         "import/resolver": {
+          project: [
+            path.resolve(__dirname, "./tsconfig.json"), // root tsconfig
+          ],
           node: {
             extensions: [".ts", ".tsx"],
           },
           typescript: {
+            project: "./tsconfig.json",
             alwaysTryTypes: true,
           },
         },
