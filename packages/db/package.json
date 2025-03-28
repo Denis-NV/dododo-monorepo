@@ -1,0 +1,22 @@
+{
+  "name": "@dododo/db",
+  "version": "0.0.0",
+  "main": "index.ts",
+  "types": "index.ts",
+  "scripts": {
+    "dev": "drizzle-kit studio --config drizzle.config.ts",
+    "gen:schema": "pnpm sst shell -- drizzle-kit generate --config=drizzle.config.ts",
+    "mig:schema": "pnpm sst shell -- drizzle-kit migrate --config=drizzle.config.ts",
+    "mig:schema:staging": "pnpm sst shell --stage staging -- drizzle-kit migrate --config=drizzle.config.ts"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.40.0",
+    "drizzle-zod": "^0.7.0",
+    "postgres": "^3.4.5",
+    "sst": "*"
+  },
+  "devDependencies": {
+    "@dododo/tsconfig": "workspace:*",
+    "drizzle-kit": "^0.30.5"
+  }
+}

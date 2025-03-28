@@ -4,9 +4,9 @@
   "scripts": {
     "sso": "aws sso login --sso-session=dododo",
     "dev": "pnpm sst dev",
-    "gen:schema": "pnpm -F core gen:schema",
-    "mig:schema": "pnpm -F core mig:schema",
-    "mig:schema:staging": "pnpm -F core mig:schema:staging",
+    "gen:schema": "pnpm -F db gen:schema",
+    "mig:schema": "pnpm -F db mig:schema",
+    "mig:schema:staging": "pnpm -F db mig:schema:staging",
     "deploy:staging": "pnpm sst deploy --stage staging",
     "deploy:prod": "pnpm sst deploy --stage production"
   },

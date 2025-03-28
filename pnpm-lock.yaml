@@ -24,6 +24,19 @@ importers:
 
   packages/core:
     dependencies:
+      sst:
+        specifier: '*'
+        version: 3.9.31
+    devDependencies:
+      '@types/aws-lambda':
+        specifier: ^8
+        version: 8.10.147
+      vitest:
+        specifier: ^2
+        version: 2.1.9(@types/node@22.13.9)
+
+  packages/db:
+    dependencies:
       drizzle-orm:
         specifier: ^0.40.0
         version: 0.40.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(gel@2.0.1)(pg@8.14.0)(postgres@3.4.5)
@@ -37,21 +50,18 @@ importers:
         specifier: '*'
         version: 3.9.31
     devDependencies:
-      '@types/aws-lambda':
-        specifier: ^8
-        version: 8.10.147
+      '@dododo/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
       drizzle-kit:
         specifier: ^0.30.5
         version: 0.30.5
-      vitest:
-        specifier: ^2
-        version: 2.1.9(@types/node@22.13.9)
 
   packages/frontApp:
     dependencies:
-      '@dododo/core':
+      '@dododo/db':
         specifier: workspace:*
-        version: link:../core
+        version: link:../db
       '@oslojs/crypto':
         specifier: ^1.0.1
         version: 1.0.1
@@ -134,9 +144,9 @@ importers:
 
   packages/functions:
     dependencies:
-      '@dododo/core':
+      '@dododo/db':
         specifier: workspace:*
-        version: link:../core
+        version: link:../db
       express:
         specifier: ^4.21.2
         version: 4.21.2
@@ -153,6 +163,8 @@ importers:
       '@types/express':
         specifier: ^5.0.0
         version: 5.0.0
+
+  packages/tsconfig: {}
 
 packages:
 

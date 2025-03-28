@@ -1,5 +1,5 @@
 import { Resource } from "sst";
-import { TInsertUser } from "@dododo/core/db";
+import { TInsertUser } from "@dododo/db";
 
 type TCreateUserBody = Pick<TInsertUser, "email"> & {
   username: string;

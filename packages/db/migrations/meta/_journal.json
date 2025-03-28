@@ -50,6 +50,13 @@
       "when": 1743059101803,
       "tag": "0006_romantic_warstar",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1743148243907,
+      "tag": "0007_unique_ricochet",
+      "breakpoints": true
     }
   ]
 }

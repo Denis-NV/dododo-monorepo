@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {},
   "dependencies": {
-    "@dododo/core": "workspace:*",
+    "@dododo/db": "workspace:*",
     "express": "^4.21.2",
     "serverless-http": "^3.2.0",
     "sst": "*"
