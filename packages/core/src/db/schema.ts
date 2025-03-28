@@ -7,20 +7,21 @@ import {
 } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
-import { timestamps } from "@/db/columns.helpers";
+import { timestamps } from "./columns";
 import { InferInsertModel, InferSelectModel } from "drizzle-orm";
 
 export const userTable = pgTable("user", {
+  ...timestamps,
   id: integer().generatedAlwaysAsIdentity().primaryKey(),
   email: text().unique().notNull(),
   username: text().notNull(),
   passwordHash: text().notNull(),
   recoveryCode: text().notNull(),
   emailVerified: boolean().notNull().default(false),
-  ...timestamps,
 });
 
 export const sessionTable = pgTable("session", {
+  ...timestamps,
   id: text("id").primaryKey(),
   userId: integer("user_id")
     .notNull()
@@ -29,14 +30,13 @@ export const sessionTable = pgTable("session", {
     withTimezone: true,
     mode: "date",
   }).notNull(),
-  ...timestamps,
 });
 
 export const AssessmentTable = pgTable("assessments", {
+  ...timestamps,
   id: integer().generatedAlwaysAsIdentity().primaryKey(),
   description: text(),
   gender: text(),
-  ...timestamps,
 });
 
 // Validation
@@ -56,9 +56,3 @@ export type TSelectSession = InferSelectModel<typeof sessionTable>;
 
 export type TInsertAssessment = InferInsertModel<typeof AssessmentTable>;
 export type TSelectAssessment = InferSelectModel<typeof AssessmentTable>;
-
-export type TSimpleType = TInsertUser & {
-  id: number;
-  name: string;
-  age: number;
-};

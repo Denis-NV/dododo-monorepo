@@ -1,25 +1,19 @@
 import { Resource } from "sst";
 import { TInsertUser } from "@dododo/core/db";
 
-type TCreateUserPayload = {
-  email: string;
+type TCreateUserBody = Pick<TInsertUser, "email"> & {
   username: string;
   password: string;
 };
 
-const test: TInsertUser = {
-  useasfsx: 1,
-};
-
-console.log(test);
-
-export const createUser = async (payload: TCreateUserPayload) => {
+export const createUser = async (body: TCreateUserBody) => {
   const response = await fetch(`${Resource.dododoApi.url}/user`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(body),
   });
+
   return await response.json();
 };
