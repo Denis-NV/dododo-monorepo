@@ -101,7 +101,7 @@ const SignUp = () => {
           </div>
         </Form>
 
-        <p className="text-red-700 text-sm mt-2 text-right">
+        <p className="text-red-700 text-sm mt-2 max-w-[340px]">
           {result?.formErrors}
         </p>
       </div>

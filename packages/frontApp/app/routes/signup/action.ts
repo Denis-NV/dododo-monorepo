@@ -44,10 +44,10 @@ const action = async ({ request }: ActionFunctionArgs) => {
     password: result.data.password,
   });
 
-  if (newUser.status !== 200) {
+  if (!newUser.data) {
     return {
       payload,
-      formErrors: ["Failed to create a new user. Please try again later."],
+      formErrors: [`Failed to create a new user. ${newUser.error}`],
       fieldErrors: {},
     };
   }
