@@ -15,11 +15,8 @@ import { encryptString } from "@/utils/encryption";
 
 export const createUser = async (
   { body }: Request<unknown, unknown, z.infer<typeof createUserRequestBody>>,
-  // res: Response
   res: Response<z.infer<typeof createUserResponseBody>>
 ) => {
-  // TODO: Maybe implement request origin checking
-
   const passwordHash = await hashPassword(body.password);
   const recoveryCode = generateRandomRecoveryCode();
   const encryptedRecoveryCode = encryptString(recoveryCode);
@@ -40,7 +37,9 @@ export const createUser = async (
     .returning()
     .onConflictDoNothing();
 
-  console.log("query >>>", newUser);
+  if (!newUser) {
+    throw new Error("Unexpected error");
+  }
 
   res.status(200).json(newUser);
 };

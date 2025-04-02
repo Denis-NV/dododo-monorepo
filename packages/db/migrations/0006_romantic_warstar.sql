@@ -1,1 +1,0 @@
-ALTER TABLE "assessments" ADD COLUMN "gender" text;

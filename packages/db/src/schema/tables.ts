@@ -5,6 +5,7 @@ import {
   timestamp,
   boolean,
   customType,
+  uuid,
 } from "drizzle-orm/pg-core";
 
 import { timestamps } from "./columns";
@@ -17,7 +18,7 @@ const bytea = customType<{ data: Buffer; notNull: false; default: false }>({
 
 export const userTable = pgTable("user", {
   ...timestamps,
-  id: integer().generatedAlwaysAsIdentity().primaryKey(),
+  id: uuid().defaultRandom().primaryKey(),
   email: text().unique().notNull(),
   username: text().notNull(),
   firstName: text(),
@@ -29,8 +30,8 @@ export const userTable = pgTable("user", {
 
 export const sessionTable = pgTable("session", {
   ...timestamps,
-  id: text().primaryKey(),
-  userId: integer()
+  id: uuid().defaultRandom().primaryKey(),
+  userId: uuid()
     .notNull()
     .references(() => userTable.id),
   expiresAt: timestamp("expires_at", {
@@ -41,7 +42,7 @@ export const sessionTable = pgTable("session", {
 
 export const AssessmentTable = pgTable("assessments", {
   ...timestamps,
-  id: integer().generatedAlwaysAsIdentity().primaryKey(),
+  id: uuid().defaultRandom().primaryKey(),
   description: text(),
   gender: text(),
 });
