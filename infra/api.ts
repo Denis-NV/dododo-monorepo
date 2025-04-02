@@ -1,8 +1,15 @@
 import { bucket, database } from "./storage";
 
+const CipherKey = new sst.Secret("CipherKey");
+
 // Create the API
 export const api = new sst.aws.ApiGatewayV2("dododoApi", {
-  link: [bucket, database],
+  link: [bucket, database, CipherKey],
 });
 
-api.route("ANY /{proxy+}", "packages/functions/src/api/index.handler");
+api.route("ANY /{proxy+}", {
+  handler: "packages/functions/src/api/index.handler",
+  nodejs: {
+    install: ["@node-rs/argon2"],
+  },
+});

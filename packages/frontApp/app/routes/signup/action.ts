@@ -1,13 +1,24 @@
 import { ActionFunctionArgs } from "@remix-run/node";
+import { createUserRequestBody } from "@dododo/db";
 import { z } from "zod";
 
-import { verifyPasswordStrength } from "@/utils/password";
 import { createUser } from "@/api";
 
-const schema = z.object({
-  email: z.string(),
-  password: z.string(),
-});
+export const createUserInput = z
+  .object({
+    email: z.coerce.string().email().min(5),
+    password: z.coerce
+      .string()
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+        "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one number"
+      ),
+    confirm: z.coerce.string(),
+  })
+  .refine((data) => data.password === data.confirm, {
+    message: "Passwords don't match",
+    path: ["confirm"], // path of error
+  });
 
 const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
@@ -15,45 +26,30 @@ const action = async ({ request }: ActionFunctionArgs) => {
   const payload = Object.fromEntries(formData);
 
   // Then parse it with zod
-  const result = schema.safeParse(payload);
-  const submission = result.data;
+  const result = createUserInput.safeParse(payload);
 
-  // TODO: Maybe implement request origin checking
+  if (!result.success) {
+    const error = result.error.flatten();
 
-  if (submission) {
-    if (submission.email === "" || submission.password === "") {
-      return {
-        payload,
-        formErrors: ["Failed to submit. Please try again later."],
-        fieldErrors: {
-          email: "Email is required",
-          password: "Password",
-        },
-      };
-    }
+    return {
+      payload,
+      formErrors: error.formErrors,
+      fieldErrors: error.fieldErrors,
+    };
+  }
 
-    // TODO: Consider moving this check to the API
-    const strongPassword = await verifyPasswordStrength(submission.password);
+  const newUser = await createUser({
+    username: result.data.email,
+    email: result.data.email,
+    password: result.data.password,
+  });
 
-    // Consider hashing the password before sending it to the server
-
-    if (!strongPassword) {
-      return {
-        payload,
-        formErrors: ["Failed to submit. Please try again later."],
-        fieldErrors: {
-          password: "Password is too weak",
-        },
-      };
-    }
-
-    const newUser = createUser({
-      username: submission.email,
-      email: submission.email,
-      password: submission.password,
-    });
-
-    console.log(">", newUser);
+  if (newUser.status !== 200) {
+    return {
+      payload,
+      formErrors: ["Failed to create a new user. Please try again later."],
+      fieldErrors: {},
+    };
   }
 
   return null;

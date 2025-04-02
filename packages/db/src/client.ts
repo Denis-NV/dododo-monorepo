@@ -4,4 +4,4 @@ import { transactionPooler } from "./url";
 
 const client = postgres(transactionPooler, { prepare: false });
 
-export const db = drizzle({ client });
+export const db = drizzle({ client, casing: "snake_case" });

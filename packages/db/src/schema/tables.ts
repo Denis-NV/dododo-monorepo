@@ -4,24 +4,33 @@ import {
   text,
   timestamp,
   boolean,
+  customType,
 } from "drizzle-orm/pg-core";
 
 import { timestamps } from "./columns";
+
+const bytea = customType<{ data: Buffer; notNull: false; default: false }>({
+  dataType() {
+    return "bytea";
+  },
+});
 
 export const userTable = pgTable("user", {
   ...timestamps,
   id: integer().generatedAlwaysAsIdentity().primaryKey(),
   email: text().unique().notNull(),
   username: text().notNull(),
+  firstName: text(),
+  lastName: text(),
   passwordHash: text().notNull(),
-  recoveryCode: text().notNull(),
+  recoveryCode: bytea().notNull(),
   emailVerified: boolean().notNull().default(false),
 });
 
 export const sessionTable = pgTable("session", {
   ...timestamps,
-  id: text("id").primaryKey(),
-  userId: integer("user_id")
+  id: text().primaryKey(),
+  userId: integer()
     .notNull()
     .references(() => userTable.id),
   expiresAt: timestamp("expires_at", {

@@ -5,6 +5,10 @@
 
 declare module "sst" {
   export interface Resource {
+    "CipherKey": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "SupabaseOrgId": {
       "type": "sst.sst.Secret"
       "value": string

@@ -5,9 +5,14 @@
   "scripts": {},
   "dependencies": {
     "@dododo/db": "workspace:*",
+    "@node-rs/argon2": "^2.0.2",
+    "@oslojs/binary": "^1.0.0",
+    "@oslojs/crypto": "^1.0.1",
+    "@oslojs/encoding": "^1.1.0",
     "express": "^4.21.2",
     "serverless-http": "^3.2.0",
-    "sst": "*"
+    "sst": "*",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8",

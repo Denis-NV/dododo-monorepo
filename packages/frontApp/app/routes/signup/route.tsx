@@ -30,13 +30,16 @@ const SignUp = () => {
                   id="form-signup.email"
                   name="email"
                   type="email"
-                  required
                   className="border border-gray-300 rounded-sm"
                 />
               </div>
             </div>
-            <p className="text-red-700 text-sm mt-2 text-right">
-              {result?.fieldErrors.email}
+            <p className="text-red-700 text-sm mt-2 max-w-[340px]">
+              {result?.fieldErrors.email?.map((e, i) => (
+                <span key={i} className="block">
+                  {e}
+                </span>
+              ))}
             </p>
           </div>
 
@@ -51,13 +54,40 @@ const SignUp = () => {
                   name="password"
                   type="password"
                   autoComplete="new-password"
-                  required
                   className="border border-gray-300 rounded-sm"
                 />
               </div>
             </div>
-            <p className="text-red-700 text-sm mt-2 text-right">
-              {result?.fieldErrors.password}
+            <p className="text-red-700 text-sm mt-2 max-w-[340px]">
+              {result?.fieldErrors.password?.map((e, i) => (
+                <span key={i} className="block">
+                  {e}
+                </span>
+              ))}
+            </p>
+          </div>
+
+          <div>
+            <div className="flex flex-row space-x-4">
+              <label htmlFor="form-signup.confirm" className="flex-1">
+                Confirm password:
+              </label>
+              <div className="flex-4 ">
+                <input
+                  id="form-signup.confirm"
+                  name="confirm"
+                  type="password"
+                  autoComplete="new-password"
+                  className="border border-gray-300 rounded-sm"
+                />
+              </div>
+            </div>
+            <p className="text-red-700 text-sm mt-2 max-w-[340px]">
+              {result?.fieldErrors.confirm?.map((e, i) => (
+                <span key={i} className="block">
+                  {e}
+                </span>
+              ))}
             </p>
           </div>
 

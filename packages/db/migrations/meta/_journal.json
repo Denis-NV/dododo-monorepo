@@ -57,6 +57,20 @@
       "when": 1743148243907,
       "tag": "0007_unique_ricochet",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1743500137625,
+      "tag": "0008_small_rick_jones",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1743573701013,
+      "tag": "0009_flawless_hitman",
+      "breakpoints": true
     }
   ]
 }
