@@ -12,6 +12,11 @@ import {
 import { hashPassword } from "@/utils/password";
 import { generateRandomRecoveryCode } from "@/utils/general";
 import { encryptString } from "@/utils/encryption";
+import {
+  createEmailVerificationRequest,
+  sendVerificationEmail,
+} from "@/utils/email-verification";
+import { createSession, generateSessionToken } from "@/utils/session";
 
 export const createUser = async (
   { body }: Request<unknown, unknown, z.infer<typeof createUserRequestBody>>,
@@ -61,10 +66,34 @@ export const createUser = async (
       });
     }
 
+    const emailVerificationRequest = await createEmailVerificationRequest(
+      newUser.id,
+      newUser.email
+    );
+
+    if (!emailVerificationRequest) {
+      return res.status(500).json({
+        error: "Failed to create email verification request",
+      });
+    }
+
+    sendVerificationEmail(
+      emailVerificationRequest.email,
+      emailVerificationRequest.code
+    );
+
+    const sessionToken = generateSessionToken();
+    const session = createSession(sessionToken, newUser.id);
+    if (!session) {
+      return res.status(500).json({
+        error: "Failed to create session",
+      });
+    }
+
     // Return the created user
     return res.status(201).json({ data: newUser });
   } catch (error) {
-    // console.error("Error creating user:", error);
+    console.error("[ API ] Error creating user:", error);
 
     // Handle unexpected errors
     return res.status(500).json({

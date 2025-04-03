@@ -1,12 +1,18 @@
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
-import { AssessmentTable, sessionTable, userTable } from "./tables";
+import {
+  AssessmentTable,
+  sessionTable,
+  userTable,
+  emailVerificationRequestTable,
+} from "./tables";
 
 const validationDetailsSchema = z.object({
   formErrors: z.array(z.string()),
   fieldErrors: z.record(z.array(z.string())),
 });
 
+// User table
 export const insertUserTableSchema = createInsertSchema(userTable, {
   email: z.string().email().min(5),
   firstName: z.string().optional(),
@@ -39,5 +45,16 @@ export const createUserResponseBody = z.object({
     .optional(),
 });
 
+// Email verification request table
+export const insertEmailVerificationRequestTableSchema = createInsertSchema(
+  emailVerificationRequestTable
+);
+export const selectEmailVerificationRequestTableSchema = createSelectSchema(
+  emailVerificationRequestTable
+);
+
+// Session table
 export const insertSessionTableSchema = createInsertSchema(sessionTable);
+export const selectSessionTableSchema = createSelectSchema(sessionTable);
+
 export const insertAssessmentTableSchema = createInsertSchema(AssessmentTable);

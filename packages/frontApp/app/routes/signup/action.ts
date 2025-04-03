@@ -1,5 +1,9 @@
-import { ActionFunctionArgs } from "@remix-run/node";
-import { createUserRequestBody } from "@dododo/db";
+import {
+  ActionFunctionArgs,
+  createCookie,
+  data,
+  redirect,
+} from "@remix-run/node";
 import { z } from "zod";
 
 import { createUser } from "@/api";
@@ -22,7 +26,6 @@ export const createUserInput = z
 
 const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
-
   const payload = Object.fromEntries(formData);
 
   // Then parse it with zod
@@ -32,7 +35,6 @@ const action = async ({ request }: ActionFunctionArgs) => {
     const error = result.error.flatten();
 
     return {
-      payload,
       formErrors: error.formErrors,
       fieldErrors: error.fieldErrors,
     };
@@ -46,13 +48,35 @@ const action = async ({ request }: ActionFunctionArgs) => {
 
   if (!newUser.data) {
     return {
-      payload,
       formErrors: [`Failed to create a new user. ${newUser.error}`],
       fieldErrors: {},
     };
   }
 
-  return null;
+  // const emailVerificationCookie = createCookie("email_verification", {
+  //   httpOnly: true,
+  //   path: "/",
+  //   secure: process.env.NODE_ENV === "production",
+  //   sameSite: "lax",
+  //   expires: request.expiresAt,
+  // });
+
+  // const sessionCookie = createCookie("session", {
+  //   httpOnly: true,
+  // 	path: "/",
+  // 	secure: process.env.NODE_ENV === "production",
+  // 	sameSite: "lax",
+  // 	expires: expiresAt});
+
+  const headers = new Headers();
+  // headers.append(
+  //   "Set-Cookie",
+  //   await emailVerificationCookie.serialize(request.id)
+  // );
+  // headers.append("Set-Cookie", await sessionCookie.serialize(token));
+
+  // return redirect("/login", { headers });
+  return data(null, { headers });
 };
 
 export default action;
