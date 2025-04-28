@@ -55,7 +55,10 @@ export async function createEmailVerificationRequest(
     })
     .returning();
 
-  console.log("[ API ] Created email verification request:", emailReq);
+  console.log(
+    "[ API ] Created email verification request:",
+    emailReq.id.substring(0, 4)
+  );
 
   return emailReq;
 }

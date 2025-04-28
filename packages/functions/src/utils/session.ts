@@ -30,7 +30,7 @@ export async function createSession(
     })
     .returning();
 
-  console.log("[ API ] Created session:", newSession);
+  console.log("[ API ] Created session:", newSession.id.substring(0, 4));
 
   return newSession;
 }

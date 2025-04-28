@@ -83,12 +83,29 @@ export const createUser = async (
     );
 
     const sessionToken = generateSessionToken();
-    const session = createSession(sessionToken, newUser.id);
+    const session = await createSession(sessionToken, newUser.id);
+
     if (!session) {
       return res.status(500).json({
         error: "Failed to create session",
       });
     }
+
+    res.cookie("email_verification", emailVerificationRequest.id, {
+      httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
+      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+      sameSite: "lax", // Prevent CSRF attacks
+      path: "/", // Cookie is valid for the entire site
+      expires: emailVerificationRequest.expiresAt,
+    });
+
+    res.cookie("session", sessionToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", //
+      sameSite: "lax",
+      path: "/",
+      expires: session.expiresAt,
+    });
 
     // Return the created user
     return res.status(201).json({ data: newUser });

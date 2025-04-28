@@ -1,13 +1,17 @@
 import { Resource } from "sst";
 import { z } from "zod";
+
 import { createUserRequestBody, createUserResponseBody } from "@dododo/db";
 
 export type TCreateUserReqBody = z.infer<typeof createUserRequestBody>;
 export type TCreateUserResBody = z.infer<typeof createUserResponseBody>;
+export type TCreateUserResult = TCreateUserResBody & {
+  cookies?: string[];
+};
 
 export const createUser = async (
   body: TCreateUserReqBody
-): Promise<TCreateUserResBody> => {
+): Promise<TCreateUserResult> => {
   try {
     const response = await fetch(`${Resource.dododoApi.url}/user`, {
       method: "POST",
@@ -19,10 +23,7 @@ export const createUser = async (
 
     const responseJson = await response.json();
 
-    console.log(">>> response", response);
-    console.log("--> json", responseJson);
-
-    return responseJson;
+    return { cookies: response.headers.getSetCookie(), ...responseJson };
   } catch (error) {
     return {
       error: "Internal server error",
@@ -30,3 +31,12 @@ export const createUser = async (
     };
   }
 };
+
+// export const getCurrentSession = cache((): SessionValidationResult => {
+// 	const token = cookies().get("session")?.value ?? null;
+// 	if (token === null) {
+// 		return { session: null, user: null };
+// 	}
+// 	const result = validateSessionToken(token);
+// 	return result;
+// });

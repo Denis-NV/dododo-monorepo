@@ -1,9 +1,4 @@
-import {
-  ActionFunctionArgs,
-  createCookie,
-  data,
-  redirect,
-} from "@remix-run/node";
+import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { z } from "zod";
 
 import { createUser } from "@/api";
@@ -40,43 +35,23 @@ const action = async ({ request }: ActionFunctionArgs) => {
     };
   }
 
-  const newUser = await createUser({
+  const { data, error, cookies } = await createUser({
     username: result.data.email,
     email: result.data.email,
     password: result.data.password,
   });
 
-  if (!newUser.data) {
+  if (!data) {
     return {
-      formErrors: [`Failed to create a new user. ${newUser.error}`],
+      formErrors: [`Failed to create a new user. ${error}`],
       fieldErrors: {},
     };
   }
 
-  // const emailVerificationCookie = createCookie("email_verification", {
-  //   httpOnly: true,
-  //   path: "/",
-  //   secure: process.env.NODE_ENV === "production",
-  //   sameSite: "lax",
-  //   expires: request.expiresAt,
-  // });
-
-  // const sessionCookie = createCookie("session", {
-  //   httpOnly: true,
-  // 	path: "/",
-  // 	secure: process.env.NODE_ENV === "production",
-  // 	sameSite: "lax",
-  // 	expires: expiresAt});
-
   const headers = new Headers();
-  // headers.append(
-  //   "Set-Cookie",
-  //   await emailVerificationCookie.serialize(request.id)
-  // );
-  // headers.append("Set-Cookie", await sessionCookie.serialize(token));
+  cookies?.forEach((cookie) => headers.append("Set-Cookie", cookie));
 
-  // return redirect("/login", { headers });
-  return data(null, { headers });
+  return redirect("/verify-email", { headers });
 };
 
 export default action;
