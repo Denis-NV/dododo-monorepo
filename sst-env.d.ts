@@ -13,6 +13,10 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
+    "RefreshTokenSecret": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "SupabaseOrgId": {
       "type": "sst.sst.Secret"
       "value": string

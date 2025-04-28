@@ -6,8 +6,11 @@ import {
   selectEmailVerificationRequestTableSchema,
 } from "@dododo/db";
 // import { getCurrentSession } from "./session";
-import { generateRandomOTP } from "./general";
 import { z } from "zod";
+
+import { EMAIL_VERIFICATION_EXPIRATION_TIME } from "@/const";
+
+import { generateRandomOTP } from "./general";
 
 export type TEmailVerificationRequest = z.infer<
   typeof selectEmailVerificationRequestTableSchema
@@ -42,7 +45,7 @@ export async function createEmailVerificationRequest(
   const id = encodeBase32(idBytes).toLowerCase();
 
   const code = generateRandomOTP();
-  const expiresAt = new Date(Date.now() + 1000 * 60 * 10);
+  const expiresAt = new Date(Date.now() + EMAIL_VERIFICATION_EXPIRATION_TIME);
 
   const [emailReq] = await db
     .insert(emailVerificationRequestTable)

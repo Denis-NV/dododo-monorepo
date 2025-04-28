@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { z } from "zod";
 import jwt from "jsonwebtoken";
+import { Resource } from "sst";
 
 import {
   db,
@@ -17,8 +18,12 @@ import {
   createEmailVerificationRequest,
   sendVerificationEmail,
 } from "@/utils/email-verification";
-import { Resource } from "sst";
 import { createSession, generateSessionToken } from "@/utils/session";
+import {
+  ACCESS_TOKEN_EXPIRATION_TIME,
+  EMAIL_VERIFICATION_EXPIRATION_TIME,
+  REFRESH_TOKEN_EXPIRATION_TIME,
+} from "@/const";
 
 export const createUser = async (
   { body }: Request<unknown, unknown, z.infer<typeof createUserRequestBody>>,
@@ -68,7 +73,6 @@ export const createUser = async (
       });
     }
 
-    // TODO: Consider whether the email verification request needs an expiresAt field
     const emailVerificationRequest = await createEmailVerificationRequest(
       newUser.id,
       newUser.email
@@ -85,7 +89,25 @@ export const createUser = async (
       emailVerificationRequest.code
     );
 
+    const jwtPayload = {
+      id: newUser.id,
+      email: newUser.email,
+    };
+
+    const accessToken = jwt.sign(jwtPayload, Resource.AccessTokenSecret.value, {
+      expiresIn: EMAIL_VERIFICATION_EXPIRATION_TIME,
+    });
+
     const sessionToken = generateSessionToken();
+
+    const refreshToken = jwt.sign(
+      { ...jwtPayload, sessionToken },
+      Resource.RefreshTokenSecret.value,
+      {
+        expiresIn: REFRESH_TOKEN_EXPIRATION_TIME,
+      }
+    );
+
     const session = await createSession(sessionToken, newUser.id);
 
     if (!session) {
@@ -94,33 +116,28 @@ export const createUser = async (
       });
     }
 
-    // res.cookie("email_verification", emailVerificationRequest.id, {
-    //   httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
-    //   secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-    //   sameSite: "lax", // Prevent CSRF attacks
-    //   path: "/", // Cookie is valid for the entire site
-    //   expires: emailVerificationRequest.expiresAt,
-    // });
+    res.cookie("email_verification", emailVerificationRequest.id, {
+      httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
+      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+      sameSite: "lax", // Prevent CSRF attacks
+      path: "/", // Cookie is valid for the entire site
+      maxAge: EMAIL_VERIFICATION_EXPIRATION_TIME, // 10 minutes
+    });
 
-    const accessToken = jwt.sign(
-      {
-        id: newUser.id,
-        email: newUser.email,
-        email_verification: emailVerificationRequest.id,
-        sessionToken,
-      },
-      Resource.AccessTokenSecret.value,
-      {
-        expiresIn: "15m",
-      }
-    );
-
-    res.cookie("accessToken", accessToken, {
+    res.cookie("access_token", accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", //
       sameSite: "lax",
       path: "/",
-      maxAge: 1000 * 60 * 15, // 15 minutes
+      maxAge: ACCESS_TOKEN_EXPIRATION_TIME, // 15 minutes
+    });
+
+    res.cookie("refresh_token", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", //
+      sameSite: "lax",
+      path: "/",
+      maxAge: REFRESH_TOKEN_EXPIRATION_TIME, // 30 days
     });
 
     // Return the created user
