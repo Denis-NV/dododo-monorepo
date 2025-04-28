@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { z } from "zod";
+import jwt from "jsonwebtoken";
 
 import {
   db,
@@ -16,6 +17,7 @@ import {
   createEmailVerificationRequest,
   sendVerificationEmail,
 } from "@/utils/email-verification";
+import { Resource } from "sst";
 import { createSession, generateSessionToken } from "@/utils/session";
 
 export const createUser = async (
@@ -66,6 +68,7 @@ export const createUser = async (
       });
     }
 
+    // TODO: Consider whether the email verification request needs an expiresAt field
     const emailVerificationRequest = await createEmailVerificationRequest(
       newUser.id,
       newUser.email
@@ -91,20 +94,33 @@ export const createUser = async (
       });
     }
 
-    res.cookie("email_verification", emailVerificationRequest.id, {
-      httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
-      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-      sameSite: "lax", // Prevent CSRF attacks
-      path: "/", // Cookie is valid for the entire site
-      expires: emailVerificationRequest.expiresAt,
-    });
+    // res.cookie("email_verification", emailVerificationRequest.id, {
+    //   httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
+    //   secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+    //   sameSite: "lax", // Prevent CSRF attacks
+    //   path: "/", // Cookie is valid for the entire site
+    //   expires: emailVerificationRequest.expiresAt,
+    // });
 
-    res.cookie("session", sessionToken, {
+    const accessToken = jwt.sign(
+      {
+        id: newUser.id,
+        email: newUser.email,
+        email_verification: emailVerificationRequest.id,
+        sessionToken,
+      },
+      Resource.AccessTokenSecret.value,
+      {
+        expiresIn: "15m",
+      }
+    );
+
+    res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", //
       sameSite: "lax",
       path: "/",
-      expires: session.expiresAt,
+      maxAge: 1000 * 60 * 15, // 15 minutes
     });
 
     // Return the created user

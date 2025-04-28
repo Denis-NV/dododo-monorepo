@@ -5,6 +5,10 @@
 
 declare module "sst" {
   export interface Resource {
+    "AccessTokenSecret": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "CipherKey": {
       "type": "sst.sst.Secret"
       "value": string

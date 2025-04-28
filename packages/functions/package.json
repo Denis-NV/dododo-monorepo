@@ -10,12 +10,14 @@
     "@oslojs/crypto": "^1.0.1",
     "@oslojs/encoding": "^1.1.0",
     "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
     "serverless-http": "^3.2.0",
     "sst": "*",
     "zod": "^3.24.2"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8",
-    "@types/express": "^5.0.0"
+    "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.9"
   }
 }
