@@ -92,6 +92,7 @@ export const createUser = async (
     const jwtPayload = {
       id: newUser.id,
       email: newUser.email,
+      username: newUser.username,
     };
 
     const accessToken = jwt.sign(jwtPayload, Resource.AccessTokenSecret.value, {
