@@ -9,6 +9,7 @@ import {
   createUserRequestBody,
   createUserResponseBody,
   insertUserTableSchema,
+  TSessionUser,
 } from "@dododo/db";
 
 import { hashPassword } from "@/utils/password";
@@ -20,9 +21,9 @@ import {
 } from "@/utils/email-verification";
 import { createSession, generateSessionToken } from "@/utils/session";
 import {
-  ACCESS_TOKEN_EXPIRATION_TIME,
-  EMAIL_VERIFICATION_EXPIRATION_TIME,
-  REFRESH_TOKEN_EXPIRATION_TIME,
+  ACCESS_TOKEN_EXPIRATION_SECONDS,
+  EMAIL_VERIFICATION_EXPIRATION_SECONDS,
+  REFRESH_TOKEN_EXPIRATION_SECONDS,
 } from "@/const";
 
 export const createUser = async (
@@ -89,26 +90,18 @@ export const createUser = async (
       emailVerificationRequest.code
     );
 
-    const jwtPayload = {
+    const jwtPayload: TSessionUser = {
       id: newUser.id,
       email: newUser.email,
       username: newUser.username,
+      emailVerified: newUser.emailVerified,
     };
 
     const accessToken = jwt.sign(jwtPayload, Resource.AccessTokenSecret.value, {
-      expiresIn: EMAIL_VERIFICATION_EXPIRATION_TIME,
+      expiresIn: ACCESS_TOKEN_EXPIRATION_SECONDS,
     });
 
     const sessionToken = generateSessionToken();
-
-    const refreshToken = jwt.sign(
-      { ...jwtPayload, sessionToken },
-      Resource.RefreshTokenSecret.value,
-      {
-        expiresIn: REFRESH_TOKEN_EXPIRATION_TIME,
-      }
-    );
-
     const session = await createSession(sessionToken, newUser.id);
 
     if (!session) {
@@ -117,12 +110,20 @@ export const createUser = async (
       });
     }
 
+    const refreshToken = jwt.sign(
+      { ...jwtPayload, sessionId: session.id },
+      Resource.RefreshTokenSecret.value,
+      {
+        expiresIn: REFRESH_TOKEN_EXPIRATION_SECONDS,
+      }
+    );
+
     res.cookie("email_verification", emailVerificationRequest.id, {
       httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
       secure: process.env.NODE_ENV === "production", // Use secure cookies in production
       sameSite: "lax", // Prevent CSRF attacks
       path: "/", // Cookie is valid for the entire site
-      maxAge: EMAIL_VERIFICATION_EXPIRATION_TIME, // 10 minutes
+      maxAge: EMAIL_VERIFICATION_EXPIRATION_SECONDS * 1000, // 10 minutes
     });
 
     res.cookie("access_token", accessToken, {
@@ -130,7 +131,7 @@ export const createUser = async (
       secure: process.env.NODE_ENV === "production", //
       sameSite: "lax",
       path: "/",
-      maxAge: ACCESS_TOKEN_EXPIRATION_TIME, // 15 minutes
+      maxAge: ACCESS_TOKEN_EXPIRATION_SECONDS * 1000, // 15 minutes
     });
 
     res.cookie("refresh_token", refreshToken, {
@@ -138,7 +139,7 @@ export const createUser = async (
       secure: process.env.NODE_ENV === "production", //
       sameSite: "lax",
       path: "/",
-      maxAge: REFRESH_TOKEN_EXPIRATION_TIME, // 30 days
+      maxAge: REFRESH_TOKEN_EXPIRATION_SECONDS * 1000, // 30 days
     });
 
     // Return the created user

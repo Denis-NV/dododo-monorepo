@@ -5,7 +5,7 @@ import {
 import { sha256 } from "@oslojs/crypto/sha2";
 import { z } from "zod";
 import { db, selectSessionTableSchema, sessionTable } from "@dododo/db";
-import { REFRESH_TOKEN_EXPIRATION_TIME } from "@/const";
+import { REFRESH_TOKEN_EXPIRATION_SECONDS } from "@/const";
 
 export type Session = z.infer<typeof selectSessionTableSchema>;
 
@@ -27,7 +27,7 @@ export async function createSession(
     .values({
       id: sessionId,
       userId,
-      expiresAt: new Date(Date.now() + REFRESH_TOKEN_EXPIRATION_TIME),
+      expiresAt: new Date(Date.now() + REFRESH_TOKEN_EXPIRATION_SECONDS * 1000),
     })
     .returning();
 

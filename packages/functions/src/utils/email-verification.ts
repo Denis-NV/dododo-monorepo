@@ -8,7 +8,7 @@ import {
 // import { getCurrentSession } from "./session";
 import { z } from "zod";
 
-import { EMAIL_VERIFICATION_EXPIRATION_TIME } from "@/const";
+import { EMAIL_VERIFICATION_EXPIRATION_SECONDS } from "@/const";
 
 import { generateRandomOTP } from "./general";
 
@@ -45,7 +45,9 @@ export async function createEmailVerificationRequest(
   const id = encodeBase32(idBytes).toLowerCase();
 
   const code = generateRandomOTP();
-  const expiresAt = new Date(Date.now() + EMAIL_VERIFICATION_EXPIRATION_TIME);
+  const expiresAt = new Date(
+    Date.now() + EMAIL_VERIFICATION_EXPIRATION_SECONDS * 1000
+  );
 
   const [emailReq] = await db
     .insert(emailVerificationRequestTable)

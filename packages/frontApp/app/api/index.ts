@@ -31,12 +31,3 @@ export const createUser = async (
     };
   }
 };
-
-// export const getCurrentSession = cache((): SessionValidationResult => {
-// 	const token = cookies().get("session")?.value ?? null;
-// 	if (token === null) {
-// 		return { session: null, user: null };
-// 	}
-// 	const result = validateSessionToken(token);
-// 	return result;
-// });
