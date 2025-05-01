@@ -1,17 +1,26 @@
-import { TSessionUser } from "@dododo/db";
 import * as cookie from "cookie";
+import { z } from "zod";
 
-export type TSession = {
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "@dododo/core";
+import { accessJwtInputSchema } from "@dododo/core";
+
+import { refreshSession } from "@/api";
+
+type TAccessJwtPayload = z.infer<typeof accessJwtInputSchema>;
+
+type TSession = {
   id: string;
   accessExpiresAt: Date;
   refreshExpiresAt: Date;
-  user: TSessionUser;
+  user: TAccessJwtPayload;
 } | null;
 
-export const getCurrentSession = (cookies: string | null): TSession => {
+export const getCurrentSession = async (
+  cookies: string | null
+): Promise<TSession> => {
   const parsedCookies = cookie.parse(cookies || "");
-  const accessToken = parsedCookies.access_token;
-  const refreshToken = parsedCookies.refresh_token;
+  const accessToken = parsedCookies?.[ACCESS_TOKEN];
+  const refreshToken = parsedCookies?.[REFRESH_TOKEN];
 
   if (accessToken && refreshToken) {
     const accessPayload = JSON.parse(atob(accessToken.split(".")[1]));
@@ -23,7 +32,7 @@ export const getCurrentSession = (cookies: string | null): TSession => {
       accessExpiresAt: new Date(accessPayload.exp * 1000),
       refreshExpiresAt: new Date(refreshPayload.exp * 1000),
       user: {
-        id: accessPayload.id,
+        userId: accessPayload.userId,
         email: accessPayload.email,
         username: accessPayload.username,
         emailVerified: accessPayload.emailVerified,
@@ -31,11 +40,18 @@ export const getCurrentSession = (cookies: string | null): TSession => {
     };
   }
 
-  if (refreshToken) {
-    const payload = JSON.parse(atob(refreshToken.split(".")[1]));
+  if (refreshToken && cookies) {
+    const { cookies: newCookies } = await refreshSession(cookies);
 
-    console.log(">>> refreshToken payload", payload);
-    console.log(">>> exprires", new Date(payload.exp * 1000));
+    const newParsedCookies = cookie.parse(newCookies || "");
+    // const newAccessToken = newParsedCookies.access_token;
+    const newRefreshToken = newParsedCookies?.[REFRESH_TOKEN];
+
+    if (newRefreshToken) {
+      const newRefreshPayload = JSON.parse(atob(newRefreshToken.split(".")[1]));
+      console.log(">>> NEW refreshToken payload", newRefreshPayload);
+      console.log(">>> NEW exprires", new Date(newRefreshPayload.exp * 1000));
+    }
   }
 
   return null;

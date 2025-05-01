@@ -4,6 +4,7 @@ import serverless from "serverless-http";
 
 import assessments from "./resources/assessments/routes";
 import users from "./resources/users/routes";
+import auth from "./resources/auth/routes";
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(express.json());
 // routes
 app.use(assessments);
 app.use(users);
+app.use(auth);
 
 // middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

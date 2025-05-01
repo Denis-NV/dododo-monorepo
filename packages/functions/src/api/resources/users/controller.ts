@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
 import { z } from "zod";
-import jwt from "jsonwebtoken";
-import { Resource } from "sst";
 
 import {
   db,
@@ -9,7 +7,6 @@ import {
   createUserRequestBody,
   createUserResponseBody,
   insertUserTableSchema,
-  TSessionUser,
 } from "@dododo/db";
 
 import { hashPassword } from "@/utils/password";
@@ -19,12 +16,9 @@ import {
   createEmailVerificationRequest,
   sendVerificationEmail,
 } from "@/utils/email-verification";
-import { createSession, generateSessionToken } from "@/utils/session";
-import {
-  ACCESS_TOKEN_EXPIRATION_SECONDS,
-  EMAIL_VERIFICATION_EXPIRATION_SECONDS,
-  REFRESH_TOKEN_EXPIRATION_SECONDS,
-} from "@/const";
+import { createSession } from "@/utils/session";
+import { EMAIL_VERIFICATION_EXPIRATION_SECONDS } from "@/const";
+import { generateAccessToken, generateRefreshToken } from "@/utils/jwt";
 
 export const createUser = async (
   { body }: Request<unknown, unknown, z.infer<typeof createUserRequestBody>>,
@@ -90,19 +84,7 @@ export const createUser = async (
       emailVerificationRequest.code
     );
 
-    const jwtPayload: TSessionUser = {
-      id: newUser.id,
-      email: newUser.email,
-      username: newUser.username,
-      emailVerified: newUser.emailVerified,
-    };
-
-    const accessToken = jwt.sign(jwtPayload, Resource.AccessTokenSecret.value, {
-      expiresIn: ACCESS_TOKEN_EXPIRATION_SECONDS,
-    });
-
-    const sessionToken = generateSessionToken();
-    const session = await createSession(sessionToken, newUser.id);
+    const session = await createSession(newUser.id);
 
     if (!session) {
       return res.status(500).json({
@@ -110,37 +92,31 @@ export const createUser = async (
       });
     }
 
-    const refreshToken = jwt.sign(
-      { ...jwtPayload, sessionId: session.id },
-      Resource.RefreshTokenSecret.value,
-      {
-        expiresIn: REFRESH_TOKEN_EXPIRATION_SECONDS,
-      }
-    );
+    const { accessCookie } = generateAccessToken({
+      userId: newUser.id,
+      email: newUser.email,
+      username: newUser.username,
+      emailVerified: newUser.emailVerified,
+    });
+
+    const { refreshCookie } = generateRefreshToken({
+      userId: newUser.id,
+      email: newUser.email,
+      username: newUser.username,
+      emailVerified: newUser.emailVerified,
+      sessionId: session.id,
+    });
 
     res.cookie("email_verification", emailVerificationRequest.id, {
-      httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
-      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-      sameSite: "lax", // Prevent CSRF attacks
-      path: "/", // Cookie is valid for the entire site
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
       maxAge: EMAIL_VERIFICATION_EXPIRATION_SECONDS * 1000, // 10 minutes
     });
 
-    res.cookie("access_token", accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", //
-      sameSite: "lax",
-      path: "/",
-      maxAge: ACCESS_TOKEN_EXPIRATION_SECONDS * 1000, // 15 minutes
-    });
-
-    res.cookie("refresh_token", refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", //
-      sameSite: "lax",
-      path: "/",
-      maxAge: REFRESH_TOKEN_EXPIRATION_SECONDS * 1000, // 30 days
-    });
+    res.cookie(accessCookie.name, accessCookie.val, accessCookie.options);
+    res.cookie(refreshCookie.name, refreshCookie.val, refreshCookie.options);
 
     // Return the created user
     return res.status(201).json({ data: newUser });

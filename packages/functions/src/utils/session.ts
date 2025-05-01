@@ -16,11 +16,11 @@ export function generateSessionToken(): string {
   return token;
 }
 
-export async function createSession(
-  token: string,
-  userId: string
-): Promise<Session> {
-  const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+export async function createSession(userId: string): Promise<Session> {
+  const sessionToken = generateSessionToken();
+  const sessionId = encodeHexLowerCase(
+    sha256(new TextEncoder().encode(sessionToken))
+  );
 
   const [newSession] = await db
     .insert(sessionTable)

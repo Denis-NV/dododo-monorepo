@@ -4,7 +4,7 @@ import { getCurrentSession } from "@/utils/session";
 const loader = async ({ request }: LoaderFunctionArgs) => {
   const cookies = request.headers.get("Cookie");
 
-  const session = getCurrentSession(cookies);
+  const session = await getCurrentSession(cookies);
 
   console.log("--> session", session);
 

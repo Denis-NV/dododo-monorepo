@@ -31,3 +31,36 @@ export const createUser = async (
     };
   }
 };
+
+export type TRefreshSessionResult = {
+  error?: string;
+  message?: string;
+  cookies?: string;
+};
+
+export const refreshSession = async (
+  cookies: string
+): Promise<TRefreshSessionResult> => {
+  try {
+    const response = await fetch(`${Resource.dododoApi.url}/auth/refresh`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: cookies,
+      },
+    });
+
+    const responseJson = await response.json();
+
+    return {
+      cookies: response.headers.getSetCookie()?.join(";"),
+      ...responseJson,
+    };
+  } catch (error) {
+    return {
+      error: "Internal server error",
+      message: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+};

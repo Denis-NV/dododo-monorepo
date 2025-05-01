@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@dododo/db": "workspace:*",
+    "@dododo/core": "workspace:*",
     "@oslojs/crypto": "^1.0.1",
     "@oslojs/encoding": "^1.1.0",
     "@remix-run/node": "^2.16.0",
