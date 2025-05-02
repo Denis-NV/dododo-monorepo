@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import { z } from "zod";
 import * as cookie from "cookie";
 import { Resource } from "sst";
 
 import { db, eq, sessionTable, userTable } from "@dododo/db";
 import {
   ACCESS_TOKEN,
+  authResponseSchema,
   REFRESH_TOKEN,
   refreshJWTOutputSchema,
 } from "@dododo/core";
@@ -13,7 +15,10 @@ import {
 import { generateAccessToken, generateRefreshToken } from "@/utils/jwt";
 import { createSession } from "@/utils/session";
 
-export const refresh = async (req: Request, res: Response) => {
+export const refresh = async (
+  req: Request,
+  res: Response<z.infer<typeof authResponseSchema>>
+) => {
   try {
     const parsedCookies = cookie.parse(req.headers.cookie || "");
     const oldToken = parsedCookies?.[REFRESH_TOKEN];
@@ -69,11 +74,10 @@ export const refresh = async (req: Request, res: Response) => {
           res.clearCookie(REFRESH_TOKEN);
           res.clearCookie(ACCESS_TOKEN);
 
+          await db.delete(sessionTable).where(eq(sessionTable.userId, userId));
+
           return res.status(401).json({ message: "Invalid session" });
         }
-
-        console.log("--> oldSession", oldSession);
-        console.log("--> user", parsedPayload.data);
 
         // Remove the old token from "db"
         await db.delete(sessionTable).where(eq(sessionTable.id, sessionId));
@@ -84,6 +88,15 @@ export const refresh = async (req: Request, res: Response) => {
           return res.status(500).json({
             error: "Failed to create session",
           });
+        }
+
+        if (Date.now() >= session.expiresAt.getTime()) {
+          res.clearCookie(REFRESH_TOKEN);
+          res.clearCookie(ACCESS_TOKEN);
+
+          await db.delete(sessionTable).where(eq(sessionTable.userId, userId));
+
+          return res.status(401).json({ message: "The session has expired" });
         }
 
         // Generate brand-new tokens
@@ -109,7 +122,7 @@ export const refresh = async (req: Request, res: Response) => {
           refreshCookie.options
         );
 
-        return res.json({ accessToken: accessJWT });
+        return res.status(200).json({ accessToken: accessJWT });
       }
     );
   } catch (error) {

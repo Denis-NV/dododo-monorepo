@@ -2,17 +2,15 @@ import { data, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { getCurrentSession } from "@/utils/session";
 
 const loader = async ({ request }: LoaderFunctionArgs) => {
-  const cookies = request.headers.get("Cookie");
+  const { accessToken, user, headers } = await getCurrentSession(
+    request.headers
+  );
 
-  const session = await getCurrentSession(cookies);
+  if (!accessToken) {
+    return redirect("/login");
+  }
 
-  console.log("--> session", session);
-
-  // if (user === null) {
-  //   return redirect("/login");
-  // }
-
-  return data({ ok: true });
+  return data({ ok: true }, { headers });
 };
 
 export default loader;

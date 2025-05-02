@@ -5,7 +5,6 @@ import {
   db,
   userTable,
   createUserRequestBody,
-  createUserResponseBody,
   insertUserTableSchema,
 } from "@dododo/db";
 
@@ -19,10 +18,11 @@ import {
 import { createSession } from "@/utils/session";
 import { EMAIL_VERIFICATION_EXPIRATION_SECONDS } from "@/const";
 import { generateAccessToken, generateRefreshToken } from "@/utils/jwt";
+import { authResponseSchema } from "@dododo/core";
 
 export const createUser = async (
   { body }: Request<unknown, unknown, z.infer<typeof createUserRequestBody>>,
-  res: Response<z.infer<typeof createUserResponseBody>>
+  res: Response<z.infer<typeof authResponseSchema>>
 ) => {
   try {
     // Validate the request body
@@ -92,7 +92,7 @@ export const createUser = async (
       });
     }
 
-    const { accessCookie } = generateAccessToken({
+    const { accessCookie, accessJWT } = generateAccessToken({
       userId: newUser.id,
       email: newUser.email,
       username: newUser.username,
@@ -119,7 +119,7 @@ export const createUser = async (
     res.cookie(refreshCookie.name, refreshCookie.val, refreshCookie.options);
 
     // Return the created user
-    return res.status(201).json({ data: newUser });
+    return res.status(201).json({ accessToken: accessJWT });
   } catch (error) {
     console.error("[ API ] Error creating user:", error);
 

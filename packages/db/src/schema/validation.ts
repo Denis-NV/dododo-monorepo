@@ -7,11 +7,6 @@ import {
   emailVerificationRequestTable,
 } from "./tables";
 
-const validationDetailsSchema = z.object({
-  formErrors: z.array(z.string()),
-  fieldErrors: z.record(z.array(z.string())),
-});
-
 // User table
 export const insertUserTableSchema = createInsertSchema(userTable, {
   email: z.string().email().min(5),
@@ -31,19 +26,6 @@ export const createUserRequestBody = insertUserTableSchema
   .extend({
     password: z.string(),
   });
-
-export const createUserResponseBody = z.object({
-  error: z.string().optional(),
-  message: z.string().optional(),
-  details: validationDetailsSchema.optional(),
-  data: selectUserTableSchema
-    .omit({
-      passwordHash: true,
-      recoveryCode: true,
-      emailVerified: true,
-    })
-    .optional(),
-});
 
 // Email verification request table
 export const insertEmailVerificationRequestTableSchema = createInsertSchema(

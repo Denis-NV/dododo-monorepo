@@ -1,17 +1,18 @@
 import { Resource } from "sst";
 import { z } from "zod";
 
-import { createUserRequestBody, createUserResponseBody } from "@dododo/db";
+import { createUserRequestBody } from "@dododo/db";
+import { authResponseSchema } from "@dododo/core";
 
-export type TCreateUserReqBody = z.infer<typeof createUserRequestBody>;
-export type TCreateUserResBody = z.infer<typeof createUserResponseBody>;
-export type TCreateUserResult = TCreateUserResBody & {
-  cookies?: string[];
+type TAuthResult = z.infer<typeof authResponseSchema> & {
+  headers?: Headers;
 };
 
-export const createUser = async (
-  body: TCreateUserReqBody
-): Promise<TCreateUserResult> => {
+type TRegisterUserReqBody = z.infer<typeof createUserRequestBody>;
+
+export const registerUser = async (
+  body: TRegisterUserReqBody
+): Promise<TAuthResult> => {
   try {
     const response = await fetch(`${Resource.dododoApi.url}/user`, {
       method: "POST",
@@ -23,7 +24,7 @@ export const createUser = async (
 
     const responseJson = await response.json();
 
-    return { cookies: response.headers.getSetCookie(), ...responseJson };
+    return { headers: response.headers, ...responseJson };
   } catch (error) {
     return {
       error: "Internal server error",
@@ -32,16 +33,11 @@ export const createUser = async (
   }
 };
 
-export type TRefreshSessionResult = {
-  error?: string;
-  message?: string;
-  cookies?: string;
-};
-
 export const refreshSession = async (
-  cookies: string
-): Promise<TRefreshSessionResult> => {
+  reqHeaders: Headers
+): Promise<TAuthResult> => {
   try {
+    const cookies = reqHeaders.get("cookie") || "";
     const response = await fetch(`${Resource.dododoApi.url}/auth/refresh`, {
       method: "POST",
       credentials: "include",
@@ -54,7 +50,7 @@ export const refreshSession = async (
     const responseJson = await response.json();
 
     return {
-      cookies: response.headers.getSetCookie()?.join(";"),
+      headers: response.headers,
       ...responseJson,
     };
   } catch (error) {

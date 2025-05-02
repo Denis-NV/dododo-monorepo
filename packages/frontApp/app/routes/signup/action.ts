@@ -1,7 +1,8 @@
 import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { z } from "zod";
 
-import { createUser } from "@/api";
+import { registerUser } from "@/api";
+import { getPropogatedCookiesHeaders } from "@/utils/cookies";
 
 export const createUserInput = z
   .object({
@@ -35,21 +36,24 @@ const action = async ({ request }: ActionFunctionArgs) => {
     };
   }
 
-  const { data, error, cookies } = await createUser({
+  const {
+    accessToken,
+    error,
+    headers: apiHeaders,
+  } = await registerUser({
     username: result.data.email,
     email: result.data.email,
     password: result.data.password,
   });
 
-  if (!data) {
+  if (!accessToken) {
     return {
       formErrors: [`Failed to create a new user. ${error}`],
       fieldErrors: {},
     };
   }
 
-  const headers = new Headers();
-  cookies?.forEach((cookie) => headers.append("Set-Cookie", cookie));
+  const headers = getPropogatedCookiesHeaders(apiHeaders);
 
   return redirect("/verify-email", { headers });
 };

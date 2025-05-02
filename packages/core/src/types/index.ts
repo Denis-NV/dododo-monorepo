@@ -20,3 +20,15 @@ export const refreshJWTOutputSchema = refreshJWTInputSchema.extend({
   iat: z.number(),
   exp: z.number(),
 });
+
+export const validationDetailsSchema = z.object({
+  formErrors: z.array(z.string()),
+  fieldErrors: z.record(z.array(z.string())),
+});
+
+export const authResponseSchema = z.object({
+  error: z.string().optional(),
+  message: z.string().optional(),
+  details: validationDetailsSchema.optional(),
+  accessToken: z.string().optional(),
+});

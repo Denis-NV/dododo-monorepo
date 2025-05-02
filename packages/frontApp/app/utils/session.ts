@@ -1,58 +1,63 @@
-import * as cookie from "cookie";
 import { z } from "zod";
 
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "@dododo/core";
-import { accessJwtInputSchema } from "@dododo/core";
+import { REFRESH_TOKEN, accessJwtOutputSchema } from "@dododo/core";
 
 import { refreshSession } from "@/api";
+import { getParsedCookies, getPropogatedCookiesHeaders } from "./cookies";
 
-type TAccessJwtPayload = z.infer<typeof accessJwtInputSchema>;
+type TAccessJwtPayload = z.infer<typeof accessJwtOutputSchema>;
 
 type TSession = {
-  id: string;
-  accessExpiresAt: Date;
-  refreshExpiresAt: Date;
-  user: TAccessJwtPayload;
-} | null;
+  accessToken?: string;
+  user?: TAccessJwtPayload;
+  headers?: Headers;
+};
 
 export const getCurrentSession = async (
-  cookies: string | null
+  reqHeaders: Headers
 ): Promise<TSession> => {
-  const parsedCookies = cookie.parse(cookies || "");
-  const accessToken = parsedCookies?.[ACCESS_TOKEN];
-  const refreshToken = parsedCookies?.[REFRESH_TOKEN];
+  const { accessToken, refreshToken } = getParsedCookies(
+    reqHeaders.get("cookie")
+  );
 
-  if (accessToken && refreshToken) {
-    const accessPayload = JSON.parse(atob(accessToken.split(".")[1]));
-    const refreshPayload = JSON.parse(atob(refreshToken.split(".")[1]));
-    const sessionId = refreshPayload.sessionId;
+  if (accessToken) {
+    const accessPayload: TAccessJwtPayload = JSON.parse(
+      atob(accessToken.split(".")[1])
+    );
 
     return {
-      id: sessionId,
-      accessExpiresAt: new Date(accessPayload.exp * 1000),
-      refreshExpiresAt: new Date(refreshPayload.exp * 1000),
-      user: {
-        userId: accessPayload.userId,
-        email: accessPayload.email,
-        username: accessPayload.username,
-        emailVerified: accessPayload.emailVerified,
-      },
+      accessToken,
+      user: { ...accessPayload },
     };
   }
 
-  if (refreshToken && cookies) {
-    const { cookies: newCookies } = await refreshSession(cookies);
+  if (refreshToken) {
+    const { headers: apiHeaders } = await refreshSession(reqHeaders);
+    const headers = getPropogatedCookiesHeaders(apiHeaders);
 
-    const newParsedCookies = cookie.parse(newCookies || "");
-    // const newAccessToken = newParsedCookies.access_token;
-    const newRefreshToken = newParsedCookies?.[REFRESH_TOKEN];
+    const newParsedCookies = getParsedCookies(headers.get("set-cookie"));
+    const newAccessToken = newParsedCookies.accessToken;
 
-    if (newRefreshToken) {
-      const newRefreshPayload = JSON.parse(atob(newRefreshToken.split(".")[1]));
-      console.log(">>> NEW refreshToken payload", newRefreshPayload);
-      console.log(">>> NEW exprires", new Date(newRefreshPayload.exp * 1000));
+    if (newAccessToken) {
+      const accessPayload: TAccessJwtPayload = JSON.parse(
+        atob(newAccessToken.split(".")[1])
+      );
+
+      return {
+        accessToken: newAccessToken,
+        user: { ...accessPayload },
+        headers,
+      };
     }
   }
 
-  return null;
+  const headers = new Headers();
+  headers.append(
+    "Set-Cookie",
+    `${REFRESH_TOKEN}=; Max-Age=-1; Path=/; HttpOnly`
+  );
+
+  return {
+    headers,
+  };
 };
