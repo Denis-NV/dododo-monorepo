@@ -14,7 +14,7 @@ export const registerUser = async (
   body: TRegisterUserReqBody
 ): Promise<TAuthResult> => {
   try {
-    const response = await fetch(`${Resource.dododoApi.url}/user`, {
+    const response = await fetch(`${Resource.dododoApi.url}/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
