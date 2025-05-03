@@ -1,7 +1,7 @@
 import { Resource } from "sst";
 import { z } from "zod";
 
-import { createUserRequestBody } from "@dododo/db";
+import { createUserRequestBody, loginUserRequestBody } from "@dododo/db";
 import { authResponseSchema } from "@dododo/core";
 
 type TAuthResult = z.infer<typeof authResponseSchema> & {
@@ -15,6 +15,29 @@ export const registerUser = async (
 ): Promise<TAuthResult> => {
   try {
     const response = await fetch(`${Resource.dododoApi.url}/auth/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+
+    const responseJson = await response.json();
+
+    return { headers: response.headers, ...responseJson };
+  } catch (error) {
+    return {
+      error: "Internal server error",
+      message: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+};
+
+type TLoginUserReqBody = z.infer<typeof loginUserRequestBody>;
+
+export const logIn = async (body: TLoginUserReqBody): Promise<TAuthResult> => {
+  try {
+    const response = await fetch(`${Resource.dododoApi.url}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

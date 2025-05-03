@@ -10,6 +10,7 @@ import {
   sessionTable,
   userTable,
   createUserRequestBody,
+  loginUserRequestBody,
   insertUserTableSchema,
 } from "@dododo/db";
 import {
@@ -19,7 +20,7 @@ import {
   refreshJWTOutputSchema,
 } from "@dododo/core";
 
-import { hashPassword } from "@/utils/password";
+import { hashPassword, verifyPasswordHash } from "@/utils/password";
 import { generateRandomRecoveryCode } from "@/utils/general";
 import { encryptString } from "@/utils/encryption";
 import {
@@ -133,7 +134,84 @@ export const registerUser = async (
   } catch (error) {
     console.error("[ API ] Error creating user:", error);
 
-    // Handle unexpected errors
+    return res.status(500).json({
+      error: "Internal server error",
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+};
+
+export const login = async (
+  { body }: Request<unknown, unknown, z.infer<typeof loginUserRequestBody>>,
+  res: Response<z.infer<typeof authResponseSchema>>
+) => {
+  try {
+    const parsedBody = loginUserRequestBody.safeParse(body);
+
+    if (!parsedBody.success) {
+      return res.status(400).json({
+        error: "Invalid input",
+        details: parsedBody.error.flatten(),
+      });
+    }
+
+    const { email, password } = parsedBody.data;
+
+    const [user] = await db
+      .select({
+        id: userTable.id,
+        email: userTable.email,
+        username: userTable.username,
+        emailVerified: userTable.emailVerified,
+        hashPassword: userTable.passwordHash,
+      })
+      .from(userTable)
+      .where(eq(userTable.email, email));
+
+    if (!user) {
+      return res.status(400).json({
+        error: "User not found",
+      });
+    }
+
+    const validPassword = await verifyPasswordHash(user.hashPassword, password);
+
+    if (!validPassword) {
+      return res.status(400).json({
+        error: "Invalid password",
+      });
+    }
+
+    const session = await createSession(user.id);
+
+    if (!session) {
+      return res.status(500).json({
+        error: "Failed to create session",
+      });
+    }
+
+    const { accessCookie, accessJWT } = generateAccessToken({
+      userId: user.id,
+      email: user.email,
+      username: user.username,
+      emailVerified: user.emailVerified,
+    });
+
+    const { refreshCookie } = generateRefreshToken({
+      userId: user.id,
+      email: user.email,
+      username: user.username,
+      emailVerified: user.emailVerified,
+      sessionId: session.id,
+    });
+
+    res.cookie(accessCookie.name, accessCookie.val, accessCookie.options);
+    res.cookie(refreshCookie.name, refreshCookie.val, refreshCookie.options);
+
+    return res.status(201).json({ accessToken: accessJWT });
+  } catch (error) {
+    console.error("[ API ] Error logging in:", error);
+
     return res.status(500).json({
       error: "Internal server error",
       message: error instanceof Error ? error.message : "Unknown error",

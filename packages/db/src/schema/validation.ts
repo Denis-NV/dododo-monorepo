@@ -27,6 +27,14 @@ export const createUserRequestBody = insertUserTableSchema
     password: z.string(),
   });
 
+export const loginUserRequestBody = selectUserTableSchema
+  .pick({
+    email: true,
+  })
+  .extend({
+    password: z.string(),
+  });
+
 // Email verification request table
 export const insertEmailVerificationRequestTableSchema = createInsertSchema(
   emailVerificationRequestTable
