@@ -4,6 +4,7 @@ import { loginUserRequestBody } from "@dododo/db";
 
 import { logIn } from "@/api";
 import { getPropogatedCookiesHeaders } from "@/utils/cookies";
+import { updateSession } from "@/utils/session";
 
 const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
@@ -36,7 +37,9 @@ const action = async ({ request }: ActionFunctionArgs) => {
     };
   }
 
-  const headers = getPropogatedCookiesHeaders(apiHeaders);
+  const propCookieHeaders = getPropogatedCookiesHeaders(apiHeaders);
+
+  const headers = await updateSession(propCookieHeaders, accessToken);
 
   return redirect("/", { headers });
 };

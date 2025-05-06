@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { registerUser } from "@/api";
 import { getPropogatedCookiesHeaders } from "@/utils/cookies";
+import { updateSession } from "@/utils/session";
 
 export const createUserInput = z
   .object({
@@ -53,7 +54,9 @@ const action = async ({ request }: ActionFunctionArgs) => {
     };
   }
 
-  const headers = getPropogatedCookiesHeaders(apiHeaders);
+  const propCookieHeaders = getPropogatedCookiesHeaders(apiHeaders);
+
+  const headers = await updateSession(propCookieHeaders, accessToken);
 
   return redirect("/verify-email", { headers });
 };

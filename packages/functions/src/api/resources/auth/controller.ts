@@ -182,6 +182,8 @@ export const login = async (
       });
     }
 
+    await db.delete(sessionTable).where(eq(sessionTable.userId, user.id));
+
     const session = await createSession(user.id);
 
     if (!session) {
@@ -286,21 +288,21 @@ export const refresh = async (
         // Remove the old token from "db"
         await db.delete(sessionTable).where(eq(sessionTable.id, sessionId));
 
-        const session = await createSession(userId);
-
-        if (!session) {
-          return res.status(500).json({
-            error: "Failed to create session",
-          });
-        }
-
-        if (Date.now() >= session.expiresAt.getTime()) {
+        if (Date.now() >= oldSession.expiresAt.getTime()) {
           res.clearCookie(REFRESH_TOKEN);
           res.clearCookie(ACCESS_TOKEN);
 
           await db.delete(sessionTable).where(eq(sessionTable.userId, userId));
 
           return res.status(401).json({ message: "The session has expired" });
+        }
+
+        const session = await createSession(userId);
+
+        if (!session) {
+          return res.status(500).json({
+            error: "Failed to create session",
+          });
         }
 
         // Generate brand-new tokens
