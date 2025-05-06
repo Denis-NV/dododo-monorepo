@@ -4,7 +4,6 @@ import { CookieOptions } from "express";
 import { z } from "zod";
 
 import {
-  ACCESS_TOKEN,
   accessJwtInputSchema,
   REFRESH_TOKEN,
   refreshJWTInputSchema,
@@ -21,20 +20,8 @@ export const generateAccessToken = (payload: TAccessJwtPayload) => {
     expiresIn: ACCESS_TOKEN_EXPIRATION_SECONDS,
   });
 
-  const options: CookieOptions = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: ACCESS_TOKEN_EXPIRATION_SECONDS * 1000, // 15 minutes
-  };
   return {
     accessJWT: token,
-    accessCookie: {
-      name: ACCESS_TOKEN,
-      val: token,
-      options,
-    },
   };
 };
 

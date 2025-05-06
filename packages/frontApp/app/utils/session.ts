@@ -49,8 +49,6 @@ export const updateSession = async (
 
   headers.append("Set-Cookie", sessionCookie);
 
-  console.log("--> Update session headers:", headers);
-
   return headers;
 };
 
@@ -67,37 +65,18 @@ export const getCurrentSession = async (
 
   const expires = session.get("payload")?.exp;
 
-  console.log("--> Current session:", session.get("payload"));
-
-  if (expires) {
-    console.log(
-      "--> Expires:",
-      new Date(expires * 1000),
-      new Date(),
-      new Date(expires * 1000) > new Date()
-    );
-    if (expires && new Date(expires * 1000) > new Date()) {
-      return {
-        accessToken: session.get("accessToken"),
-        user: session.get("payload"),
-      };
-    }
+  if (expires && new Date(expires * 1000) > new Date()) {
+    return {
+      accessToken: session.get("accessToken"),
+      user: session.get("payload"),
+    };
   }
 
-  const {
-    // accessToken,
-    refreshToken,
-  } = getParsedCookies(reqHeaders.get("cookie"));
+  const { refreshToken } = getParsedCookies(reqHeaders.get("cookie"));
 
   if (refreshToken) {
     const { headers: apiHeaders, accessToken: newAccessToken } =
       await refreshSession(reqHeaders);
-    // const headers = getPropogatedCookiesHeaders(apiHeaders);
-
-    // const newParsedCookies = getParsedCookies(headers.get("set-cookie"));
-    // const newAccessToken = newParsedCookies.accessToken;
-
-    console.log("--> Refresh session headers:", apiHeaders);
 
     if (apiHeaders && newAccessToken) {
       const accessPayload: TAccessJwtPayload = JSON.parse(

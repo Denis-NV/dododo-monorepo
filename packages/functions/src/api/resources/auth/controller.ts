@@ -14,7 +14,6 @@ import {
   insertUserTableSchema,
 } from "@dododo/db";
 import {
-  ACCESS_TOKEN,
   authResponseSchema,
   REFRESH_TOKEN,
   refreshJWTOutputSchema,
@@ -103,7 +102,7 @@ export const registerUser = async (
       });
     }
 
-    const { accessCookie, accessJWT } = generateAccessToken({
+    const { accessJWT } = generateAccessToken({
       userId: newUser.id,
       email: newUser.email,
       username: newUser.username,
@@ -126,7 +125,6 @@ export const registerUser = async (
       maxAge: EMAIL_VERIFICATION_EXPIRATION_SECONDS * 1000, // 10 minutes
     });
 
-    res.cookie(accessCookie.name, accessCookie.val, accessCookie.options);
     res.cookie(refreshCookie.name, refreshCookie.val, refreshCookie.options);
 
     // Return the created user
@@ -192,7 +190,7 @@ export const login = async (
       });
     }
 
-    const { accessCookie, accessJWT } = generateAccessToken({
+    const { accessJWT } = generateAccessToken({
       userId: user.id,
       email: user.email,
       username: user.username,
@@ -207,7 +205,6 @@ export const login = async (
       sessionId: session.id,
     });
 
-    res.cookie(accessCookie.name, accessCookie.val, accessCookie.options);
     res.cookie(refreshCookie.name, refreshCookie.val, refreshCookie.options);
 
     return res.status(201).json({ accessToken: accessJWT });
@@ -240,7 +237,6 @@ export const refresh = async (
         // If token is invalid or not the latest one
         if (err) {
           res.clearCookie(REFRESH_TOKEN);
-          res.clearCookie(ACCESS_TOKEN);
 
           return res.status(401).json({ message: "Invalid refresh token" });
         }
@@ -259,7 +255,6 @@ export const refresh = async (
 
         if (!sessionId) {
           res.clearCookie(REFRESH_TOKEN);
-          res.clearCookie(ACCESS_TOKEN);
 
           return res.status(401).json({ message: "Invalid session ID" });
         }
@@ -278,7 +273,6 @@ export const refresh = async (
 
         if (!oldSession) {
           res.clearCookie(REFRESH_TOKEN);
-          res.clearCookie(ACCESS_TOKEN);
 
           await db.delete(sessionTable).where(eq(sessionTable.userId, userId));
 
@@ -290,7 +284,6 @@ export const refresh = async (
 
         if (Date.now() >= oldSession.expiresAt.getTime()) {
           res.clearCookie(REFRESH_TOKEN);
-          res.clearCookie(ACCESS_TOKEN);
 
           await db.delete(sessionTable).where(eq(sessionTable.userId, userId));
 
@@ -306,7 +299,7 @@ export const refresh = async (
         }
 
         // Generate brand-new tokens
-        const { accessJWT, accessCookie } = generateAccessToken({
+        const { accessJWT } = generateAccessToken({
           userId,
           email,
           username,
@@ -321,7 +314,6 @@ export const refresh = async (
           sessionId: session.id,
         });
 
-        res.cookie(accessCookie.name, accessCookie.val, accessCookie.options);
         res.cookie(
           refreshCookie.name,
           refreshCookie.val,
