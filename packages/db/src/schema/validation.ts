@@ -35,6 +35,10 @@ export const loginUserRequestBody = selectUserTableSchema
     password: z.string(),
   });
 
+export const logoutUserRequestBody = selectUserTableSchema.pick({
+  id: true,
+});
+
 // Email verification request table
 export const insertEmailVerificationRequestTableSchema = createInsertSchema(
   emailVerificationRequestTable

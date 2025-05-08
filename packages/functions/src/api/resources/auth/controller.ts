@@ -11,6 +11,7 @@ import {
   userTable,
   createUserRequestBody,
   loginUserRequestBody,
+  logoutUserRequestBody,
   insertUserTableSchema,
 } from "@dododo/db";
 import {
@@ -146,6 +147,8 @@ export const login = async (
   try {
     const parsedBody = loginUserRequestBody.safeParse(body);
 
+    console.log("==> Log in body parsed: ", parsedBody.success);
+
     if (!parsedBody.success) {
       return res.status(400).json({
         error: "Invalid input",
@@ -154,6 +157,8 @@ export const login = async (
     }
 
     const { email, password } = parsedBody.data;
+
+    console.log("==> Log in body password: ", parsedBody.data);
 
     const [user] = await db
       .select({
@@ -172,7 +177,11 @@ export const login = async (
       });
     }
 
+    console.log("==> Log in body user: ", user);
+
     const validPassword = await verifyPasswordHash(user.hashPassword, password);
+
+    console.log("==> Log in body validPassword: ", validPassword);
 
     if (!validPassword) {
       return res.status(400).json({
@@ -218,6 +227,41 @@ export const login = async (
   }
 };
 
+export const logout = async (
+  { body }: Request<unknown, unknown, z.infer<typeof logoutUserRequestBody>>,
+  res: Response<z.infer<typeof authResponseSchema>>
+) => {
+  try {
+    const parsedBody = logoutUserRequestBody.safeParse(body);
+
+    console.log("--> Log out body: ", parsedBody.success);
+
+    if (!parsedBody.success) {
+      return res.status(400).json({
+        error: "Invalid input",
+        details: parsedBody.error.flatten(),
+      });
+    }
+
+    const { id } = parsedBody.data;
+
+    console.log("--> Log out user id: ", id);
+
+    await db.delete(sessionTable).where(eq(sessionTable.userId, id));
+
+    return res.status(200).json({
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    console.error("[ API ] Error logging out:", error);
+
+    return res.status(500).json({
+      error: "Internal server error",
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+};
+
 export const refresh = async (
   req: Request,
   res: Response<z.infer<typeof authResponseSchema>>
@@ -225,6 +269,8 @@ export const refresh = async (
   try {
     const parsedCookies = cookie.parse(req.headers.cookie || "");
     const oldToken = parsedCookies?.[REFRESH_TOKEN];
+
+    console.log(">> Refresh Session request cookies:", parsedCookies);
 
     if (!oldToken) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -234,7 +280,11 @@ export const refresh = async (
       oldToken,
       Resource.RefreshTokenSecret.value,
       async (err: any, payload: any) => {
+        console.log(">> Refresh Session error:", err);
+        console.log(">> Refresh Session payload:", payload);
+
         // If token is invalid or not the latest one
+
         if (err) {
           res.clearCookie(REFRESH_TOKEN);
 
@@ -242,6 +292,8 @@ export const refresh = async (
         }
 
         const parsedPayload = refreshJWTOutputSchema.safeParse(payload);
+
+        console.log(">> Refresh Session parsedPayload:", parsedPayload.success);
 
         if (!parsedPayload.success) {
           return res.status(401).json({
@@ -252,6 +304,8 @@ export const refresh = async (
 
         const { sessionId, userId, email, username, emailVerified } =
           parsedPayload.data;
+
+        console.log(">> Refresh Session Id:", sessionId);
 
         if (!sessionId) {
           res.clearCookie(REFRESH_TOKEN);
@@ -271,6 +325,8 @@ export const refresh = async (
           .innerJoin(userTable, eq(sessionTable.userId, userTable.id))
           .where(eq(sessionTable.id, sessionId));
 
+        console.log(">> Refresh Session oldSession:", oldSession);
+
         if (!oldSession) {
           res.clearCookie(REFRESH_TOKEN);
 
@@ -281,6 +337,11 @@ export const refresh = async (
 
         // Remove the old token from "db"
         await db.delete(sessionTable).where(eq(sessionTable.id, sessionId));
+
+        console.log(
+          ">> Refresh Session expired:",
+          Date.now() >= oldSession.expiresAt.getTime()
+        );
 
         if (Date.now() >= oldSession.expiresAt.getTime()) {
           res.clearCookie(REFRESH_TOKEN);
@@ -320,6 +381,7 @@ export const refresh = async (
           refreshCookie.options
         );
 
+        console.log("<<<<");
         return res.status(200).json({ accessToken: accessJWT });
       }
     );

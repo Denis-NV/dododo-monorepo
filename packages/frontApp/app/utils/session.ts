@@ -93,11 +93,25 @@ export const getCurrentSession = async (
     }
   }
 
+  const { headers } = await destroyCurrentSession(reqHeaders);
+
+  return {
+    headers,
+  };
+};
+
+export const destroyCurrentSession = async (
+  reqHeaders: Headers
+): Promise<TSession> => {
+  const session = await getSession(reqHeaders.get("Cookie"));
+
   const headers = new Headers();
+
   headers.append(
     "Set-Cookie",
     `${REFRESH_TOKEN}=; Max-Age=-1; Path=/; HttpOnly`
   );
+  headers.append("Set-Cookie", await destroySession(session));
 
   return {
     headers,
