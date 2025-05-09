@@ -11,13 +11,13 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@dododo/db": "workspace:*",
     "@dododo/core": "workspace:*",
+    "@dododo/db": "workspace:*",
     "@oslojs/crypto": "^1.0.1",
     "@oslojs/encoding": "^1.1.0",
-    "@remix-run/node": "^2.16.0",
-    "@remix-run/react": "^2.16.0",
-    "@remix-run/serve": "^2.16.0",
+    "@remix-run/node": "^2.16.5",
+    "@remix-run/react": "^2.16.5",
+    "@remix-run/serve": "^2.16.5",
     "cookie": "^1.0.2",
     "isbot": "^4.1.0",
     "react": "^18.2.0",
@@ -25,9 +25,9 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@remix-run/dev": "^2.16.0",
-    "@types/react": "^18.2.20",
-    "@types/react-dom": "^18.2.7",
+    "@remix-run/dev": "^2.16.5",
+    "@types/react": "^18.3.21",
+    "@types/react-dom": "^18.3.7",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "@typescript-eslint/parser": "^6.7.4",
     "autoprefixer": "^10.4.19",
@@ -40,7 +40,7 @@
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.1.6",
-    "vite": "^6.0.0",
+    "vite": "^6.3.5",
     "vite-tsconfig-paths": "^4.2.1"
   },
   "engines": {

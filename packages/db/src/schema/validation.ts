@@ -47,6 +47,12 @@ export const selectEmailVerificationRequestTableSchema = createSelectSchema(
   emailVerificationRequestTable
 );
 
+export const resentVerificationRequestBody =
+  selectEmailVerificationRequestTableSchema.pick({
+    userId: true,
+    email: true,
+  });
+
 // Session table
 export const insertSessionTableSchema = createInsertSchema(sessionTable);
 export const selectSessionTableSchema = createSelectSchema(sessionTable);

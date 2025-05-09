@@ -26,9 +26,14 @@ export const validationDetailsSchema = z.object({
   fieldErrors: z.record(z.array(z.string())),
 });
 
-export const authResponseSchema = z.object({
+export const responseSchema = z.object({
   error: z.string().optional(),
   message: z.string().optional(),
   details: validationDetailsSchema.optional(),
+});
+
+export const authResponseSchema = responseSchema.extend({
+  error: z.string().optional(),
+  message: z.string().optional(),
   accessToken: z.string().optional(),
 });

@@ -1,5 +1,5 @@
 import * as cookie from "cookie";
-import { REFRESH_TOKEN } from "@dododo/core";
+import { REFRESH_TOKEN, EMAIL_VERIFICATION } from "@dododo/core";
 
 export const getPropogatedCookiesHeaders = (
   originalHeaders?: Headers,
@@ -15,6 +15,7 @@ export const getPropogatedCookiesHeaders = (
 
 type TParsedCookies = {
   refreshToken: string | undefined;
+  emailVerification: string | undefined;
 };
 
 export const getParsedCookies = (cookies: string | null): TParsedCookies => {
@@ -22,5 +23,6 @@ export const getParsedCookies = (cookies: string | null): TParsedCookies => {
 
   return {
     refreshToken: parsedCookies?.[REFRESH_TOKEN],
+    emailVerification: parsedCookies?.[EMAIL_VERIFICATION],
   };
 };

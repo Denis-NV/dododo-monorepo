@@ -13,11 +13,14 @@ import {
   loginUserRequestBody,
   logoutUserRequestBody,
   insertUserTableSchema,
+  resentVerificationRequestBody,
 } from "@dododo/db";
 import {
   authResponseSchema,
+  EMAIL_VERIFICATION,
   REFRESH_TOKEN,
   refreshJWTOutputSchema,
+  responseSchema,
 } from "@dododo/core";
 
 import { hashPassword, verifyPasswordHash } from "@/utils/password";
@@ -118,7 +121,7 @@ export const registerUser = async (
       sessionId: session.id,
     });
 
-    res.cookie("email_verification", emailVerificationRequest.id, {
+    res.cookie(EMAIL_VERIFICATION, emailVerificationRequest.id, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
@@ -389,6 +392,65 @@ export const refresh = async (
     console.error("[ API ] Error refreshing token:", error);
 
     // Handle unexpected errors
+    return res.status(500).json({
+      error: "Internal server error",
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+};
+
+export const resentEmailVerification = async (
+  {
+    body,
+  }: Request<unknown, unknown, z.infer<typeof resentVerificationRequestBody>>,
+  res: Response<z.infer<typeof responseSchema>>
+) => {
+  try {
+    const parsedBody = resentVerificationRequestBody.safeParse(body);
+
+    console.log("--> Resent email verification body: ", parsedBody.success);
+
+    if (!parsedBody.success) {
+      return res.status(400).json({
+        error: "Invalid input",
+        details: parsedBody.error.flatten(),
+      });
+    }
+
+    const { email, userId } = parsedBody.data;
+
+    console.log("--> Resent email verification data: ", email, userId);
+
+    const emailVerificationRequest = await createEmailVerificationRequest(
+      userId,
+      email
+    );
+
+    if (!emailVerificationRequest) {
+      return res.status(500).json({
+        error: "Failed to create email verification request",
+      });
+    }
+
+    sendVerificationEmail(
+      emailVerificationRequest.email,
+      emailVerificationRequest.code
+    );
+
+    res.cookie(EMAIL_VERIFICATION, emailVerificationRequest.id, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: EMAIL_VERIFICATION_EXPIRATION_SECONDS * 1000, // 10 minutes
+    });
+
+    return res.status(200).json({
+      message: "Successfully resent email verification code",
+    });
+  } catch (error) {
+    console.error("[ API ] Error resending email verification code:", error);
+
     return res.status(500).json({
       error: "Internal server error",
       message: error instanceof Error ? error.message : "Unknown error",

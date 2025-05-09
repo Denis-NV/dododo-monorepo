@@ -15,7 +15,7 @@ export const action = verifyEmailAction;
 export const loader = verifyEmailLoader;
 
 const VerifyEmail = () => {
-  const data = useLoaderData<typeof loader>();
+  const { resent } = useLoaderData<typeof loader>();
   const result = useActionData<typeof action>();
 
   return (
@@ -55,6 +55,12 @@ const VerifyEmail = () => {
             </button>
           </div>
         </Form>
+
+        {resent && (
+          <p className="text-green-700 text-sm mt-2 max-w-[340px]">
+            Verification code resent. Please check your email.
+          </p>
+        )}
 
         <p className="text-red-700 text-sm mt-2 max-w-[340px]">
           {result?.formErrors}

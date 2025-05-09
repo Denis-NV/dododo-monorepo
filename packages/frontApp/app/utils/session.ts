@@ -55,7 +55,7 @@ export const updateSession = async (
 type TSession = {
   accessToken?: string;
   user?: TAccessJwtPayload;
-  headers?: Headers;
+  headers: Headers;
 };
 
 export const getCurrentSession = async (
@@ -69,6 +69,7 @@ export const getCurrentSession = async (
     return {
       accessToken: session.get("accessToken"),
       user: session.get("payload"),
+      headers: new Headers(),
     };
   }
 

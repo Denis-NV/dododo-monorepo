@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { encodeBase32 } from "@oslojs/encoding";
 import {
   db,
@@ -5,8 +6,6 @@ import {
   eq,
   selectEmailVerificationRequestTableSchema,
 } from "@dododo/db";
-// import { getCurrentSession } from "./session";
-import { z } from "zod";
 
 import { EMAIL_VERIFICATION_EXPIRATION_SECONDS } from "@/const";
 
@@ -15,24 +14,6 @@ import { generateRandomOTP } from "./general";
 export type TEmailVerificationRequest = z.infer<
   typeof selectEmailVerificationRequestTableSchema
 >;
-
-// export function getUserEmailVerificationRequest(userId: number, id: string): TEmailVerificationRequest | null {
-// 	const row = db.queryOne(
-// 		"SELECT id, user_id, code, email, expires_at FROM email_verification_request WHERE id = ? AND user_id = ?",
-// 		[id, userId]
-// 	);
-// 	if (row === null) {
-// 		return row;
-// 	}
-// 	const request: TEmailVerificationRequest = {
-// 		id: row.string(0),
-// 		userId: row.number(1),
-// 		code: row.string(2),
-// 		email: row.string(3),
-// 		expiresAt: new Date(row.number(4) * 1000)
-// 	};
-// 	return request;
-// }
 
 export async function createEmailVerificationRequest(
   userId: string,
@@ -68,7 +49,7 @@ export async function createEmailVerificationRequest(
   return emailReq;
 }
 
-export async function deleteUserEmailVerificationRequest(
+async function deleteUserEmailVerificationRequest(
   userId: string
 ): Promise<void> {
   const [emailReq] = await db
@@ -84,19 +65,3 @@ export async function deleteUserEmailVerificationRequest(
 export function sendVerificationEmail(email: string, code: string): void {
   console.log(`[ API ] To ${email}: Your verification code is ${code}`);
 }
-
-// export function getUserEmailVerificationRequestFromRequest(): TEmailVerificationRequest | null {
-// 	const { user } = getCurrentSession();
-// 	if (user === null) {
-// 		return null;
-// 	}
-// 	const id = cookies().get("email_verification")?.value ?? null;
-// 	if (id === null) {
-// 		return null;
-// 	}
-// 	const request = getUserEmailVerificationRequest(user.id, id);
-// 	if (request === null) {
-// 		deleteEmailVerificationRequestCookie();
-// 	}
-// 	return request;
-// }
