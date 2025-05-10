@@ -33,7 +33,5 @@ export const responseSchema = z.object({
 });
 
 export const authResponseSchema = responseSchema.extend({
-  error: z.string().optional(),
-  message: z.string().optional(),
   accessToken: z.string().optional(),
 });

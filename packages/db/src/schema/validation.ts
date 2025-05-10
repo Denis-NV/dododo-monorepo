@@ -53,6 +53,14 @@ export const resentVerificationRequestBody =
     email: true,
   });
 
+export const verifyEmailBody = selectEmailVerificationRequestTableSchema
+  .pick({
+    userId: true,
+  })
+  .extend({
+    code: z.string(),
+  });
+
 // Session table
 export const insertSessionTableSchema = createInsertSchema(sessionTable);
 export const selectSessionTableSchema = createSelectSchema(sessionTable);

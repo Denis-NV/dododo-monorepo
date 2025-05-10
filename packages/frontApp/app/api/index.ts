@@ -6,6 +6,7 @@ import {
   loginUserRequestBody,
   logoutUserRequestBody,
   resentVerificationRequestBody,
+  verifyEmailBody,
 } from "@dododo/db";
 import { authResponseSchema, responseSchema } from "@dododo/core";
 
@@ -138,6 +139,44 @@ export const resendEmailVerificationCode = async (
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      }
+    );
+
+    const responseJson = await response.json();
+
+    return {
+      headers: response.headers,
+      ...responseJson,
+    };
+  } catch (error) {
+    return {
+      error: "Internal server error",
+      message: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+};
+
+type TVerifyEmailBody = z.infer<typeof verifyEmailBody>;
+
+export const verifyEmail = async (
+  body: TVerifyEmailBody,
+  reqHeaders: Headers
+): Promise<TAuthResult> => {
+  try {
+    const cookies = reqHeaders.get("cookie") || "";
+
+    console.log("::: Passing body to getEmailVerificationCode:", body);
+
+    const response = await fetch(
+      `${Resource.dododoApi.url}/auth/verify-email`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: cookies,
         },
         body: JSON.stringify(body),
       }

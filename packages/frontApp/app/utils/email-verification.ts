@@ -1,14 +1,15 @@
 import { z } from "zod";
 import { accessJwtOutputSchema } from "@dododo/core";
 
-import { resendEmailVerificationCode } from "@/api";
+import { resendEmailVerificationCode, verifyEmail } from "@/api";
 
 import { getParsedCookies } from "./cookies";
+import { verifyEmailBody } from "@dododo/db";
+import { updateSession } from "./session";
 
 type TUser = z.infer<typeof accessJwtOutputSchema>;
 
-type TEmailVerificationRequest = {
-  id?: string;
+type TEmailVerificationResponse = {
   resent?: boolean;
   headers?: Headers;
 };
@@ -16,7 +17,7 @@ type TEmailVerificationRequest = {
 export const getUserEmailVerificationRequest = async (
   reqHeaders: Headers,
   user: TUser
-): Promise<TEmailVerificationRequest> => {
+): Promise<TEmailVerificationResponse> => {
   const { emailVerification } = getParsedCookies(reqHeaders.get("cookie"));
 
   if (!emailVerification) {
@@ -37,10 +38,11 @@ export const getUserEmailVerificationRequest = async (
         newEmailVerification
       );
 
+      reqHeaders.append("set-cookie", headers.get("set-cookie") ?? "");
+
       return {
-        id: newEmailVerification,
         resent: true,
-        headers,
+        headers: reqHeaders,
       };
     }
 
@@ -50,7 +52,54 @@ export const getUserEmailVerificationRequest = async (
   console.log("::: Got email verification from cookies:", emailVerification);
 
   return {
-    id: emailVerification,
     resent: false,
+    headers: reqHeaders,
+  };
+};
+
+type TVerifyEmailBody = z.infer<typeof verifyEmailBody>;
+type TAccessJwtPayload = z.infer<typeof accessJwtOutputSchema>;
+
+export const getVerifiedUser = async (
+  reqHeaders: Headers,
+  verifyBody: TVerifyEmailBody
+) => {
+  const {
+    accessToken,
+    headers: verifyHeaders,
+    ...rest
+  } = await verifyEmail(verifyBody, reqHeaders);
+
+  console.log(
+    "::: getVerifiedUser: verifyEmail:",
+    accessToken,
+    verifyHeaders,
+    rest
+  );
+
+  if (accessToken && verifyHeaders) {
+    const newHeaders = await updateSession(verifyHeaders, accessToken);
+
+    const accessPayload: TAccessJwtPayload = JSON.parse(
+      atob(accessToken.split(".")[1])
+    );
+
+    console.log(
+      "::: getVerifiedUser: updateSession:",
+      newHeaders,
+      accessPayload
+    );
+
+    return {
+      headers: newHeaders,
+      verified: accessPayload.emailVerified,
+      ...rest,
+    };
+  }
+
+  return {
+    headers: verifyHeaders,
+    verified: false,
+    ...rest,
   };
 };

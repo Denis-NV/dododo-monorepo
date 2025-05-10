@@ -15,13 +15,14 @@ export const action = verifyEmailAction;
 export const loader = verifyEmailLoader;
 
 const VerifyEmail = () => {
-  const { resent } = useLoaderData<typeof loader>();
+  const { user } = useLoaderData<typeof loader>();
   const result = useActionData<typeof action>();
 
   return (
     <div className="p-4 flex justify-center items-center h-screen">
-      <div>
-        <h1 className="mb-6 text-2xl">Verify Email</h1>
+      <div className="max-w-[300px]">
+        <h1 className="mb-6 text-2xl text-center">Verify Email</h1>
+        <p className="mb-4 text-sm">We sent an 8-digit code to {user.email}.</p>
         <Form method="post" className="flex flex-col space-y-2">
           <div>
             <div className="flex flex-row space-x-2">
@@ -38,7 +39,7 @@ const VerifyEmail = () => {
               </div>
             </div>
             <p className="text-red-700 text-sm mt-2 max-w-[340px]">
-              {result?.fieldErrors.code?.map((e, i) => (
+              {result?.fieldErrors?.code?.map((e, i) => (
                 <span key={i} className="block">
                   {e}
                 </span>
@@ -51,12 +52,12 @@ const VerifyEmail = () => {
               type="submit"
               className="bg-slate-800 text-white px-2 py-1 rounded-md "
             >
-              Submit
+              Verify
             </button>
           </div>
         </Form>
 
-        {resent && (
+        {result?.resent && (
           <p className="text-green-700 text-sm mt-2 max-w-[340px]">
             Verification code resent. Please check your email.
           </p>

@@ -6,21 +6,14 @@ const loader = async ({ request }: LoaderFunctionArgs) => {
   const { user, headers } = await getCurrentSession(request.headers);
 
   if (!user) {
-    return redirect("/login");
+    return redirect("/login", { headers });
   }
 
   if (user.emailVerified) {
-    return redirect("/login");
+    return redirect("/", { headers });
   }
 
-  const { headers: apiHeaders, resent } = await getUserEmailVerificationRequest(
-    request.headers,
-    user
-  );
-
-  headers?.append("set-cookie", apiHeaders?.get("set-cookie") ?? "");
-
-  return data({ resent }, { headers });
+  return data({ user }, { headers });
 };
 
 export default loader;

@@ -49,7 +49,7 @@ export async function createEmailVerificationRequest(
   return emailReq;
 }
 
-async function deleteUserEmailVerificationRequest(
+export async function deleteUserEmailVerificationRequest(
   userId: string
 ): Promise<void> {
   const [emailReq] = await db

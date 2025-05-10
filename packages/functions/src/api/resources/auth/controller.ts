@@ -14,6 +14,9 @@ import {
   logoutUserRequestBody,
   insertUserTableSchema,
   resentVerificationRequestBody,
+  verifyEmailBody,
+  emailVerificationRequestTable,
+  and,
 } from "@dododo/db";
 import {
   authResponseSchema,
@@ -28,9 +31,9 @@ import { generateRandomRecoveryCode } from "@/utils/general";
 import { encryptString } from "@/utils/encryption";
 import {
   createEmailVerificationRequest,
+  deleteUserEmailVerificationRequest,
   sendVerificationEmail,
 } from "@/utils/email-verification";
-import { generateAccessToken, generateRefreshToken } from "@/utils/jwt";
 import { createSession } from "@/utils/session";
 import { EMAIL_VERIFICATION_EXPIRATION_SECONDS } from "@/const";
 
@@ -98,28 +101,18 @@ export const registerUser = async (
       emailVerificationRequest.code
     );
 
-    const session = await createSession(newUser.id);
+    const { session, refreshCookie, accessJWT } = await createSession({
+      userId: newUser.id,
+      email: newUser.email,
+      username: newUser.username,
+      emailVerified: newUser.emailVerified,
+    });
 
     if (!session) {
       return res.status(500).json({
         error: "Failed to create session",
       });
     }
-
-    const { accessJWT } = generateAccessToken({
-      userId: newUser.id,
-      email: newUser.email,
-      username: newUser.username,
-      emailVerified: newUser.emailVerified,
-    });
-
-    const { refreshCookie } = generateRefreshToken({
-      userId: newUser.id,
-      email: newUser.email,
-      username: newUser.username,
-      emailVerified: newUser.emailVerified,
-      sessionId: session.id,
-    });
 
     res.cookie(EMAIL_VERIFICATION, emailVerificationRequest.id, {
       httpOnly: true,
@@ -194,28 +187,18 @@ export const login = async (
 
     await db.delete(sessionTable).where(eq(sessionTable.userId, user.id));
 
-    const session = await createSession(user.id);
+    const { session, refreshCookie, accessJWT } = await createSession({
+      userId: user.id,
+      email: user.email,
+      username: user.username,
+      emailVerified: user.emailVerified,
+    });
 
     if (!session) {
       return res.status(500).json({
         error: "Failed to create session",
       });
     }
-
-    const { accessJWT } = generateAccessToken({
-      userId: user.id,
-      email: user.email,
-      username: user.username,
-      emailVerified: user.emailVerified,
-    });
-
-    const { refreshCookie } = generateRefreshToken({
-      userId: user.id,
-      email: user.email,
-      username: user.username,
-      emailVerified: user.emailVerified,
-      sessionId: session.id,
-    });
 
     res.cookie(refreshCookie.name, refreshCookie.val, refreshCookie.options);
 
@@ -354,29 +337,18 @@ export const refresh = async (
           return res.status(401).json({ message: "The session has expired" });
         }
 
-        const session = await createSession(userId);
+        const { session, refreshCookie, accessJWT } = await createSession({
+          userId,
+          email,
+          username,
+          emailVerified,
+        });
 
         if (!session) {
           return res.status(500).json({
             error: "Failed to create session",
           });
         }
-
-        // Generate brand-new tokens
-        const { accessJWT } = generateAccessToken({
-          userId,
-          email,
-          username,
-          emailVerified,
-        });
-
-        const { refreshCookie } = generateRefreshToken({
-          userId,
-          email,
-          username,
-          emailVerified,
-          sessionId: session.id,
-        });
 
         res.cookie(
           refreshCookie.name,
@@ -450,6 +422,129 @@ export const resentEmailVerification = async (
     });
   } catch (error) {
     console.error("[ API ] Error resending email verification code:", error);
+
+    return res.status(500).json({
+      error: "Internal server error",
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+};
+
+export const verifyEmail = async (
+  { body, headers }: Request<unknown, unknown, z.infer<typeof verifyEmailBody>>,
+  res: Response<z.infer<typeof authResponseSchema>>
+) => {
+  try {
+    const parsedCookies = cookie.parse(headers.cookie || "");
+    const verificationReqId = parsedCookies?.[EMAIL_VERIFICATION];
+
+    console.log(">> Email verification request cookies:", parsedCookies);
+
+    if (!verificationReqId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const parsedBody = verifyEmailBody.safeParse(body);
+
+    console.log("--> Verify email body: ", parsedBody.success);
+
+    if (!parsedBody.success) {
+      return res.status(400).json({
+        error: "Invalid input",
+        details: parsedBody.error.flatten(),
+      });
+    }
+
+    const { userId } = parsedBody.data;
+
+    console.log("--> Verify email data: ", userId);
+
+    const [verifyReq] = await db
+      .select()
+      .from(emailVerificationRequestTable)
+      .where(
+        and(
+          eq(emailVerificationRequestTable.id, verificationReqId),
+          eq(emailVerificationRequestTable.userId, userId)
+        )
+      );
+
+    console.log("--> Found email request for: ", verifyReq.email);
+
+    if (!verifyReq) {
+      return res.status(500).json({
+        error: "Failed to find email verification request",
+      });
+    }
+
+    const valid =
+      Date.now() < verifyReq.expiresAt.getTime() &&
+      verifyReq.code === body.code;
+
+    console.log("--> Email valid: ", valid);
+    console.log(
+      "--> Email NOT expiried: ",
+      Date.now(),
+      verifyReq.expiresAt.getTime(),
+      Date.now() < verifyReq.expiresAt.getTime()
+    );
+    console.log(
+      "--> Email codes: ",
+      verifyReq.code,
+      body.code,
+      verifyReq.code === body.code
+    );
+
+    if (!valid) {
+      return res.status(400).json({
+        error: "Invalid email verification code",
+      });
+    }
+
+    const [updatedUser] = await db
+      .update(userTable)
+      .set({ emailVerified: true })
+      .where(eq(userTable.id, userId))
+      .returning();
+
+    if (!updatedUser) {
+      return res.status(500).json({
+        error: "Failed to update user",
+      });
+    }
+
+    await deleteUserEmailVerificationRequest(updatedUser.id);
+
+    await db.delete(sessionTable).where(eq(sessionTable.userId, userId));
+
+    const { session, refreshCookie, accessJWT } = await createSession({
+      userId: updatedUser.id,
+      email: updatedUser.email,
+      username: updatedUser.username,
+      emailVerified: updatedUser.emailVerified,
+    });
+
+    if (!session) {
+      return res.status(500).json({
+        error: "Failed to create session",
+      });
+    }
+
+    res.cookie(refreshCookie.name, refreshCookie.val, refreshCookie.options);
+    res.cookie(EMAIL_VERIFICATION, "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: -1, // Expire the cookie immediately
+    });
+
+    return res.status(200).json({
+      accessToken: accessJWT,
+      message: "Email verified successfully",
+    });
+  } catch (error) {
+    console.error("[ API ] Error verifying email:", error);
 
     return res.status(500).json({
       error: "Internal server error",
