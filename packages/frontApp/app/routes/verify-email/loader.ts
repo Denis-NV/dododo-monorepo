@@ -9,6 +9,10 @@ const loader = async ({ request }: LoaderFunctionArgs) => {
     return redirect("/login");
   }
 
+  if (user.emailVerified) {
+    return redirect("/login");
+  }
+
   const { headers: apiHeaders, resent } = await getUserEmailVerificationRequest(
     request.headers,
     user
