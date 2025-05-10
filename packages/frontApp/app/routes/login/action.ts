@@ -26,8 +26,7 @@ const action = async ({ request }: ActionFunctionArgs) => {
     error,
     headers: apiHeaders,
   } = await logIn({
-    email: result.data.email,
-    password: result.data.password,
+    body: { email: result.data.email, password: result.data.password },
   });
 
   if (!accessToken) {

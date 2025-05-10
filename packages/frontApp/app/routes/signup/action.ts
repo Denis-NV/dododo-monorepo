@@ -42,9 +42,11 @@ const action = async ({ request }: ActionFunctionArgs) => {
     error,
     headers: apiHeaders,
   } = await registerUser({
-    username: result.data.email,
-    email: result.data.email,
-    password: result.data.password,
+    body: {
+      username: result.data.email,
+      email: result.data.email,
+      password: result.data.password,
+    },
   });
 
   if (!accessToken) {

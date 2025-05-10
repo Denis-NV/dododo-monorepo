@@ -11,7 +11,9 @@ const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   const { error, message } = await logOut({
-    id: user.userId,
+    body: {
+      id: user.userId,
+    },
   });
 
   console.log("Logout", error || message);

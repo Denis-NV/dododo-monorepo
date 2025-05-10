@@ -22,8 +22,10 @@ export const getUserEmailVerificationRequest = async (
 
   if (!emailVerification) {
     const { headers } = await resendEmailVerificationCode({
-      userId: user.userId,
-      email: user.email,
+      body: {
+        userId: user.userId,
+        email: user.email,
+      },
     });
 
     console.log("::: Created new email verification request:", headers);
@@ -68,7 +70,7 @@ export const getVerifiedUser = async (
     accessToken,
     headers: verifyHeaders,
     ...rest
-  } = await verifyEmail(verifyBody, reqHeaders);
+  } = await verifyEmail({ body: verifyBody, reqHeaders });
 
   console.log(
     "::: getVerifiedUser: verifyEmail:",

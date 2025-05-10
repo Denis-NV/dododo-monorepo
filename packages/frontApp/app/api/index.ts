@@ -6,9 +6,14 @@ import {
   loginUserRequestBody,
   logoutUserRequestBody,
   resentVerificationRequestBody,
+  userProfileResponseSchema,
   verifyEmailBody,
 } from "@dododo/db";
-import { authResponseSchema, responseSchema } from "@dododo/core";
+import {
+  AUTHORIZATION,
+  authResponseSchema,
+  responseSchema,
+} from "@dododo/core";
 
 type TResult = z.infer<typeof responseSchema> & {
   headers?: Headers;
@@ -26,18 +31,23 @@ const fetchApi =
     method: TMethod,
     responseSchema: Schema
   ) =>
-  async (body?: TBody, reqHeaders?: Headers): Promise<TResponseJson> => {
+  async ({
+    body,
+    reqHeaders,
+  }: {
+    body?: TBody;
+    reqHeaders?: Headers;
+  }): Promise<TResponseJson> => {
     try {
-      const Cookie = reqHeaders?.get("cookie") || "";
-
       const response = await fetch(`${Resource.dododoApi.url}/${route}`, {
         method: method,
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
-          Cookie,
+          Cookie: reqHeaders?.get("cookie") || "",
+          [AUTHORIZATION]: reqHeaders?.get(AUTHORIZATION) || "",
         },
-        body: JSON.stringify(body),
+        body: body ? JSON.stringify(body) : undefined,
       });
 
       const responseJson = await response.json();
@@ -90,3 +100,9 @@ export const verifyEmail = fetchApi<
   TAuthResult,
   z.infer<typeof verifyEmailBody>
 >("auth/verify-email", "POST", authResponseSchema);
+
+export const getProfile = fetchApi<z.infer<typeof userProfileResponseSchema>>(
+  "user",
+  "GET",
+  userProfileResponseSchema
+);

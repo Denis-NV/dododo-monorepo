@@ -6,6 +6,7 @@ import {
   userTable,
   emailVerificationRequestTable,
 } from "./tables";
+import { responseSchema } from "@dododo/core";
 
 // User table
 export const insertUserTableSchema = createInsertSchema(userTable, {
@@ -66,3 +67,17 @@ export const insertSessionTableSchema = createInsertSchema(sessionTable);
 export const selectSessionTableSchema = createSelectSchema(sessionTable);
 
 export const insertAssessmentTableSchema = createInsertSchema(AssessmentTable);
+
+// General
+
+export const userProfileResponseSchema = responseSchema.extend({
+  user: selectUserTableSchema
+    .pick({
+      id: true,
+      email: true,
+      firstName: true,
+      lastName: true,
+      username: true,
+    })
+    .optional(),
+});
