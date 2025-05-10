@@ -77,7 +77,7 @@ export const getCurrentSession = async (
 
   if (refreshToken) {
     const { headers: apiHeaders, accessToken: newAccessToken } =
-      await refreshSession(reqHeaders);
+      await refreshSession({}, reqHeaders);
 
     if (apiHeaders && newAccessToken) {
       const accessPayload: TAccessJwtPayload = JSON.parse(
