@@ -11,10 +11,12 @@ const verifyEmailInput = z.object({
 });
 
 const action = async ({ request }: ActionFunctionArgs) => {
+  console.log("====> Verify Email Action");
+
   const { user, headers } = await getCurrentSession(request.headers);
 
   console.log(
-    "--> Verify Email Action: session cookies",
+    "<==== Verify Email Action: session cookies",
     headers.getSetCookie()
   );
 

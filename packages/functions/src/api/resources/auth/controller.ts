@@ -288,8 +288,7 @@ export const refresh = async (
           });
         }
 
-        const { sessionId, userId, email, username, emailVerified } =
-          parsedPayload.data;
+        const { sessionId, userId } = parsedPayload.data;
 
         console.log(">> Refresh Session Id:", sessionId);
 
@@ -339,9 +338,9 @@ export const refresh = async (
 
         const { session, refreshCookie, accessJWT } = await createSession({
           userId,
-          email,
-          username,
-          emailVerified,
+          email: oldSession.email,
+          username: oldSession.username,
+          emailVerified: oldSession.emailVerified,
         });
 
         if (!session) {
@@ -356,6 +355,7 @@ export const refresh = async (
           refreshCookie.options
         );
 
+        console.log(">> Refresh Session new access JWT:", accessJWT);
         console.log("<<<<");
         return res.status(200).json({ accessToken: accessJWT });
       }
