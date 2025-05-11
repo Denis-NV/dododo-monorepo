@@ -96,7 +96,7 @@ export const registerUser = async (
       });
     }
 
-    sendVerificationEmail(
+    await sendVerificationEmail(
       emailVerificationRequest.email,
       emailVerificationRequest.code
     );
@@ -321,9 +321,6 @@ export const refresh = async (
           return res.status(401).json({ message: "Invalid session" });
         }
 
-        // Remove the old token from "db"
-        await db.delete(sessionTable).where(eq(sessionTable.id, sessionId));
-
         console.log(
           ">> Refresh Session expired:",
           Date.now() >= oldSession.expiresAt.getTime()
@@ -336,6 +333,9 @@ export const refresh = async (
 
           return res.status(401).json({ message: "The session has expired" });
         }
+
+        // Remove the old token from "db"
+        await db.delete(sessionTable).where(eq(sessionTable.id, sessionId));
 
         const { session, refreshCookie, accessJWT } = await createSession({
           userId,
@@ -404,7 +404,7 @@ export const resentEmailVerification = async (
       });
     }
 
-    sendVerificationEmail(
+    await sendVerificationEmail(
       emailVerificationRequest.email,
       emailVerificationRequest.code
     );
@@ -437,8 +437,6 @@ export const verifyEmail = async (
   try {
     const parsedCookies = cookie.parse(headers.cookie || "");
     const verificationReqId = parsedCookies?.[EMAIL_VERIFICATION];
-
-    console.log(">> Email verification request cookies:", parsedCookies);
 
     if (!verificationReqId) {
       return res.status(401).json({ message: "Unauthorized" });

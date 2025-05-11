@@ -69,7 +69,7 @@ export const getCurrentSession = async (
     return {
       accessToken: session.get("accessToken"),
       user: session.get("payload"),
-      headers: new Headers(),
+      headers: reqHeaders,
     };
   }
 
@@ -84,7 +84,11 @@ export const getCurrentSession = async (
         atob(newAccessToken.split(".")[1])
       );
 
+      console.log(">>> Refresh session API headers:", apiHeaders);
+
       const headers = await updateSession(apiHeaders, newAccessToken);
+
+      console.log(">>> Refresh session update session headers:", headers);
 
       return {
         accessToken: newAccessToken,

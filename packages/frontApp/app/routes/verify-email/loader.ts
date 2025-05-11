@@ -5,6 +5,11 @@ import { getUserEmailVerificationRequest } from "@/utils/email-verification";
 const loader = async ({ request }: LoaderFunctionArgs) => {
   const { user, headers } = await getCurrentSession(request.headers);
 
+  console.log(
+    "--> Verify Email Loader: session cookies",
+    headers.getSetCookie()
+  );
+
   if (!user) {
     return redirect("/login", { headers });
   }
