@@ -96,7 +96,7 @@ export const registerUser = async (
       });
     }
 
-    sendVerificationEmail(
+    await sendVerificationEmail(
       emailVerificationRequest.email,
       emailVerificationRequest.code
     );
@@ -288,8 +288,7 @@ export const refresh = async (
           });
         }
 
-        const { sessionId, userId, email, username, emailVerified } =
-          parsedPayload.data;
+        const { sessionId, userId } = parsedPayload.data;
 
         console.log(">> Refresh Session Id:", sessionId);
 
@@ -321,9 +320,6 @@ export const refresh = async (
           return res.status(401).json({ message: "Invalid session" });
         }
 
-        // Remove the old token from "db"
-        await db.delete(sessionTable).where(eq(sessionTable.id, sessionId));
-
         console.log(
           ">> Refresh Session expired:",
           Date.now() >= oldSession.expiresAt.getTime()
@@ -337,11 +333,14 @@ export const refresh = async (
           return res.status(401).json({ message: "The session has expired" });
         }
 
+        // Remove the old token from "db"
+        await db.delete(sessionTable).where(eq(sessionTable.id, sessionId));
+
         const { session, refreshCookie, accessJWT } = await createSession({
           userId,
-          email,
-          username,
-          emailVerified,
+          email: oldSession.email,
+          username: oldSession.username,
+          emailVerified: oldSession.emailVerified,
         });
 
         if (!session) {
@@ -356,6 +355,7 @@ export const refresh = async (
           refreshCookie.options
         );
 
+        console.log(">> Refresh Session new access JWT:", accessJWT);
         console.log("<<<<");
         return res.status(200).json({ accessToken: accessJWT });
       }
@@ -404,7 +404,7 @@ export const resentEmailVerification = async (
       });
     }
 
-    sendVerificationEmail(
+    await sendVerificationEmail(
       emailVerificationRequest.email,
       emailVerificationRequest.code
     );
@@ -437,8 +437,6 @@ export const verifyEmail = async (
   try {
     const parsedCookies = cookie.parse(headers.cookie || "");
     const verificationReqId = parsedCookies?.[EMAIL_VERIFICATION];
-
-    console.log(">> Email verification request cookies:", parsedCookies);
 
     if (!verificationReqId) {
       return res.status(401).json({ message: "Unauthorized" });

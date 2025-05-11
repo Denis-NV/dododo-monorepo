@@ -52,6 +52,8 @@ const fetchApi =
 
       const responseJson = await response.json();
 
+      console.log(`::: Response from route ${route}:`, responseJson);
+
       const parseResult = responseSchema.safeParse(responseJson);
 
       if (!parseResult.success) {

@@ -65,36 +65,81 @@ export const getCurrentSession = async (
 
   const expires = session.get("payload")?.exp;
 
+  console.log(">>> getCurrentSession: current seession", expires);
+
+  console.log(
+    ">>> getCurrentSession: still valid?",
+    expires && new Date(expires * 1000) > new Date()
+  );
+
   if (expires && new Date(expires * 1000) > new Date()) {
     return {
       accessToken: session.get("accessToken"),
       user: session.get("payload"),
-      headers: new Headers(),
+      headers: reqHeaders,
     };
   }
 
   const { refreshToken } = getParsedCookies(reqHeaders.get("cookie"));
 
+  console.log(
+    ">>> getCurrentSession: refreshToken found",
+    Boolean(refreshToken)
+  );
+
   if (refreshToken) {
-    const { headers: apiHeaders, accessToken: newAccessToken } =
-      await refreshSession({ reqHeaders });
+    const {
+      headers: apiHeaders,
+      accessToken: newAccessToken,
+      error,
+      message,
+      details,
+    } = await refreshSession({ reqHeaders });
+
+    console.log(
+      ">>> getCurrentSession: refreshSession headers:",
+      Boolean(apiHeaders)
+    );
+    console.log(
+      ">>> getCurrentSession: refreshSession access token:",
+      Boolean(newAccessToken),
+      newAccessToken,
+      error,
+      message,
+      details
+    );
 
     if (apiHeaders && newAccessToken) {
       const accessPayload: TAccessJwtPayload = JSON.parse(
         atob(newAccessToken.split(".")[1])
       );
 
-      const headers = await updateSession(apiHeaders, newAccessToken);
+      console.log(
+        ">>> getCurrentSession: Refresh session API cookies:",
+        apiHeaders.getSetCookie()
+      );
+
+      const newAccessSessionHeaders = await updateSession(
+        apiHeaders,
+        newAccessToken
+      );
+
+      console.log(
+        ">>> getCurrentSession: Refresh session new session cookies:",
+        newAccessSessionHeaders.getSetCookie()
+      );
 
       return {
         accessToken: newAccessToken,
         user: accessPayload,
-        headers,
+        headers: newAccessSessionHeaders,
       };
     }
   }
 
   const { headers } = await destroyCurrentSession(reqHeaders);
+
+  console.log(">>> getCurrentSession: Destory session:", headers);
 
   return {
     headers,

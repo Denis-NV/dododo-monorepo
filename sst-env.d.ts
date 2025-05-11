@@ -17,6 +17,11 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
+    "DododoEmail": {
+      "configSet": string
+      "sender": string
+      "type": "sst.aws.Email"
+    }
     "RefreshTokenSecret": {
       "type": "sst.sst.Secret"
       "value": string

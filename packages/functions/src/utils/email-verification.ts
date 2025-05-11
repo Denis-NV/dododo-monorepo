@@ -1,5 +1,9 @@
 import { z } from "zod";
 import { encodeBase32 } from "@oslojs/encoding";
+import { SESv2Client, SendEmailCommand } from "@aws-sdk/client-sesv2";
+import { Resource } from "sst";
+import { render } from "jsx-email";
+
 import {
   db,
   emailVerificationRequestTable,
@@ -7,9 +11,11 @@ import {
   selectEmailVerificationRequestTableSchema,
 } from "@dododo/db";
 
-import { EMAIL_VERIFICATION_EXPIRATION_SECONDS } from "@/const";
-
 import { generateRandomOTP } from "./general";
+import { EMAIL_VERIFICATION_EXPIRATION_SECONDS } from "@/const";
+import { Template } from "@/emailTemplates/confirmationCode";
+
+const client = new SESv2Client();
 
 export type TEmailVerificationRequest = z.infer<
   typeof selectEmailVerificationRequestTableSchema
@@ -62,6 +68,34 @@ export async function deleteUserEmailVerificationRequest(
   }
 }
 
-export function sendVerificationEmail(email: string, code: string): void {
+export const sendVerificationEmail = async (email: string, code: string) => {
   console.log(`[ API ] To ${email}: Your verification code is ${code}`);
-}
+  console.log(
+    `[ API ] Sending email to ${email} from ${Resource.DododoEmail.sender}`
+  );
+
+  await client.send(
+    new SendEmailCommand({
+      FromEmailAddress: Resource.DododoEmail.sender,
+      Destination: {
+        ToAddresses: [email],
+      },
+      Content: {
+        Simple: {
+          Subject: {
+            Data: "Dododo registration",
+          },
+          Body: {
+            Html: {
+              Data: await render(
+                Template({
+                  code,
+                })
+              ),
+            },
+          },
+        },
+      },
+    })
+  );
+};
