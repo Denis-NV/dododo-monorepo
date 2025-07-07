@@ -40,7 +40,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           scaling="95%"
         >
           {children}
-          <ThemePanel />
+          {/* <ThemePanel /> */}
         </Theme>
 
         <ScrollRestoration />

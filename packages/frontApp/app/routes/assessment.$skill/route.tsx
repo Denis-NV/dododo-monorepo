@@ -3,7 +3,7 @@ import { useLoaderData } from "@remix-run/react";
 
 import assessmentLoader from "./loader";
 
-import StepForm from "@/components/stepForm";
+// import StepForm from "@/components/stepForm";
 import { Heading } from "@radix-ui/themes";
 
 export const meta: MetaFunction = () => {
@@ -23,7 +23,7 @@ const Assessment = () => {
       <Heading as="h1" size="4">
         {params?.skill} assessment page
       </Heading>
-      <StepForm />
+      {/* <StepForm /> */}
     </div>
   );
 };
