@@ -39,7 +39,7 @@ const Assessment = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const [form, fields] = useForm({
-    id: "assessment-form",
+    id: "emotions",
     lastResult: actionData,
     onValidate({ formData }) {
       return parseWithZod(formData, { schema: assessmentSchema });
@@ -48,49 +48,56 @@ const Assessment = () => {
     shouldRevalidate: "onInput",
   });
 
-  const questions = [
-    {
-      id: "question1",
-      question: "What is your preferred learning style?",
-      options: [
-        { value: "visual", label: "Visual" },
-        { value: "auditory", label: "Auditory" },
-        { value: "kinesthetic", label: "Kinesthetic" },
-        { value: "reading", label: "Reading/Writing" },
-      ],
-    },
-    {
-      id: "question2",
-      question: "How do you handle challenging situations?",
-      options: [
-        { value: "analyze", label: "Analyze thoroughly" },
-        { value: "seek_help", label: "Seek help from others" },
-        { value: "trial_error", label: "Trial and error" },
-        { value: "take_break", label: "Take a break first" },
-      ],
-    },
-    {
-      id: "question3",
-      question: "What motivates you most in your work?",
-      options: [
-        { value: "achievement", label: "Personal achievement" },
-        { value: "recognition", label: "Recognition from others" },
-        { value: "helping", label: "Helping others" },
-        { value: "learning", label: "Continuous learning" },
-      ],
-    },
-    {
-      id: "question4",
-      question: "How do you prefer to receive feedback?",
-      options: [
-        { value: "immediate", label: "Immediate and direct" },
-        { value: "written", label: "Written format" },
-        { value: "constructive", label: "Constructive discussion" },
-        { value: "examples", label: "With specific examples" },
-      ],
-    },
-  ];
+  const assessmentData = {
+    emotions: [
+      {
+        id: "question1",
+        question: "What is your preferred learning style?",
+        level: "3",
+        options: [
+          { score: "2", value: "never", label: "Visual" },
+          { score: "1", value: "rarely", label: "Auditory" },
+          { score: "0", value: "sometimes", label: "Kinesthetic" },
+          { score: "3", value: "always", label: "Reading/Writing" },
+        ],
+      },
+      {
+        id: "question2",
+        question: "How do you handle challenging situations?",
+        level: "1",
+        options: [
+          { score: "3", value: "never", label: "Analyze thoroughly" },
+          { score: "2", value: "rarely", label: "Seek help from others" },
+          { score: "1", value: "sometimes", label: "Trial and error" },
+          { score: "0", value: "always", label: "Take a break first" },
+        ],
+      },
+      {
+        id: "question3",
+        question: "What motivates you most in your work?",
+        level: "2",
+        options: [
+          { score: "2", value: "never", label: "Personal achievement" },
+          { score: "0", value: "rarely", label: "Recognition from others" },
+          { score: "3", value: "sometimes", label: "Helping others" },
+          { score: "1", value: "always", label: "Continuous learning" },
+        ],
+      },
+      {
+        id: "question4",
+        question: "How do you prefer to receive feedback?",
+        level: "1",
+        options: [
+          { score: "3", value: "never", label: "Immediate and direct" },
+          { score: "1", value: "rarely", label: "Written format" },
+          { score: "2", value: "sometimes", label: "Constructive discussion" },
+          { score: "0", value: "always", label: "With specific examples" },
+        ],
+      },
+    ],
+  };
 
+  const questions = assessmentData.emotions;
   const currentQuestion = questions[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
   const isCurrentQuestionAnswered = selectedValues[currentQuestion.id];
@@ -162,148 +169,189 @@ const Assessment = () => {
       </Box>
 
       <Form method="post" id={form.id} onSubmit={form.onSubmit}>
-        {/* Hidden inputs for all selected values */}
-        {Object.entries(selectedValues).map(([questionId, value]) => (
-          <input
-            key={questionId}
-            type="hidden"
-            name={questionId}
-            value={value}
-          />
-        ))}
+        {/* Question Container with all questions always in DOM */}
+        <Box style={{ minHeight: "400px" }}>
+          {questions.map((question, questionIndex) => {
+            const isCurrentQuestion = questionIndex === currentQuestionIndex;
+            const field = fields[question.id as keyof typeof fields];
 
-        {/* Question Container with fade transition */}
-        <Box
-          style={{
-            opacity: isTransitioning ? 0 : 1,
-            transition: "opacity 0.15s ease-in-out",
-            minHeight: "400px",
-          }}
-        >
-          <Card style={{ padding: "24px" }}>
-            <Flex direction="column" gap="4">
-              <Text size="5" weight="medium" style={{ lineHeight: "1.4" }}>
-                {currentQuestionIndex + 1}. {currentQuestion.question}
-              </Text>
-
-              <RadioGroup.Root
-                value={selectedValues[currentQuestion.id] || ""}
-                onValueChange={handleValueChange}
+            return (
+              <Box
+                key={question.id}
+                style={{
+                  opacity: isCurrentQuestion ? (isTransitioning ? 0 : 1) : 0,
+                  visibility: isCurrentQuestion ? "visible" : "hidden",
+                  position: isCurrentQuestion ? "relative" : "absolute",
+                  top: isCurrentQuestion ? "auto" : 0,
+                  left: isCurrentQuestion ? "auto" : 0,
+                  width: isCurrentQuestion ? "auto" : "100%",
+                  transition: "opacity 0.15s ease-in-out",
+                  pointerEvents: isCurrentQuestion ? "auto" : "none",
+                }}
               >
-                <Flex direction="column" gap="3">
-                  {currentQuestion.options.map((option) => {
-                    const isSelected =
-                      selectedValues[currentQuestion.id] === option.value;
+                <Card style={{ padding: "24px" }}>
+                  <Flex direction="column" gap="4">
+                    <Text
+                      size="5"
+                      weight="medium"
+                      style={{ lineHeight: "1.4" }}
+                    >
+                      {questionIndex + 1}. {question.question}
+                    </Text>
 
-                    return (
-                      <Box key={option.value}>
-                        <Text asChild>
-                          <label
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: "12px",
-                              padding: "16px 20px",
-                              border: `2px solid ${
-                                isSelected ? "#3b82f6" : "#d1d5db"
-                              }`,
-                              borderRadius: "8px",
-                              cursor: "pointer",
-                              transition: "all 0.2s ease",
-                              backgroundColor: isSelected
-                                ? "#dbeafe"
-                                : "#ffffff",
-                              boxShadow: isSelected
-                                ? "0 0 0 3px rgba(59, 130, 246, 0.1)"
-                                : "none",
-                            }}
-                            onMouseEnter={(e) => {
-                              if (!isSelected) {
-                                e.currentTarget.style.backgroundColor =
-                                  "#f9fafb";
-                                e.currentTarget.style.borderColor = "#9ca3af";
-                              }
-                            }}
-                            onMouseLeave={(e) => {
-                              if (!isSelected) {
-                                e.currentTarget.style.backgroundColor =
-                                  "#ffffff";
-                                e.currentTarget.style.borderColor = "#d1d5db";
-                              } else {
-                                e.currentTarget.style.backgroundColor =
-                                  "#dbeafe";
-                                e.currentTarget.style.borderColor = "#3b82f6";
-                              }
-                            }}
-                          >
-                            <RadioGroup.Item
-                              value={option.value}
-                              style={{
-                                margin: 0,
-                                opacity: 0,
-                                position: "absolute",
-                                pointerEvents: "none",
-                              }}
-                            />
-                            <Text
-                              size="3"
-                              weight={isSelected ? "bold" : "regular"}
-                              style={{
-                                color: isSelected ? "#1e40af" : "#374151",
-                              }}
-                            >
-                              {option.label}
-                            </Text>
-                          </label>
-                        </Text>
-                      </Box>
-                    );
-                  })}
-                </Flex>
-              </RadioGroup.Root>
-            </Flex>
-          </Card>
+                    <RadioGroup.Root
+                      name={question.id}
+                      value={selectedValues[question.id] || ""}
+                      onValueChange={(value) => {
+                        setSelectedValues((prev) => ({
+                          ...prev,
+                          [question.id]: value,
+                        }));
+                      }}
+                    >
+                      <Flex direction="column" gap="3">
+                        {question.options.map((option) => {
+                          const isSelected =
+                            selectedValues[question.id] === option.value;
+
+                          return (
+                            <Box key={option.value}>
+                              <Text asChild>
+                                <label
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "12px",
+                                    padding: "16px 20px",
+                                    border: `2px solid ${
+                                      isSelected ? "#3b82f6" : "#d1d5db"
+                                    }`,
+                                    borderRadius: "8px",
+                                    cursor: "pointer",
+                                    transition: "all 0.2s ease",
+                                    backgroundColor: isSelected
+                                      ? "#dbeafe"
+                                      : "#ffffff",
+                                    boxShadow: isSelected
+                                      ? "0 0 0 3px rgba(59, 130, 246, 0.1)"
+                                      : "none",
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    if (!isSelected) {
+                                      e.currentTarget.style.backgroundColor =
+                                        "#f9fafb";
+                                      e.currentTarget.style.borderColor =
+                                        "#9ca3af";
+                                    }
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    if (!isSelected) {
+                                      e.currentTarget.style.backgroundColor =
+                                        "#ffffff";
+                                      e.currentTarget.style.borderColor =
+                                        "#d1d5db";
+                                    } else {
+                                      e.currentTarget.style.backgroundColor =
+                                        "#dbeafe";
+                                      e.currentTarget.style.borderColor =
+                                        "#3b82f6";
+                                    }
+                                  }}
+                                >
+                                  <RadioGroup.Item
+                                    value={option.value}
+                                    style={{
+                                      margin: 0,
+                                      opacity: 0,
+                                      position: "absolute",
+                                      pointerEvents: "none",
+                                    }}
+                                  />
+                                  <Text
+                                    size="3"
+                                    weight={isSelected ? "bold" : "regular"}
+                                    style={{
+                                      color: isSelected ? "#1e40af" : "#374151",
+                                    }}
+                                  >
+                                    {option.label}
+                                  </Text>
+                                </label>
+                              </Text>
+                            </Box>
+                          );
+                        })}
+                      </Flex>
+                    </RadioGroup.Root>
+
+                    {field?.errors && (
+                      <Text size="2" color="red">
+                        {field.errors[0]}
+                      </Text>
+                    )}
+                  </Flex>
+                </Card>
+              </Box>
+            );
+          })}
         </Box>
 
-        {/* Navigation Buttons */}
+        {/* Navigation Buttons - Always present in DOM */}
         <Flex justify="between" align="center" mt="6">
           <Button
             type="button"
             variant="outline"
             onClick={handlePrevious}
-            disabled={currentQuestionIndex === 0}
             style={{
-              opacity: currentQuestionIndex === 0 ? 0.5 : 1,
+              opacity: currentQuestionIndex === 0 ? 0 : 1,
+              pointerEvents: currentQuestionIndex === 0 ? "none" : "auto",
               cursor: currentQuestionIndex === 0 ? "not-allowed" : "pointer",
+              transition: "opacity 0.2s ease",
             }}
           >
             Previous
           </Button>
 
-          {isLastQuestion ? (
-            <Button
-              type="submit"
-              disabled={!isCurrentQuestionAnswered}
-              style={{
-                opacity: !isCurrentQuestionAnswered ? 0.5 : 1,
-                cursor: !isCurrentQuestionAnswered ? "not-allowed" : "pointer",
-              }}
-            >
-              Submit Assessment
-            </Button>
-          ) : (
-            <Button
-              type="button"
-              onClick={handleNext}
-              disabled={!isCurrentQuestionAnswered}
-              style={{
-                opacity: !isCurrentQuestionAnswered ? 0.5 : 1,
-                cursor: !isCurrentQuestionAnswered ? "not-allowed" : "pointer",
-              }}
-            >
-              Next
-            </Button>
-          )}
+          <Button
+            type="button"
+            onClick={handleNext}
+            style={{
+              opacity: isLastQuestion
+                ? 0
+                : !isCurrentQuestionAnswered
+                ? 0.5
+                : 1,
+              pointerEvents: isLastQuestion
+                ? "none"
+                : !isCurrentQuestionAnswered
+                ? "none"
+                : "auto",
+              cursor: !isCurrentQuestionAnswered ? "not-allowed" : "pointer",
+              transition: "opacity 0.2s ease",
+            }}
+          >
+            Next
+          </Button>
+
+          <Button
+            type="submit"
+            style={{
+              opacity: !isLastQuestion
+                ? 0
+                : !isCurrentQuestionAnswered
+                ? 0.5
+                : 1,
+              pointerEvents: !isLastQuestion
+                ? "none"
+                : !isCurrentQuestionAnswered
+                ? "none"
+                : "auto",
+              cursor: !isCurrentQuestionAnswered ? "not-allowed" : "pointer",
+              transition: "opacity 0.2s ease",
+            }}
+          >
+            Submit Assessment
+          </Button>
         </Flex>
 
         {actionData?.status === "success" && (
