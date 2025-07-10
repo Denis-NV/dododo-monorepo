@@ -28,7 +28,11 @@ export const loader = assessmentLoader;
 export const action = assessmentAction;
 
 const Assessment = () => {
-  const params = useLoaderData<typeof loader>();
+  const {
+    skill,
+    assessmentData,
+    questions: loaderQuestions,
+  } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
 
   // State for carousel functionality
@@ -48,56 +52,8 @@ const Assessment = () => {
     shouldRevalidate: "onInput",
   });
 
-  const assessmentData = {
-    emotions: [
-      {
-        id: "question1",
-        question: "What is your preferred learning style?",
-        level: "3",
-        options: [
-          { score: "2", value: "never", label: "Visual" },
-          { score: "1", value: "rarely", label: "Auditory" },
-          { score: "0", value: "sometimes", label: "Kinesthetic" },
-          { score: "3", value: "always", label: "Reading/Writing" },
-        ],
-      },
-      {
-        id: "question2",
-        question: "How do you handle challenging situations?",
-        level: "1",
-        options: [
-          { score: "3", value: "never", label: "Analyze thoroughly" },
-          { score: "2", value: "rarely", label: "Seek help from others" },
-          { score: "1", value: "sometimes", label: "Trial and error" },
-          { score: "0", value: "always", label: "Take a break first" },
-        ],
-      },
-      {
-        id: "question3",
-        question: "What motivates you most in your work?",
-        level: "2",
-        options: [
-          { score: "2", value: "never", label: "Personal achievement" },
-          { score: "0", value: "rarely", label: "Recognition from others" },
-          { score: "3", value: "sometimes", label: "Helping others" },
-          { score: "1", value: "always", label: "Continuous learning" },
-        ],
-      },
-      {
-        id: "question4",
-        question: "How do you prefer to receive feedback?",
-        level: "1",
-        options: [
-          { score: "3", value: "never", label: "Immediate and direct" },
-          { score: "1", value: "rarely", label: "Written format" },
-          { score: "2", value: "sometimes", label: "Constructive discussion" },
-          { score: "0", value: "always", label: "With specific examples" },
-        ],
-      },
-    ],
-  };
-
-  const questions = assessmentData.emotions;
+  // Use questions from loader or fallback to emotions
+  const questions = loaderQuestions || assessmentData.emotions;
   const currentQuestion = questions[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
   const isCurrentQuestionAnswered = selectedValues[currentQuestion.id];
@@ -132,7 +88,7 @@ const Assessment = () => {
   return (
     <Box p="4" maxWidth="800px" mx="auto">
       <Heading as="h1" size="6" mb="6" align="center">
-        {params?.skill} Assessment
+        {skill} Assessment
       </Heading>
 
       {/* Progress indicator */}
