@@ -1,5 +1,5 @@
 import { MetaFunction } from "@remix-run/node";
-import { useLoaderData, useActionData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import assessmentLoader from "./loader";
 
 import { Heading, Button, Box, Flex, Text, Card, Grid } from "@radix-ui/themes";
@@ -35,23 +35,8 @@ const Assessment = () => {
           const questionCount = Array.isArray(skillData) ? skillData.length : 0;
 
           return (
-            <Card
-              key={skill}
-              style={{
-                padding: "24px",
-                transition: "transform 0.2s ease, box-shadow 0.2s ease",
-                cursor: "pointer",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow = "0 8px 25px rgba(0,0,0,0.1)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "none";
-              }}
-            >
-              <Flex direction="column" gap="4" height="100%">
+            <Card key={skill}>
+              <Flex direction="column" gap="4" height="100%" p="4">
                 <Box>
                   <Heading
                     as="h3"
