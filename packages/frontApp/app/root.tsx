@@ -8,6 +8,7 @@ import {
 import type { LinksFunction } from "@remix-run/node";
 
 import "./tailwind.css";
+import { Theme, ThemePanel } from "@radix-ui/themes";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -32,7 +33,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        <Theme accentColor="gold" grayColor="sage" radius="small">
+          {children}
+          {/* <ThemePanel /> */}
+        </Theme>
+
         <ScrollRestoration />
         <Scripts />
       </body>

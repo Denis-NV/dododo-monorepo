@@ -1,12 +1,21 @@
-@tailwind base;
+@import "tailwindcss/base";
+@import "@radix-ui/themes/styles.css";
+
 @tailwind components;
 @tailwind utilities;
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
+  background-color: white;
+}
 
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
+.radix-themes {
+  --cursor-button: pointer;
+
+  --secondary-accent: #3b82f6; /* blue-500 */
+
+  /* Transition variables */
+  --transition-fast: 0.15s ease-in-out;
+  --transition-medium: 0.2s ease;
+  --transition-slow: 0.3s ease;
 }
