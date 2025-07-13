@@ -230,12 +230,11 @@ const Assessment = () => {
           <Button
             type="button"
             variant="outline"
+            size="3"
             onClick={handlePrevious}
             disabled={currentQuestionIndex === 0}
             style={{
               opacity: currentQuestionIndex === 0 ? 0 : 1,
-              pointerEvents: currentQuestionIndex === 0 ? "none" : "auto",
-              transition: `opacity var(--transition-medium)`,
             }}
           >
             Previous
@@ -243,20 +242,12 @@ const Assessment = () => {
 
           <Button
             type="button"
+            size="3"
             onClick={handleNext}
-            disabled={isLastQuestion || !isCurrentQuestionAnswered}
+            disabled={!isCurrentQuestionAnswered}
             style={{
-              opacity: isLastQuestion
-                ? 0
-                : !isCurrentQuestionAnswered
-                ? 0.5
-                : 1,
-              pointerEvents: isLastQuestion
-                ? "none"
-                : !isCurrentQuestionAnswered
-                ? "none"
-                : "auto",
-              transition: `opacity var(--transition-medium)`,
+              opacity: isLastQuestion ? 0 : 1,
+              visibility: isLastQuestion ? "hidden" : "visible",
             }}
           >
             Next
@@ -264,19 +255,13 @@ const Assessment = () => {
 
           <Button
             type="submit"
-            disabled={!isLastQuestion || !isCurrentQuestionAnswered}
+            size="3"
+            disabled={!isCurrentQuestionAnswered}
             style={{
-              opacity: !isLastQuestion
-                ? 0
-                : !isCurrentQuestionAnswered
-                ? 0.5
-                : 1,
-              pointerEvents: !isLastQuestion
-                ? "none"
-                : !isCurrentQuestionAnswered
-                ? "none"
-                : "auto",
-              transition: `opacity var(--transition-medium)`,
+              opacity: isLastQuestion ? 1 : 0,
+              visibility: isLastQuestion ? "visible" : "hidden",
+              position: isLastQuestion ? "static" : "absolute",
+              right: isLastQuestion ? "auto" : "0",
             }}
           >
             Submit Assessment
