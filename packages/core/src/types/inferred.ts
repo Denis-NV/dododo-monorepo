@@ -10,6 +10,7 @@ import {
   logoutUserRequestSchema,
 } from "../schemas/user";
 import {
+  assessmentSchema,
   assessmentResponseSchema,
   createUpdateAssessmentRequestSchema,
 } from "../schemas/assessment";
@@ -17,6 +18,8 @@ import {
   resentVerificationRequestSchema,
   verifyEmailRequestSchema,
 } from "../schemas/emailVerification";
+
+export type TAssesmentJson = z.infer<typeof assessmentSchema>;
 
 // Inferred Response Body Types
 export type TBaseApiResponse = z.infer<typeof baseApiResponseSchema>;

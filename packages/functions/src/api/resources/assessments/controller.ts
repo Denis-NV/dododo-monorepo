@@ -62,7 +62,7 @@ export const createUpdateAssessment = async (
       }
 
       return res.status(200).json({
-        assessment: updatedAssessment,
+        assessment: updatedAssessment.assessment,
         message: "Assessment updated successfully",
       });
     } else {
@@ -84,7 +84,7 @@ export const createUpdateAssessment = async (
       }
 
       return res.status(201).json({
-        assessment: newAssessment,
+        assessment: newAssessment.assessment,
         message: "Assessment created successfully",
       });
     }

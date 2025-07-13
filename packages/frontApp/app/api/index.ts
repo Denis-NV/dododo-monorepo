@@ -19,18 +19,18 @@ import {
   TVerifyEmailRequest,
 } from "@dododo/core";
 
-type TResult = TBaseApiResponse & {
+type TResponseWithHeaders = TBaseApiResponse & {
   headers?: Headers;
 };
 
-type TAuthResult = TAuthApiResponse & {
+type TAuthResponseWithHeaders = TAuthApiResponse & {
   headers?: Headers;
 };
 
 type TMethod = "GET" | "POST" | "PUT" | "DELETE";
 
 const fetchApi =
-  <TResponseJson extends TResult, TBody = Record<string, any>>(
+  <TResponseJson extends TResponseWithHeaders, TBody = Record<string, any>>(
     route: string,
     method: TMethod,
     responseSchema: Schema
@@ -76,40 +76,38 @@ const fetchApi =
     }
   };
 
-export const registerUser = fetchApi<TAuthResult, TCreateUserRequest>(
-  "auth/register",
-  "POST",
-  authApiResponseSchema
-);
+export const registerUser = fetchApi<
+  TAuthResponseWithHeaders,
+  TCreateUserRequest
+>("auth/register", "POST", authApiResponseSchema);
 
-export const logIn = fetchApi<TAuthResult, TLoginUserRequest>(
+export const logIn = fetchApi<TAuthResponseWithHeaders, TLoginUserRequest>(
   "auth/login",
   "POST",
   authApiResponseSchema
 );
 
-export const logOut = fetchApi<TAuthResult, TLogoutUserRequest>(
+export const logOut = fetchApi<TAuthResponseWithHeaders, TLogoutUserRequest>(
   "auth/logout",
   "POST",
   authApiResponseSchema
 );
 
-export const refreshSession = fetchApi<TAuthResult>(
+export const refreshSession = fetchApi<TAuthResponseWithHeaders>(
   "auth/refresh",
   "POST",
   authApiResponseSchema
 );
 
 export const resendEmailVerificationCode = fetchApi<
-  TResult,
+  TResponseWithHeaders,
   TResentVerificationRequest
 >("auth/resend-email-verification", "POST", baseApiResponseSchema);
 
-export const verifyEmail = fetchApi<TAuthResult, TVerifyEmailRequest>(
-  "auth/verify-email",
-  "POST",
-  authApiResponseSchema
-);
+export const verifyEmail = fetchApi<
+  TAuthResponseWithHeaders,
+  TVerifyEmailRequest
+>("auth/verify-email", "POST", authApiResponseSchema);
 
 export const getProfile = fetchApi<TUserProfileResponse>(
   "user",
