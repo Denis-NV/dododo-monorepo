@@ -29,7 +29,7 @@ export const userTable = pgTable("user", {
   passwordHash: text().notNull(),
   recoveryCode: bytea().notNull(),
   emailVerified: boolean().notNull().default(false),
-  integer: integer().notNull().default(0),
+  curAssessmentVersion: integer().notNull().default(0),
 });
 
 export const emailVerificationRequestTable = pgTable(

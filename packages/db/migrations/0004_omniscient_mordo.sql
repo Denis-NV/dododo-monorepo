@@ -1,0 +1,1 @@
+ALTER TABLE "user" RENAME COLUMN "integer" TO "cur_assessment_version";
