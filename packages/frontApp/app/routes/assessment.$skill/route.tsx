@@ -16,6 +16,7 @@ import {
   RadioGroup,
   Card,
 } from "@radix-ui/themes";
+import { StepIndicator } from "../../components";
 
 export const meta: MetaFunction = () => {
   return [
@@ -91,38 +92,10 @@ const Assessment = () => {
         {skill} Assessment
       </Heading>
 
-      {/* Progress indicator */}
-      <Box mb="6">
-        <Flex justify="between" align="center" mb="2">
-          <Text size="2" color="gray">
-            Question {currentQuestionIndex + 1} of {questions.length}
-          </Text>
-          <Text size="2" color="gray">
-            {Math.round(((currentQuestionIndex + 1) / questions.length) * 100)}%
-            Complete
-          </Text>
-        </Flex>
-        <Box
-          width="100%"
-          height="4px"
-          style={{
-            backgroundColor: "var(--gray-4)",
-            borderRadius: "2px",
-            overflow: "hidden",
-          }}
-        >
-          <Box
-            height="100%"
-            style={{
-              width: `${
-                ((currentQuestionIndex + 1) / questions.length) * 100
-              }%`,
-              backgroundColor: "#3b82f6",
-              transition: "width 0.3s ease",
-            }}
-          />
-        </Box>
-      </Box>
+      <StepIndicator
+        currentStep={currentQuestionIndex + 1}
+        totalSteps={questions.length}
+      />
 
       <Form method="post" id={form.id} onSubmit={form.onSubmit}>
         {/* Question Container with all questions always in DOM */}
@@ -141,7 +114,7 @@ const Assessment = () => {
                 style={{
                   opacity: isCurrentQuestion ? (isTransitioning ? 0 : 1) : 0,
                   visibility: isCurrentQuestion ? "visible" : "hidden",
-                  transition: "opacity 0.15s ease-in-out",
+                  transition: `opacity var(--transition-fast)`,
                   pointerEvents: isCurrentQuestion ? "auto" : "none",
                 }}
               >
@@ -186,7 +159,7 @@ const Assessment = () => {
                                     }`,
                                     borderRadius: "8px",
                                     cursor: "pointer",
-                                    transition: "all 0.2s ease",
+                                    transition: `all var(--transition-medium)`,
                                     backgroundColor: isSelected
                                       ? "var(--blue-2)"
                                       : "var(--color-background)",
@@ -262,7 +235,7 @@ const Assessment = () => {
             style={{
               opacity: currentQuestionIndex === 0 ? 0 : 1,
               pointerEvents: currentQuestionIndex === 0 ? "none" : "auto",
-              transition: "opacity 0.2s ease",
+              transition: `opacity var(--transition-medium)`,
             }}
           >
             Previous
@@ -283,7 +256,7 @@ const Assessment = () => {
                 : !isCurrentQuestionAnswered
                 ? "none"
                 : "auto",
-              transition: "opacity 0.2s ease",
+              transition: `opacity var(--transition-medium)`,
             }}
           >
             Next
@@ -303,7 +276,7 @@ const Assessment = () => {
                 : !isCurrentQuestionAnswered
                 ? "none"
                 : "auto",
-              transition: "opacity 0.2s ease",
+              transition: `opacity var(--transition-medium)`,
             }}
           >
             Submit Assessment
