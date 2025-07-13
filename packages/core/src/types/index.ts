@@ -1,2 +1,2 @@
-export * from "../zodSchemas/auth";
+export * from "../schemas/auth";
 export * from "./general";
