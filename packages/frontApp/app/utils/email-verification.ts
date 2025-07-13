@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { accessJwtOutputSchema, TVerifyEmailBody } from "@dododo/core";
+import { accessJwtOutputSchema, TVerifyEmailRequest } from "@dododo/core";
 
 import { resendEmailVerificationCode, verifyEmail } from "@/api";
 
@@ -62,7 +62,7 @@ type TAccessJwtPayload = z.infer<typeof accessJwtOutputSchema>;
 
 export const getVerifiedUser = async (
   reqHeaders: Headers,
-  verifyBody: TVerifyEmailBody
+  verifyBody: TVerifyEmailRequest
 ) => {
   const {
     accessToken,

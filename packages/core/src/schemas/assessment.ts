@@ -1,14 +1,14 @@
 import { z } from "zod";
 
-export const createUpdateAssessmentRequestBodySchema = z.object({
+import { baseApiResponseSchema } from "./general";
+
+export const createUpdateAssessmentRequestSchema = z.object({
   userId: z.string(),
   version: z.number(),
   assessment: z.record(z.any()), // This will be typed as TAssesmentJson from types
 });
 
-export const assessmentResponseSchema = z.object({
-  error: z.string().optional(),
-  message: z.string().optional(),
+export const assessmentResponseSchema = baseApiResponseSchema.extend({
   assessment: z
     .object({
       id: z.string(),

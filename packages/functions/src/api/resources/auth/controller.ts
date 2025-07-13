@@ -17,17 +17,17 @@ import {
   EMAIL_VERIFICATION,
   REFRESH_TOKEN,
   refreshJWTOutputSchema,
-  createUserRequestBodySchema,
-  loginUserRequestBodySchema,
-  logoutUserRequestBodySchema,
-  resentVerificationRequestBodySchema,
-  verifyEmailBodySchema,
-  TResponse,
-  TAuthResponse,
-  TLoginUserRequestBody,
-  TLogoutUserRequestBody,
-  TResentVerificationRequestBody,
-  TVerifyEmailBody,
+  createUserRequestSchema,
+  loginUserRequestSchema,
+  logoutUserRequestSchema,
+  resentVerificationRequestSchema,
+  verifyEmailRequestSchema,
+  TBaseApiResponse,
+  TAuthApiResponse,
+  TLoginUserRequest,
+  TLogoutUserRequest,
+  TResentVerificationRequest,
+  TVerifyEmailRequest,
 } from "@dododo/core";
 
 import { hashPassword, verifyPasswordHash } from "@/utils/password";
@@ -43,11 +43,11 @@ import { EMAIL_VERIFICATION_EXPIRATION_SECONDS } from "@/const";
 
 export const registerUser = async (
   { body }: Request,
-  res: Response<TAuthResponse>
+  res: Response<TAuthApiResponse>
 ) => {
   try {
     // Validate the request body
-    const parsedBody = createUserRequestBodySchema.safeParse(body);
+    const parsedBody = createUserRequestSchema.safeParse(body);
     if (!parsedBody.success) {
       return res.status(400).json({
         error: "Invalid input",
@@ -140,11 +140,11 @@ export const registerUser = async (
 };
 
 export const login = async (
-  { body }: Request<unknown, unknown, TLoginUserRequestBody>,
-  res: Response<TAuthResponse>
+  { body }: Request<unknown, unknown, TLoginUserRequest>,
+  res: Response<TAuthApiResponse>
 ) => {
   try {
-    const parsedBody = loginUserRequestBodySchema.safeParse(body);
+    const parsedBody = loginUserRequestSchema.safeParse(body);
 
     console.log("==> Log in body parsed: ", parsedBody.success);
 
@@ -216,11 +216,11 @@ export const login = async (
 };
 
 export const logout = async (
-  { body }: Request<unknown, unknown, TLogoutUserRequestBody>,
-  res: Response<TAuthResponse>
+  { body }: Request<unknown, unknown, TLogoutUserRequest>,
+  res: Response<TAuthApiResponse>
 ) => {
   try {
-    const parsedBody = logoutUserRequestBodySchema.safeParse(body);
+    const parsedBody = logoutUserRequestSchema.safeParse(body);
 
     console.log("--> Log out body: ", parsedBody.success);
 
@@ -249,7 +249,10 @@ export const logout = async (
   }
 };
 
-export const refresh = async (req: Request, res: Response<TAuthResponse>) => {
+export const refresh = async (
+  req: Request,
+  res: Response<TAuthApiResponse>
+) => {
   try {
     const parsedCookies = cookie.parse(req.headers.cookie || "");
     const oldToken = parsedCookies?.[REFRESH_TOKEN];
@@ -369,11 +372,11 @@ export const refresh = async (req: Request, res: Response<TAuthResponse>) => {
 };
 
 export const resentEmailVerification = async (
-  { body }: Request<unknown, unknown, TResentVerificationRequestBody>,
-  res: Response<TResponse>
+  { body }: Request<unknown, unknown, TResentVerificationRequest>,
+  res: Response<TBaseApiResponse>
 ) => {
   try {
-    const parsedBody = resentVerificationRequestBodySchema.safeParse(body);
+    const parsedBody = resentVerificationRequestSchema.safeParse(body);
 
     console.log("--> Resent email verification body: ", parsedBody.success);
 
@@ -425,8 +428,8 @@ export const resentEmailVerification = async (
 };
 
 export const verifyEmail = async (
-  { body, headers }: Request<unknown, unknown, TVerifyEmailBody>,
-  res: Response<TAuthResponse>
+  { body, headers }: Request<unknown, unknown, TVerifyEmailRequest>,
+  res: Response<TAuthApiResponse>
 ) => {
   try {
     const parsedCookies = cookie.parse(headers.cookie || "");
@@ -436,7 +439,7 @@ export const verifyEmail = async (
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const parsedBody = verifyEmailBodySchema.safeParse(body);
+    const parsedBody = verifyEmailRequestSchema.safeParse(body);
 
     console.log("--> Verify email body: ", parsedBody.success);
 

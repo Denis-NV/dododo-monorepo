@@ -1,6 +1,7 @@
 import { z } from "zod";
+import { baseApiResponseSchema } from "./general";
 
-export const createUserRequestBodySchema = z.object({
+export const createUserRequestSchema = z.object({
   email: z.string().email().min(5),
   username: z.string(),
   firstName: z.string().optional(),
@@ -8,18 +9,16 @@ export const createUserRequestBodySchema = z.object({
   password: z.string(),
 });
 
-export const loginUserRequestBodySchema = z.object({
+export const loginUserRequestSchema = z.object({
   email: z.string().email(),
   password: z.string(),
 });
 
-export const logoutUserRequestBodySchema = z.object({
+export const logoutUserRequestSchema = z.object({
   id: z.string(),
 });
 
-export const userProfileResponseSchema = z.object({
-  error: z.string().optional(),
-  message: z.string().optional(),
+export const userProfileResponseSchema = baseApiResponseSchema.extend({
   user: z
     .object({
       id: z.string(),

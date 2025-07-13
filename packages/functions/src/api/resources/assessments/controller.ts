@@ -2,18 +2,17 @@ import { Request, Response } from "express";
 
 import { db, eq, and, AssessmentTable } from "@dododo/db";
 import {
-  createUpdateAssessmentRequestBodySchema,
-  TCreateUpdateAssessmentRequestBody,
+  createUpdateAssessmentRequestSchema,
   TAssessmentResponse,
 } from "@dododo/core";
 
 export const createUpdateAssessment = async (
-  { body }: Request<unknown, unknown, TCreateUpdateAssessmentRequestBody>,
+  { body }: Request,
   res: Response<TAssessmentResponse>
 ) => {
   try {
     // Validate the request body
-    const parsedBody = createUpdateAssessmentRequestBodySchema.safeParse(body);
+    const parsedBody = createUpdateAssessmentRequestSchema.safeParse(body);
     if (!parsedBody.success) {
       return res.status(400).json({
         error: "Invalid input",

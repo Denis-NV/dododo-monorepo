@@ -5,25 +5,25 @@ import {
   userProfileResponseSchema,
   assessmentResponseSchema,
   AUTHORIZATION,
-  authResponseSchema,
-  responseSchema,
-  TResponse,
-  TAuthResponse,
+  authApiResponseSchema,
+  baseApiResponseSchema,
+  TBaseApiResponse,
+  TAuthApiResponse,
   TUserProfileResponse,
   TAssessmentResponse,
-  TCreateUpdateAssessmentRequestBody,
-  TCreateUserRequestBody,
-  TLoginUserRequestBody,
-  TLogoutUserRequestBody,
-  TResentVerificationRequestBody,
-  TVerifyEmailBody,
+  TCreateUpdateAssessmentRequest,
+  TCreateUserRequest,
+  TLoginUserRequest,
+  TLogoutUserRequest,
+  TResentVerificationRequest,
+  TVerifyEmailRequest,
 } from "@dododo/core";
 
-type TResult = TResponse & {
+type TResult = TBaseApiResponse & {
   headers?: Headers;
 };
 
-type TAuthResult = TAuthResponse & {
+type TAuthResult = TAuthApiResponse & {
   headers?: Headers;
 };
 
@@ -76,39 +76,39 @@ const fetchApi =
     }
   };
 
-export const registerUser = fetchApi<TAuthResult, TCreateUserRequestBody>(
+export const registerUser = fetchApi<TAuthResult, TCreateUserRequest>(
   "auth/register",
   "POST",
-  authResponseSchema
+  authApiResponseSchema
 );
 
-export const logIn = fetchApi<TAuthResult, TLoginUserRequestBody>(
+export const logIn = fetchApi<TAuthResult, TLoginUserRequest>(
   "auth/login",
   "POST",
-  authResponseSchema
+  authApiResponseSchema
 );
 
-export const logOut = fetchApi<TAuthResult, TLogoutUserRequestBody>(
+export const logOut = fetchApi<TAuthResult, TLogoutUserRequest>(
   "auth/logout",
   "POST",
-  authResponseSchema
+  authApiResponseSchema
 );
 
 export const refreshSession = fetchApi<TAuthResult>(
   "auth/refresh",
   "POST",
-  authResponseSchema
+  authApiResponseSchema
 );
 
 export const resendEmailVerificationCode = fetchApi<
   TResult,
-  TResentVerificationRequestBody
->("auth/resend-email-verification", "POST", responseSchema);
+  TResentVerificationRequest
+>("auth/resend-email-verification", "POST", baseApiResponseSchema);
 
-export const verifyEmail = fetchApi<TAuthResult, TVerifyEmailBody>(
+export const verifyEmail = fetchApi<TAuthResult, TVerifyEmailRequest>(
   "auth/verify-email",
   "POST",
-  authResponseSchema
+  authApiResponseSchema
 );
 
 export const getProfile = fetchApi<TUserProfileResponse>(
@@ -119,5 +119,5 @@ export const getProfile = fetchApi<TUserProfileResponse>(
 
 export const createUpdateAssessment = fetchApi<
   TAssessmentResponse,
-  TCreateUpdateAssessmentRequestBody
+  TCreateUpdateAssessmentRequest
 >("assessment", "POST", assessmentResponseSchema);

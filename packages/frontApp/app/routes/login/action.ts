@@ -1,6 +1,6 @@
 import { ActionFunctionArgs, redirect } from "@remix-run/node";
 
-import { loginUserRequestBodySchema } from "@dododo/core";
+import { loginUserRequestSchema } from "@dododo/core";
 
 import { logIn } from "@/api";
 import { getPropogatedCookiesHeaders } from "@/utils/cookies";
@@ -10,7 +10,7 @@ const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const payload = Object.fromEntries(formData);
 
-  const result = loginUserRequestBodySchema.safeParse(payload);
+  const result = loginUserRequestSchema.safeParse(payload);
 
   if (!result.success) {
     const error = result.error.flatten();

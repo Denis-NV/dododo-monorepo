@@ -1,11 +1,11 @@
 import { z } from "zod";
 
-export const resentVerificationRequestBodySchema = z.object({
+export const resentVerificationRequestSchema = z.object({
   userId: z.string(),
   email: z.string().email(),
 });
 
-export const verifyEmailBodySchema = z.object({
+export const verifyEmailRequestSchema = z.object({
   userId: z.string(),
   code: z.string(),
 });

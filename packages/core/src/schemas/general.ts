@@ -1,10 +1,10 @@
 import { z } from "zod";
 
-export const responseSchema = z.object({
+export const baseApiResponseSchema = z.object({
   error: z.string().optional(),
   message: z.string().optional(),
 });
 
-export const authResponseSchema = responseSchema.extend({
+export const authApiResponseSchema = baseApiResponseSchema.extend({
   accessToken: z.string().optional(),
 });
