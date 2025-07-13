@@ -26,7 +26,6 @@ export const createUpdateAssessment = async (
     if (!parsedBody.success) {
       return res.status(400).json({
         error: "Invalid input",
-        details: parsedBody.error.flatten(),
       });
     }
 

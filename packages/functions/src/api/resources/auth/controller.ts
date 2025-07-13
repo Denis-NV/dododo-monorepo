@@ -47,7 +47,6 @@ export const registerUser = async (
     if (!parsedBody.success) {
       return res.status(400).json({
         error: "Invalid input",
-        details: parsedBody.error.flatten(),
       });
     }
 
@@ -148,7 +147,6 @@ export const login = async (
     if (!parsedBody.success) {
       return res.status(400).json({
         error: "Invalid input",
-        details: parsedBody.error.flatten(),
       });
     }
 
@@ -225,7 +223,6 @@ export const logout = async (
     if (!parsedBody.success) {
       return res.status(400).json({
         error: "Invalid input",
-        details: parsedBody.error.flatten(),
       });
     }
 
@@ -284,7 +281,6 @@ export const refresh = async (
         if (!parsedPayload.success) {
           return res.status(401).json({
             error: "Invalid refresh token payload",
-            details: parsedPayload.error.flatten(),
           });
         }
 
@@ -385,7 +381,6 @@ export const resentEmailVerification = async (
     if (!parsedBody.success) {
       return res.status(400).json({
         error: "Invalid input",
-        details: parsedBody.error.flatten(),
       });
     }
 
@@ -449,7 +444,6 @@ export const verifyEmail = async (
     if (!parsedBody.success) {
       return res.status(400).json({
         error: "Invalid input",
-        details: parsedBody.error.flatten(),
       });
     }
 
