@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { accessJwtOutputSchema, verifyEmailBodySchema } from "@dododo/core";
+import { accessJwtOutputSchema, TVerifyEmailBody } from "@dododo/core";
 
 import { resendEmailVerificationCode, verifyEmail } from "@/api";
 
@@ -58,7 +58,6 @@ export const getUserEmailVerificationRequest = async (
   };
 };
 
-type TVerifyEmailBody = z.infer<typeof verifyEmailBodySchema>;
 type TAccessJwtPayload = z.infer<typeof accessJwtOutputSchema>;
 
 export const getVerifiedUser = async (

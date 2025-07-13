@@ -2,24 +2,28 @@ import { Resource } from "sst";
 import { Schema, z } from "zod";
 
 import {
-  createUserRequestBodySchema,
-  loginUserRequestBodySchema,
-  logoutUserRequestBodySchema,
-  resentVerificationRequestBodySchema,
   userProfileResponseSchema,
-  verifyEmailBodySchema,
-  createUpdateAssessmentRequestBodySchema,
   assessmentResponseSchema,
   AUTHORIZATION,
   authResponseSchema,
   responseSchema,
+  TResponse,
+  TAuthResponse,
+  TUserProfileResponse,
+  TAssessmentResponse,
+  TCreateUpdateAssessmentRequestBody,
+  TCreateUserRequestBody,
+  TLoginUserRequestBody,
+  TLogoutUserRequestBody,
+  TResentVerificationRequestBody,
+  TVerifyEmailBody,
 } from "@dododo/core";
 
-type TResult = z.infer<typeof responseSchema> & {
+type TResult = TResponse & {
   headers?: Headers;
 };
 
-type TAuthResult = z.infer<typeof authResponseSchema> & {
+type TAuthResult = TAuthResponse & {
   headers?: Headers;
 };
 
@@ -72,20 +76,23 @@ const fetchApi =
     }
   };
 
-export const registerUser = fetchApi<
-  TAuthResult,
-  z.infer<typeof createUserRequestBodySchema>
->("auth/register", "POST", authResponseSchema);
+export const registerUser = fetchApi<TAuthResult, TCreateUserRequestBody>(
+  "auth/register",
+  "POST",
+  authResponseSchema
+);
 
-export const logIn = fetchApi<
-  TAuthResult,
-  z.infer<typeof loginUserRequestBodySchema>
->("auth/login", "POST", authResponseSchema);
+export const logIn = fetchApi<TAuthResult, TLoginUserRequestBody>(
+  "auth/login",
+  "POST",
+  authResponseSchema
+);
 
-export const logOut = fetchApi<
-  TAuthResult,
-  z.infer<typeof logoutUserRequestBodySchema>
->("auth/logout", "POST", authResponseSchema);
+export const logOut = fetchApi<TAuthResult, TLogoutUserRequestBody>(
+  "auth/logout",
+  "POST",
+  authResponseSchema
+);
 
 export const refreshSession = fetchApi<TAuthResult>(
   "auth/refresh",
@@ -95,21 +102,22 @@ export const refreshSession = fetchApi<TAuthResult>(
 
 export const resendEmailVerificationCode = fetchApi<
   TResult,
-  z.infer<typeof resentVerificationRequestBodySchema>
+  TResentVerificationRequestBody
 >("auth/resend-email-verification", "POST", responseSchema);
 
-export const verifyEmail = fetchApi<
-  TAuthResult,
-  z.infer<typeof verifyEmailBodySchema>
->("auth/verify-email", "POST", authResponseSchema);
+export const verifyEmail = fetchApi<TAuthResult, TVerifyEmailBody>(
+  "auth/verify-email",
+  "POST",
+  authResponseSchema
+);
 
-export const getProfile = fetchApi<z.infer<typeof userProfileResponseSchema>>(
+export const getProfile = fetchApi<TUserProfileResponse>(
   "user",
   "GET",
   userProfileResponseSchema
 );
 
 export const createUpdateAssessment = fetchApi<
-  z.infer<typeof assessmentResponseSchema>,
-  z.infer<typeof createUpdateAssessmentRequestBodySchema>
+  TAssessmentResponse,
+  TCreateUpdateAssessmentRequestBody
 >("assessment", "POST", assessmentResponseSchema);

@@ -1,13 +1,11 @@
-import z from "zod";
-
 import { Request, Response } from "express";
 
 import { db, userTable } from "@dododo/db";
-import { userProfileResponseSchema } from "@dododo/core";
+import { TUserProfileResponse } from "@dododo/core";
 
 export const getAuthenticatedUser = async (
   req: Request,
-  res: Response<z.infer<typeof userProfileResponseSchema>>
+  res: Response<TUserProfileResponse>
 ) => {
   try {
     // const { email, password } = parsedBody.data;

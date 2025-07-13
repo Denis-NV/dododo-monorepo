@@ -14,16 +14,20 @@ import {
   and,
 } from "@dododo/db";
 import {
-  authResponseSchema,
   EMAIL_VERIFICATION,
   REFRESH_TOKEN,
   refreshJWTOutputSchema,
-  responseSchema,
   createUserRequestBodySchema,
   loginUserRequestBodySchema,
   logoutUserRequestBodySchema,
   resentVerificationRequestBodySchema,
   verifyEmailBodySchema,
+  TResponse,
+  TAuthResponse,
+  TLoginUserRequestBody,
+  TLogoutUserRequestBody,
+  TResentVerificationRequestBody,
+  TVerifyEmailBody,
 } from "@dododo/core";
 
 import { hashPassword, verifyPasswordHash } from "@/utils/password";
@@ -38,10 +42,8 @@ import { createSession } from "@/utils/session";
 import { EMAIL_VERIFICATION_EXPIRATION_SECONDS } from "@/const";
 
 export const registerUser = async (
-  {
-    body,
-  }: Request<unknown, unknown, z.infer<typeof createUserRequestBodySchema>>,
-  res: Response<z.infer<typeof authResponseSchema>>
+  { body }: Request,
+  res: Response<TAuthResponse>
 ) => {
   try {
     // Validate the request body
@@ -138,10 +140,8 @@ export const registerUser = async (
 };
 
 export const login = async (
-  {
-    body,
-  }: Request<unknown, unknown, z.infer<typeof loginUserRequestBodySchema>>,
-  res: Response<z.infer<typeof authResponseSchema>>
+  { body }: Request<unknown, unknown, TLoginUserRequestBody>,
+  res: Response<TAuthResponse>
 ) => {
   try {
     const parsedBody = loginUserRequestBodySchema.safeParse(body);
@@ -216,10 +216,8 @@ export const login = async (
 };
 
 export const logout = async (
-  {
-    body,
-  }: Request<unknown, unknown, z.infer<typeof logoutUserRequestBodySchema>>,
-  res: Response<z.infer<typeof authResponseSchema>>
+  { body }: Request<unknown, unknown, TLogoutUserRequestBody>,
+  res: Response<TAuthResponse>
 ) => {
   try {
     const parsedBody = logoutUserRequestBodySchema.safeParse(body);
@@ -251,10 +249,7 @@ export const logout = async (
   }
 };
 
-export const refresh = async (
-  req: Request,
-  res: Response<z.infer<typeof authResponseSchema>>
-) => {
+export const refresh = async (req: Request, res: Response<TAuthResponse>) => {
   try {
     const parsedCookies = cookie.parse(req.headers.cookie || "");
     const oldToken = parsedCookies?.[REFRESH_TOKEN];
@@ -374,14 +369,8 @@ export const refresh = async (
 };
 
 export const resentEmailVerification = async (
-  {
-    body,
-  }: Request<
-    unknown,
-    unknown,
-    z.infer<typeof resentVerificationRequestBodySchema>
-  >,
-  res: Response<z.infer<typeof responseSchema>>
+  { body }: Request<unknown, unknown, TResentVerificationRequestBody>,
+  res: Response<TResponse>
 ) => {
   try {
     const parsedBody = resentVerificationRequestBodySchema.safeParse(body);
@@ -436,11 +425,8 @@ export const resentEmailVerification = async (
 };
 
 export const verifyEmail = async (
-  {
-    body,
-    headers,
-  }: Request<unknown, unknown, z.infer<typeof verifyEmailBodySchema>>,
-  res: Response<z.infer<typeof authResponseSchema>>
+  { body, headers }: Request<unknown, unknown, TVerifyEmailBody>,
+  res: Response<TAuthResponse>
 ) => {
   try {
     const parsedCookies = cookie.parse(headers.cookie || "");

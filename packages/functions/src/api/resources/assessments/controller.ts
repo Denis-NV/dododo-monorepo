@@ -1,21 +1,15 @@
 import { Request, Response } from "express";
-import { z } from "zod";
 
 import { db, eq, and, AssessmentTable } from "@dododo/db";
 import {
   createUpdateAssessmentRequestBodySchema,
-  assessmentResponseSchema,
+  TCreateUpdateAssessmentRequestBody,
+  TAssessmentResponse,
 } from "@dododo/core";
 
 export const createUpdateAssessment = async (
-  {
-    body,
-  }: Request<
-    unknown,
-    unknown,
-    z.infer<typeof createUpdateAssessmentRequestBodySchema>
-  >,
-  res: Response<z.infer<typeof assessmentResponseSchema>>
+  { body }: Request<unknown, unknown, TCreateUpdateAssessmentRequestBody>,
+  res: Response<TAssessmentResponse>
 ) => {
   try {
     // Validate the request body
