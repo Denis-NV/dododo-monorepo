@@ -86,7 +86,7 @@ const Assessment = () => {
   };
 
   return (
-    <Box p="4" maxWidth="800px" mx="auto">
+    <Box p="4" style={{ maxWidth: "800px" }} mx="auto">
       <Heading as="h1" size="6" mb="6" align="center">
         {skill} Assessment
       </Heading>
@@ -103,20 +103,20 @@ const Assessment = () => {
           </Text>
         </Flex>
         <Box
+          width="100%"
+          height="4px"
           style={{
-            width: "100%",
-            height: "4px",
             backgroundColor: "var(--gray-4)",
             borderRadius: "2px",
             overflow: "hidden",
           }}
         >
           <Box
+            height="100%"
             style={{
               width: `${
                 ((currentQuestionIndex + 1) / questions.length) * 100
               }%`,
-              height: "100%",
               backgroundColor: "#3b82f6",
               transition: "width 0.3s ease",
             }}
@@ -126,7 +126,7 @@ const Assessment = () => {
 
       <Form method="post" id={form.id} onSubmit={form.onSubmit}>
         {/* Question Container with all questions always in DOM */}
-        <Box style={{ minHeight: "400px" }}>
+        <Box style={{ minHeight: "400px" }} position="relative">
           {questions.map((question, questionIndex) => {
             const isCurrentQuestion = questionIndex === currentQuestionIndex;
             const field = fields[question.id as keyof typeof fields];
@@ -134,13 +134,13 @@ const Assessment = () => {
             return (
               <Box
                 key={question.id}
+                position={isCurrentQuestion ? "relative" : "absolute"}
+                top={isCurrentQuestion ? "auto" : "0"}
+                left={isCurrentQuestion ? "auto" : "0"}
+                width={isCurrentQuestion ? "auto" : "100%"}
                 style={{
                   opacity: isCurrentQuestion ? (isTransitioning ? 0 : 1) : 0,
                   visibility: isCurrentQuestion ? "visible" : "hidden",
-                  position: isCurrentQuestion ? "relative" : "absolute",
-                  top: isCurrentQuestion ? "auto" : 0,
-                  left: isCurrentQuestion ? "auto" : 0,
-                  width: isCurrentQuestion ? "auto" : "100%",
                   transition: "opacity 0.15s ease-in-out",
                   pointerEvents: isCurrentQuestion ? "auto" : "none",
                 }}
@@ -180,37 +180,39 @@ const Assessment = () => {
                                     gap: "12px",
                                     padding: "16px 20px",
                                     border: `2px solid ${
-                                      isSelected ? "#3b82f6" : "#d1d5db"
+                                      isSelected
+                                        ? "var(--blue-9)"
+                                        : "var(--gray-6)"
                                     }`,
                                     borderRadius: "8px",
                                     cursor: "pointer",
                                     transition: "all 0.2s ease",
                                     backgroundColor: isSelected
-                                      ? "#dbeafe"
-                                      : "#ffffff",
+                                      ? "var(--blue-2)"
+                                      : "var(--color-background)",
                                     boxShadow: isSelected
-                                      ? "0 0 0 3px rgba(59, 130, 246, 0.1)"
+                                      ? "0 0 0 3px var(--blue-4)"
                                       : "none",
                                   }}
                                   onMouseEnter={(e) => {
                                     if (!isSelected) {
                                       e.currentTarget.style.backgroundColor =
-                                        "#f9fafb";
+                                        "var(--gray-2)";
                                       e.currentTarget.style.borderColor =
-                                        "#9ca3af";
+                                        "var(--gray-8)";
                                     }
                                   }}
                                   onMouseLeave={(e) => {
                                     if (!isSelected) {
                                       e.currentTarget.style.backgroundColor =
-                                        "#ffffff";
+                                        "var(--color-background)";
                                       e.currentTarget.style.borderColor =
-                                        "#d1d5db";
+                                        "var(--gray-6)";
                                     } else {
                                       e.currentTarget.style.backgroundColor =
-                                        "#dbeafe";
+                                        "var(--blue-2)";
                                       e.currentTarget.style.borderColor =
-                                        "#3b82f6";
+                                        "var(--blue-9)";
                                     }
                                   }}
                                 >
@@ -226,9 +228,7 @@ const Assessment = () => {
                                   <Text
                                     size="3"
                                     weight={isSelected ? "bold" : "regular"}
-                                    style={{
-                                      color: isSelected ? "#1e40af" : "#374151",
-                                    }}
+                                    color={isSelected ? "blue" : "gray"}
                                   >
                                     {option.label}
                                   </Text>
@@ -258,10 +258,10 @@ const Assessment = () => {
             type="button"
             variant="outline"
             onClick={handlePrevious}
+            disabled={currentQuestionIndex === 0}
             style={{
               opacity: currentQuestionIndex === 0 ? 0 : 1,
               pointerEvents: currentQuestionIndex === 0 ? "none" : "auto",
-              cursor: currentQuestionIndex === 0 ? "not-allowed" : "pointer",
               transition: "opacity 0.2s ease",
             }}
           >
@@ -271,6 +271,7 @@ const Assessment = () => {
           <Button
             type="button"
             onClick={handleNext}
+            disabled={isLastQuestion || !isCurrentQuestionAnswered}
             style={{
               opacity: isLastQuestion
                 ? 0
@@ -282,7 +283,6 @@ const Assessment = () => {
                 : !isCurrentQuestionAnswered
                 ? "none"
                 : "auto",
-              cursor: !isCurrentQuestionAnswered ? "not-allowed" : "pointer",
               transition: "opacity 0.2s ease",
             }}
           >
@@ -291,6 +291,7 @@ const Assessment = () => {
 
           <Button
             type="submit"
+            disabled={!isLastQuestion || !isCurrentQuestionAnswered}
             style={{
               opacity: !isLastQuestion
                 ? 0
@@ -302,7 +303,6 @@ const Assessment = () => {
                 : !isCurrentQuestionAnswered
                 ? "none"
                 : "auto",
-              cursor: !isCurrentQuestionAnswered ? "not-allowed" : "pointer",
               transition: "opacity 0.2s ease",
             }}
           >
@@ -312,11 +312,8 @@ const Assessment = () => {
 
         {actionData?.status === "success" && (
           <Card
-            style={{
-              padding: "16px",
-              backgroundColor: "var(--green-2)",
-              marginTop: "24px",
-            }}
+            mt="6"
+            style={{ padding: "16px", backgroundColor: "var(--green-2)" }}
           >
             <Text size="3" color="green" weight="medium">
               Assessment submitted successfully! Check the console for answers.

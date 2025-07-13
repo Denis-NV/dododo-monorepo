@@ -4,7 +4,7 @@ import { z } from "zod";
 import {
   getAssessmentData,
   getQuestionsForSkill,
-} from "../../utils/useAssessmentData";
+} from "@/utils/assessmentData";
 
 // Generate schema dynamically based on assessment data
 const generateAssessmentSchema = (skill: string) => {

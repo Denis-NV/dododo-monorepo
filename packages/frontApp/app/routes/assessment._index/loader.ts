@@ -1,5 +1,5 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
-import { getAssessmentData } from "../../utils/useAssessmentData";
+import { getAssessmentData } from "@/utils/assessmentData";
 
 const loader = async ({ request }: LoaderFunctionArgs) => {
   const assessmentData = getAssessmentData();

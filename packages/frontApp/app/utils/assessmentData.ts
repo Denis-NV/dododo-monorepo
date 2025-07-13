@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { z } from "zod";
 import assessmentDataV1 from "../data/assessmentDataV1.json";
 import assessmentDataV2 from "../data/assessmentDataV2.json";
@@ -41,13 +40,20 @@ export type AssessmentData = z.infer<typeof assessmentDataSchema>;
  * @returns {AssessmentData} The validated assessment data
  * @throws {Error} If validation fails
  */
-export const getAssessmentData = (version: AssessmentVersion = 'v1'): AssessmentData => {
+export const getAssessmentData = (
+  version: AssessmentVersion = "v1"
+): AssessmentData => {
   const assessmentData = assessmentDataVersions[version];
   const result = assessmentDataSchema.safeParse(assessmentData);
 
   if (!result.success) {
-    console.error(`Assessment data validation failed for version ${version}:`, result.error.flatten());
-    throw new Error(`Invalid assessment data (${version}): ${result.error.message}`);
+    console.error(
+      `Assessment data validation failed for version ${version}:`,
+      result.error.flatten()
+    );
+    throw new Error(
+      `Invalid assessment data (${version}): ${result.error.message}`
+    );
   }
 
   return result.data;
@@ -59,7 +65,10 @@ export const getAssessmentData = (version: AssessmentVersion = 'v1'): Assessment
  * @param version - The version of assessment data to use (defaults to 'v1')
  * @returns {AssessmentQuestion[]} Array of validated questions for the skill
  */
-export const getQuestionsForSkill = (skill: string, version: AssessmentVersion = 'v1'): AssessmentQuestion[] => {
+export const getQuestionsForSkill = (
+  skill: string,
+  version: AssessmentVersion = "v1"
+): AssessmentQuestion[] => {
   const data = getAssessmentData(version);
   const questions = data[skill as keyof AssessmentData] || [];
 
@@ -73,7 +82,9 @@ export const getQuestionsForSkill = (skill: string, version: AssessmentVersion =
  * @param version - The version of assessment data to use (defaults to 'v1')
  * @returns {string[]} Array of available skill names
  */
-export const getAvailableSkills = (version: AssessmentVersion = 'v1'): string[] => {
+export const getAvailableSkills = (
+  version: AssessmentVersion = "v1"
+): string[] => {
   const data = getAssessmentData(version);
   return Object.keys(data);
 };
@@ -84,7 +95,10 @@ export const getAvailableSkills = (version: AssessmentVersion = 'v1'): string[] 
  * @param version - The version of assessment data to use (defaults to 'v1')
  * @returns {boolean} Whether the skill exists
  */
-export const hasSkill = (skill: string, version: AssessmentVersion = 'v1'): boolean => {
+export const hasSkill = (
+  skill: string,
+  version: AssessmentVersion = "v1"
+): boolean => {
   try {
     const data = getAssessmentData(version);
     return skill in data && Array.isArray(data[skill as keyof AssessmentData]);
@@ -101,28 +115,10 @@ export const hasSkill = (skill: string, version: AssessmentVersion = 'v1'): bool
  */
 export const getQuestionsForSkillSafe = (
   skill: string,
-  version: AssessmentVersion = 'v1'
+  version: AssessmentVersion = "v1"
 ): AssessmentQuestion[] | null => {
   if (!hasSkill(skill, version)) {
     return null;
   }
   return getQuestionsForSkill(skill, version);
 };
-
-/**
- * Custom hook that provides validated assessment data on client-side
- * @param version - The version of assessment data to use (defaults to 'v1')
- * @returns {AssessmentData | null} The validated assessment data or null if invalid
- */
-export const useAssessmentData = (version: AssessmentVersion = 'v1'): AssessmentData | null => {
-  return useMemo(() => {
-    try {
-      return getAssessmentData(version);
-    } catch (error) {
-      console.error(`Failed to load assessment data (${version}):`, error);
-      return null;
-    }
-  }, [version]);
-};
-
-export default useAssessmentData;
