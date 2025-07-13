@@ -2,16 +2,14 @@ import { Resource } from "sst";
 import { Schema, z } from "zod";
 
 import {
-  createUserRequestBody,
-  loginUserRequestBody,
-  logoutUserRequestBody,
-  resentVerificationRequestBody,
+  createUserRequestBodySchema,
+  loginUserRequestBodySchema,
+  logoutUserRequestBodySchema,
+  resentVerificationRequestBodySchema,
   userProfileResponseSchema,
-  verifyEmailBody,
-  createUpdateAssessmentRequestBody,
+  verifyEmailBodySchema,
+  createUpdateAssessmentRequestBodySchema,
   assessmentResponseSchema,
-} from "@dododo/db";
-import {
   AUTHORIZATION,
   authResponseSchema,
   responseSchema,
@@ -76,17 +74,17 @@ const fetchApi =
 
 export const registerUser = fetchApi<
   TAuthResult,
-  z.infer<typeof createUserRequestBody>
+  z.infer<typeof createUserRequestBodySchema>
 >("auth/register", "POST", authResponseSchema);
 
 export const logIn = fetchApi<
   TAuthResult,
-  z.infer<typeof loginUserRequestBody>
+  z.infer<typeof loginUserRequestBodySchema>
 >("auth/login", "POST", authResponseSchema);
 
 export const logOut = fetchApi<
   TAuthResult,
-  z.infer<typeof logoutUserRequestBody>
+  z.infer<typeof logoutUserRequestBodySchema>
 >("auth/logout", "POST", authResponseSchema);
 
 export const refreshSession = fetchApi<TAuthResult>(
@@ -97,12 +95,12 @@ export const refreshSession = fetchApi<TAuthResult>(
 
 export const resendEmailVerificationCode = fetchApi<
   TResult,
-  z.infer<typeof resentVerificationRequestBody>
+  z.infer<typeof resentVerificationRequestBodySchema>
 >("auth/resend-email-verification", "POST", responseSchema);
 
 export const verifyEmail = fetchApi<
   TAuthResult,
-  z.infer<typeof verifyEmailBody>
+  z.infer<typeof verifyEmailBodySchema>
 >("auth/verify-email", "POST", authResponseSchema);
 
 export const getProfile = fetchApi<z.infer<typeof userProfileResponseSchema>>(
@@ -113,5 +111,5 @@ export const getProfile = fetchApi<z.infer<typeof userProfileResponseSchema>>(
 
 export const createUpdateAssessment = fetchApi<
   z.infer<typeof assessmentResponseSchema>,
-  z.infer<typeof createUpdateAssessmentRequestBody>
+  z.infer<typeof createUpdateAssessmentRequestBodySchema>
 >("assessment", "POST", assessmentResponseSchema);

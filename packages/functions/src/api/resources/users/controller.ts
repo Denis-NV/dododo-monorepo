@@ -2,7 +2,8 @@ import z from "zod";
 
 import { Request, Response } from "express";
 
-import { db, userProfileResponseSchema, userTable } from "@dododo/db";
+import { db, userTable } from "@dododo/db";
+import { userProfileResponseSchema } from "@dododo/core";
 
 export const getAuthenticatedUser = async (
   req: Request,
@@ -59,7 +60,15 @@ export const getAuthenticatedUser = async (
 
     // res.cookie(refreshCookie.name, refreshCookie.val, refreshCookie.options);
 
-    return res.status(200).json({ user: users[0] });
+    return res.status(200).json({
+      user: {
+        id: users[0].id,
+        email: users[0].email,
+        username: users[0].username,
+        firstName: users[0].firstName || undefined,
+        lastName: users[0].lastName || undefined,
+      },
+    });
   } catch (error) {
     console.error("[ API ] Error logging in:", error);
 

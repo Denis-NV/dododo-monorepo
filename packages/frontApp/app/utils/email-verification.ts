@@ -1,10 +1,9 @@
 import { z } from "zod";
-import { accessJwtOutputSchema } from "@dododo/core";
+import { accessJwtOutputSchema, verifyEmailBodySchema } from "@dododo/core";
 
 import { resendEmailVerificationCode, verifyEmail } from "@/api";
 
 import { getParsedCookies } from "./cookies";
-import { verifyEmailBody } from "@dododo/db";
 import { updateSession } from "./session";
 
 type TUser = z.infer<typeof accessJwtOutputSchema>;
@@ -59,7 +58,7 @@ export const getUserEmailVerificationRequest = async (
   };
 };
 
-type TVerifyEmailBody = z.infer<typeof verifyEmailBody>;
+type TVerifyEmailBody = z.infer<typeof verifyEmailBodySchema>;
 type TAccessJwtPayload = z.infer<typeof accessJwtOutputSchema>;
 
 export const getVerifiedUser = async (

@@ -6,9 +6,10 @@ import {
   userTable,
   emailVerificationRequestTable,
 } from "./tables";
-import { responseSchema } from "@dododo/core";
 
-// User table
+// ===== DRIZZLE-ZOD GENERATED SCHEMAS ONLY =====
+
+// User table schemas
 export const insertUserTableSchema = createInsertSchema(userTable, {
   email: z.string().email().min(5),
   firstName: z.string().optional(),
@@ -16,31 +17,7 @@ export const insertUserTableSchema = createInsertSchema(userTable, {
 });
 export const selectUserTableSchema = createSelectSchema(userTable);
 
-export const createUserRequestBody = insertUserTableSchema
-  .omit({
-    createdAt: true,
-    updatedAt: true,
-    passwordHash: true,
-    recoveryCode: true,
-    emailVerified: true,
-  })
-  .extend({
-    password: z.string(),
-  });
-
-export const loginUserRequestBody = selectUserTableSchema
-  .pick({
-    email: true,
-  })
-  .extend({
-    password: z.string(),
-  });
-
-export const logoutUserRequestBody = selectUserTableSchema.pick({
-  id: true,
-});
-
-// Email verification request table
+// Email verification request table schemas
 export const insertEmailVerificationRequestTableSchema = createInsertSchema(
   emailVerificationRequestTable
 );
@@ -48,49 +25,10 @@ export const selectEmailVerificationRequestTableSchema = createSelectSchema(
   emailVerificationRequestTable
 );
 
-export const resentVerificationRequestBody =
-  selectEmailVerificationRequestTableSchema.pick({
-    userId: true,
-    email: true,
-  });
-
-export const verifyEmailBody = selectEmailVerificationRequestTableSchema
-  .pick({
-    userId: true,
-  })
-  .extend({
-    code: z.string(),
-  });
-
-// Session table
+// Session table schemas
 export const insertSessionTableSchema = createInsertSchema(sessionTable);
 export const selectSessionTableSchema = createSelectSchema(sessionTable);
 
+// Assessment table schemas
 export const insertAssessmentTableSchema = createInsertSchema(AssessmentTable);
 export const selectAssessmentTableSchema = createSelectSchema(AssessmentTable);
-
-export const createUpdateAssessmentRequestBody =
-  insertAssessmentTableSchema.omit({
-    id: true,
-    createdAt: true,
-    updatedAt: true,
-    locked: true,
-  });
-
-export const assessmentResponseSchema = responseSchema.extend({
-  assessment: selectAssessmentTableSchema.optional(),
-});
-
-// General
-
-export const userProfileResponseSchema = responseSchema.extend({
-  user: selectUserTableSchema
-    .pick({
-      id: true,
-      email: true,
-      firstName: true,
-      lastName: true,
-      username: true,
-    })
-    .optional(),
-});

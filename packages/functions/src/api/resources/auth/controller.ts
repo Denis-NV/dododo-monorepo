@@ -9,12 +9,7 @@ import {
   eq,
   sessionTable,
   userTable,
-  createUserRequestBody,
-  loginUserRequestBody,
-  logoutUserRequestBody,
   insertUserTableSchema,
-  resentVerificationRequestBody,
-  verifyEmailBody,
   emailVerificationRequestTable,
   and,
 } from "@dododo/db";
@@ -24,6 +19,11 @@ import {
   REFRESH_TOKEN,
   refreshJWTOutputSchema,
   responseSchema,
+  createUserRequestBodySchema,
+  loginUserRequestBodySchema,
+  logoutUserRequestBodySchema,
+  resentVerificationRequestBodySchema,
+  verifyEmailBodySchema,
 } from "@dododo/core";
 
 import { hashPassword, verifyPasswordHash } from "@/utils/password";
@@ -38,12 +38,14 @@ import { createSession } from "@/utils/session";
 import { EMAIL_VERIFICATION_EXPIRATION_SECONDS } from "@/const";
 
 export const registerUser = async (
-  { body }: Request<unknown, unknown, z.infer<typeof createUserRequestBody>>,
+  {
+    body,
+  }: Request<unknown, unknown, z.infer<typeof createUserRequestBodySchema>>,
   res: Response<z.infer<typeof authResponseSchema>>
 ) => {
   try {
     // Validate the request body
-    const parsedBody = createUserRequestBody.safeParse(body);
+    const parsedBody = createUserRequestBodySchema.safeParse(body);
     if (!parsedBody.success) {
       return res.status(400).json({
         error: "Invalid input",
@@ -136,11 +138,13 @@ export const registerUser = async (
 };
 
 export const login = async (
-  { body }: Request<unknown, unknown, z.infer<typeof loginUserRequestBody>>,
+  {
+    body,
+  }: Request<unknown, unknown, z.infer<typeof loginUserRequestBodySchema>>,
   res: Response<z.infer<typeof authResponseSchema>>
 ) => {
   try {
-    const parsedBody = loginUserRequestBody.safeParse(body);
+    const parsedBody = loginUserRequestBodySchema.safeParse(body);
 
     console.log("==> Log in body parsed: ", parsedBody.success);
 
@@ -212,11 +216,13 @@ export const login = async (
 };
 
 export const logout = async (
-  { body }: Request<unknown, unknown, z.infer<typeof logoutUserRequestBody>>,
+  {
+    body,
+  }: Request<unknown, unknown, z.infer<typeof logoutUserRequestBodySchema>>,
   res: Response<z.infer<typeof authResponseSchema>>
 ) => {
   try {
-    const parsedBody = logoutUserRequestBody.safeParse(body);
+    const parsedBody = logoutUserRequestBodySchema.safeParse(body);
 
     console.log("--> Log out body: ", parsedBody.success);
 
@@ -370,11 +376,15 @@ export const refresh = async (
 export const resentEmailVerification = async (
   {
     body,
-  }: Request<unknown, unknown, z.infer<typeof resentVerificationRequestBody>>,
+  }: Request<
+    unknown,
+    unknown,
+    z.infer<typeof resentVerificationRequestBodySchema>
+  >,
   res: Response<z.infer<typeof responseSchema>>
 ) => {
   try {
-    const parsedBody = resentVerificationRequestBody.safeParse(body);
+    const parsedBody = resentVerificationRequestBodySchema.safeParse(body);
 
     console.log("--> Resent email verification body: ", parsedBody.success);
 
@@ -426,7 +436,10 @@ export const resentEmailVerification = async (
 };
 
 export const verifyEmail = async (
-  { body, headers }: Request<unknown, unknown, z.infer<typeof verifyEmailBody>>,
+  {
+    body,
+    headers,
+  }: Request<unknown, unknown, z.infer<typeof verifyEmailBodySchema>>,
   res: Response<z.infer<typeof authResponseSchema>>
 ) => {
   try {
@@ -437,7 +450,7 @@ export const verifyEmail = async (
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const parsedBody = verifyEmailBody.safeParse(body);
+    const parsedBody = verifyEmailBodySchema.safeParse(body);
 
     console.log("--> Verify email body: ", parsedBody.success);
 

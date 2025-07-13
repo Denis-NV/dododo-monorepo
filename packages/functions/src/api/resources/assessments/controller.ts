@@ -1,14 +1,11 @@
 import { Request, Response } from "express";
 import { z } from "zod";
 
+import { db, eq, and, AssessmentTable } from "@dododo/db";
 import {
-  db,
-  eq,
-  and,
-  AssessmentTable,
-  createUpdateAssessmentRequestBody,
+  createUpdateAssessmentRequestBodySchema,
   assessmentResponseSchema,
-} from "@dododo/db";
+} from "@dododo/core";
 
 export const createUpdateAssessment = async (
   {
@@ -16,13 +13,13 @@ export const createUpdateAssessment = async (
   }: Request<
     unknown,
     unknown,
-    z.infer<typeof createUpdateAssessmentRequestBody>
+    z.infer<typeof createUpdateAssessmentRequestBodySchema>
   >,
   res: Response<z.infer<typeof assessmentResponseSchema>>
 ) => {
   try {
     // Validate the request body
-    const parsedBody = createUpdateAssessmentRequestBody.safeParse(body);
+    const parsedBody = createUpdateAssessmentRequestBodySchema.safeParse(body);
     if (!parsedBody.success) {
       return res.status(400).json({
         error: "Invalid input",
