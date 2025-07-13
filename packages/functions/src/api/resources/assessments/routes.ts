@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { getAll } from "./controller";
+import { createUpdateAssessment } from "./controller";
 
 const router = Router();
 
-router.get("/assesment", getAll);
+router.post("/assesment", createUpdateAssessment);
 
 export default router;
