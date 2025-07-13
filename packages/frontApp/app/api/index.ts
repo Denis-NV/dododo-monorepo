@@ -8,6 +8,8 @@ import {
   resentVerificationRequestBody,
   userProfileResponseSchema,
   verifyEmailBody,
+  createUpdateAssessmentRequestBody,
+  assessmentResponseSchema,
 } from "@dododo/db";
 import {
   AUTHORIZATION,
@@ -108,3 +110,8 @@ export const getProfile = fetchApi<z.infer<typeof userProfileResponseSchema>>(
   "GET",
   userProfileResponseSchema
 );
+
+export const createUpdateAssessment = fetchApi<
+  z.infer<typeof assessmentResponseSchema>,
+  z.infer<typeof createUpdateAssessmentRequestBody>
+>("assessment", "POST", assessmentResponseSchema);

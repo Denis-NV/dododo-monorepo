@@ -67,6 +67,19 @@ export const insertSessionTableSchema = createInsertSchema(sessionTable);
 export const selectSessionTableSchema = createSelectSchema(sessionTable);
 
 export const insertAssessmentTableSchema = createInsertSchema(AssessmentTable);
+export const selectAssessmentTableSchema = createSelectSchema(AssessmentTable);
+
+export const createUpdateAssessmentRequestBody =
+  insertAssessmentTableSchema.omit({
+    id: true,
+    createdAt: true,
+    updatedAt: true,
+    locked: true,
+  });
+
+export const assessmentResponseSchema = responseSchema.extend({
+  assessment: selectAssessmentTableSchema.optional(),
+});
 
 // General
 

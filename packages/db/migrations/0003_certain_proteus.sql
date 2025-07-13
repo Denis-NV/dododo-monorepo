@@ -1,0 +1,1 @@
+ALTER TABLE "assessments" RENAME COLUMN "json" TO "assessment";

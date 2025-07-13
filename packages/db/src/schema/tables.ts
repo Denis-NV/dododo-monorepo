@@ -69,5 +69,5 @@ export const AssessmentTable = pgTable("assessments", {
     .references(() => userTable.id, { onDelete: "cascade" }),
   locked: boolean().notNull().default(false),
   version: integer().notNull(),
-  json: json().$type<TAssesmentJson>().notNull(),
+  assessment: json().$type<TAssesmentJson>().notNull(),
 });
