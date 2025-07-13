@@ -5,7 +5,11 @@ import {
   boolean,
   customType,
   uuid,
+  integer,
+  json,
 } from "drizzle-orm/pg-core";
+
+import { TAssesmentJson } from "@dododo/core";
 
 import { timestamps } from "./columns";
 
@@ -25,6 +29,7 @@ export const userTable = pgTable("user", {
   passwordHash: text().notNull(),
   recoveryCode: bytea().notNull(),
   emailVerified: boolean().notNull().default(false),
+  integer: integer().notNull().default(0),
 });
 
 export const emailVerificationRequestTable = pgTable(
@@ -59,6 +64,10 @@ export const sessionTable = pgTable("session", {
 export const AssessmentTable = pgTable("assessments", {
   ...timestamps,
   id: uuid().primaryKey().defaultRandom(),
-  description: text(),
-  gender: text(),
+  userId: uuid()
+    .notNull()
+    .references(() => userTable.id, { onDelete: "cascade" }),
+  locked: boolean().notNull().default(false),
+  version: integer().notNull(),
+  json: json().$type<TAssesmentJson>().notNull(),
 });
