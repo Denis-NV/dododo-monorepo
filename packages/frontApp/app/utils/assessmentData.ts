@@ -24,13 +24,19 @@ export const assessmentQuestionSchema = z.object({
   options: z.array(assessmentOptionSchema),
 });
 
+export const assessmentSkillSchema = z.object({
+  title: z.string(),
+  questions: z.array(assessmentQuestionSchema),
+});
+
 export const assessmentDataSchema = z.object({
-  emotions: z.array(assessmentQuestionSchema),
+  emotions: assessmentSkillSchema,
 });
 
 // Inferred types from Zod schemas
 export type AssessmentOption = z.infer<typeof assessmentOptionSchema>;
 export type AssessmentQuestion = z.infer<typeof assessmentQuestionSchema>;
+export type AssessmentSkill = z.infer<typeof assessmentSkillSchema>;
 export type AssessmentData = z.infer<typeof assessmentDataSchema>;
 
 /**
@@ -70,11 +76,30 @@ export const getQuestionsForSkill = (
   version: AssessmentVersion = "v1"
 ): AssessmentQuestion[] => {
   const data = getAssessmentData(version);
-  const questions = data[skill as keyof AssessmentData] || [];
+  const skillData = data[skill as keyof AssessmentData];
 
-  // Questions are already validated as part of the main data validation
-  // No need to re-validate each question individually
-  return questions;
+  if (!skillData) {
+    return [];
+  }
+
+  // Return the questions array from the skill object
+  return skillData.questions;
+};
+
+/**
+ * Get skill data (title and questions) for a specific skill category
+ * @param skill - The skill category (e.g., 'emotions')
+ * @param version - The version of assessment data to use (defaults to 'v1')
+ * @returns {AssessmentSkill | null} The skill data or null if not found
+ */
+export const getSkillData = (
+  skill: string,
+  version: AssessmentVersion = "v1"
+): AssessmentSkill | null => {
+  const data = getAssessmentData(version);
+  const skillData = data[skill as keyof AssessmentData];
+
+  return skillData || null;
 };
 
 /**
@@ -101,7 +126,7 @@ export const hasSkill = (
 ): boolean => {
   try {
     const data = getAssessmentData(version);
-    return skill in data && Array.isArray(data[skill as keyof AssessmentData]);
+    return skill in data && data[skill as keyof AssessmentData] !== undefined;
   } catch {
     return false;
   }

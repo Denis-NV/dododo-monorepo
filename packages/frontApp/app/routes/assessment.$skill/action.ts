@@ -1,21 +1,20 @@
 import { ActionFunctionArgs } from "@remix-run/node";
 import { parseWithZod } from "@conform-to/zod";
 import { z } from "zod";
-import {
-  getAssessmentData,
-  getQuestionsForSkill,
-} from "@/utils/assessmentData";
+import { getSkillData } from "@/utils/assessmentData";
 
 // Generate schema dynamically based on assessment data
 const generateAssessmentSchema = (skill: string) => {
-  const questions = getQuestionsForSkill(skill);
+  const skillData = getSkillData(skill);
   const schemaObject: Record<string, z.ZodString> = {};
 
-  questions.forEach((question) => {
-    schemaObject[question.id] = z
-      .string()
-      .min(1, `Please select an answer for ${question.question}`);
-  });
+  if (skillData) {
+    skillData.questions.forEach((question) => {
+      schemaObject[question.id] = z
+        .string()
+        .min(1, `Please select an answer for ${question.question}`);
+    });
+  }
 
   return z.object(schemaObject);
 };
@@ -43,13 +42,24 @@ const action = async ({ request, params }: ActionFunctionArgs) => {
     return submission.reply();
   }
 
-  // Get assessment data for additional processing if needed
-  const assessmentData = getAssessmentData();
-  const questions = getQuestionsForSkill(skill);
+  // Get skill data for additional processing if needed
+  const skillData = getSkillData(skill);
+
+  if (!skillData) {
+    throw new Response("Skill not found", { status: 404 });
+  }
 
   // Log the answers to console with question context
-  console.log(`Assessment answers for ${skill}:`, submission.value);
-  console.log("Questions context:", questions);
+  console.log(`\n=== ${skillData.title} Assessment Results ===`);
+  Object.entries(submission.value).forEach(([questionId, answer]) => {
+    const question = skillData.questions.find((q) => q.id === questionId);
+    const option = question?.options.find((opt) => opt.value === answer);
+
+    console.log(`Question: ${question?.question}`);
+    console.log(`Answer: ${option?.label} (${answer})`);
+    console.log(`Score: ${option?.score}`);
+    console.log("---");
+  });
 
   // Return the submission with success status
   return submission.reply({ resetForm: true });

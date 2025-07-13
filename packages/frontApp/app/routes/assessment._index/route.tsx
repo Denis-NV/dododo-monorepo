@@ -32,19 +32,14 @@ const Assessment = () => {
         {availableSkills.map((skill: string) => {
           const skillData =
             assessmentData[skill as keyof typeof assessmentData];
-          const questionCount = Array.isArray(skillData) ? skillData.length : 0;
+          const questionCount = skillData?.questions?.length || 0;
 
           return (
             <Card key={skill}>
               <Flex direction="column" gap="4" height="100%" p="4">
                 <Box>
-                  <Heading
-                    as="h3"
-                    size="5"
-                    mb="2"
-                    style={{ textTransform: "capitalize" }}
-                  >
-                    {skill} Assessment
+                  <Heading as="h3" size="5" mb="2">
+                    {skillData?.title || skill}
                   </Heading>
                   <Text size="3" color="gray" mb="4">
                     {questionCount} questions designed to evaluate your {skill}{" "}

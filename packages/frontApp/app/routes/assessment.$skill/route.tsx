@@ -20,8 +20,8 @@ import { StepIndicator } from "../../components";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "skill Assessment" },
-    { name: "description", content: "Asses your skill" },
+    { title: "Skill Assessment" },
+    { name: "description", content: "Assess your skill" },
   ];
 };
 
@@ -29,11 +29,7 @@ export const loader = assessmentLoader;
 export const action = assessmentAction;
 
 const Assessment = () => {
-  const {
-    skill,
-    assessmentData,
-    questions: loaderQuestions,
-  } = useLoaderData<typeof loader>();
+  const { skill, skillData } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
 
   // State for carousel functionality
@@ -44,7 +40,7 @@ const Assessment = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const [form, fields] = useForm({
-    id: "emotions",
+    id: skill,
     lastResult: actionData,
     onValidate({ formData }) {
       return parseWithZod(formData, { schema: assessmentSchema });
@@ -53,8 +49,8 @@ const Assessment = () => {
     shouldRevalidate: "onInput",
   });
 
-  // Use questions from loader or fallback to emotions
-  const questions = loaderQuestions || assessmentData.emotions;
+  // Use questions from the skill data
+  const questions = skillData.questions;
   const currentQuestion = questions[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
   const isCurrentQuestionAnswered = selectedValues[currentQuestion.id];
@@ -79,17 +75,10 @@ const Assessment = () => {
     }
   };
 
-  const handleValueChange = (value: string) => {
-    setSelectedValues((prev) => ({
-      ...prev,
-      [currentQuestion.id]: value,
-    }));
-  };
-
   return (
     <Box p="4" style={{ maxWidth: "800px" }} mx="auto">
       <Heading as="h1" size="6" mb="6" align="center">
-        {skill} Assessment
+        {skillData.title}
       </Heading>
 
       <StepIndicator
@@ -144,70 +133,25 @@ const Assessment = () => {
                             selectedValues[question.id] === option.value;
 
                           return (
-                            <Box key={option.value}>
-                              <Text asChild>
-                                <label
-                                  style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "12px",
-                                    padding: "16px 20px",
-                                    border: `2px solid ${
-                                      isSelected
-                                        ? "var(--blue-9)"
-                                        : "var(--gray-6)"
-                                    }`,
-                                    borderRadius: "8px",
-                                    cursor: "pointer",
-                                    transition: `all var(--transition-medium)`,
-                                    backgroundColor: isSelected
-                                      ? "var(--blue-2)"
-                                      : "var(--color-background)",
-                                    boxShadow: isSelected
-                                      ? "0 0 0 3px var(--blue-4)"
-                                      : "none",
-                                  }}
-                                  onMouseEnter={(e) => {
-                                    if (!isSelected) {
-                                      e.currentTarget.style.backgroundColor =
-                                        "var(--gray-2)";
-                                      e.currentTarget.style.borderColor =
-                                        "var(--gray-8)";
-                                    }
-                                  }}
-                                  onMouseLeave={(e) => {
-                                    if (!isSelected) {
-                                      e.currentTarget.style.backgroundColor =
-                                        "var(--color-background)";
-                                      e.currentTarget.style.borderColor =
-                                        "var(--gray-6)";
-                                    } else {
-                                      e.currentTarget.style.backgroundColor =
-                                        "var(--blue-2)";
-                                      e.currentTarget.style.borderColor =
-                                        "var(--blue-9)";
-                                    }
-                                  }}
-                                >
-                                  <RadioGroup.Item
-                                    value={option.value}
-                                    style={{
-                                      margin: 0,
-                                      opacity: 0,
-                                      position: "absolute",
-                                      pointerEvents: "none",
-                                    }}
-                                  />
+                            <Button
+                              asChild
+                              key={option.value}
+                              size="4"
+                              variant={isSelected ? "solid" : "outline"}
+                              radius="small"
+                              style={{ cursor: "pointer" }}
+                            >
+                              <Flex justify="start" asChild>
+                                <label>
+                                  <RadioGroup.Item value={option.value} />
                                   <Text
-                                    size="3"
                                     weight={isSelected ? "bold" : "regular"}
-                                    color={isSelected ? "blue" : "gray"}
                                   >
                                     {option.label}
                                   </Text>
                                 </label>
-                              </Text>
-                            </Box>
+                              </Flex>
+                            </Button>
                           );
                         })}
                       </Flex>
