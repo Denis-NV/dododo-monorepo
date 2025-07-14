@@ -5,6 +5,8 @@ export const accessJwtInputSchema = z.object({
   email: z.string().email(),
   username: z.string(),
   emailVerified: z.boolean(),
+  role: z.string(),
+  curAssessmentVersion: z.number(),
 });
 
 export const accessJwtOutputSchema = accessJwtInputSchema.extend({

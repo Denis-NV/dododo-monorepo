@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { baseApiResponseSchema } from "./general";
+import { ROLE_ADMIN, ROLE_MANAGER, ROLE_USER } from "@/const";
 
 export const createUserRequestSchema = z.object({
   email: z.string().email().min(5),
@@ -26,6 +27,8 @@ export const userProfileResponseSchema = baseApiResponseSchema.extend({
       firstName: z.string().optional(),
       lastName: z.string().optional(),
       username: z.string(),
+      role: z.enum([ROLE_USER, ROLE_MANAGER, ROLE_ADMIN]).optional(),
+      curAssessmentVersion: z.number().optional(),
     })
     .optional(),
 });

@@ -18,6 +18,7 @@ import {
   resentVerificationRequestSchema,
   verifyEmailRequestSchema,
 } from "../schemas/emailVerification";
+import { accessJwtInputSchema, refreshJWTInputSchema } from "../schemas/auth";
 
 export type TAssesmentJson = z.infer<typeof assessmentSchema>;
 
@@ -38,3 +39,8 @@ export type TResentVerificationRequest = z.infer<
   typeof resentVerificationRequestSchema
 >;
 export type TVerifyEmailRequest = z.infer<typeof verifyEmailRequestSchema>;
+
+// Other Inferred Types
+
+export type TAccessJwtPayload = z.infer<typeof accessJwtInputSchema>;
+export type TRefreshJwtPayload = z.infer<typeof refreshJWTInputSchema>;

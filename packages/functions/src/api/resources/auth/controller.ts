@@ -105,10 +105,8 @@ export const registerUser = async (
     );
 
     const { session, refreshCookie, accessJWT } = await createSession({
+      ...newUser,
       userId: newUser.id,
-      email: newUser.email,
-      username: newUser.username,
-      emailVerified: newUser.emailVerified,
     });
 
     if (!session) {
@@ -165,6 +163,8 @@ export const login = async (
         username: userTable.username,
         emailVerified: userTable.emailVerified,
         hashPassword: userTable.passwordHash,
+        role: userTable.role,
+        curAssessmentVersion: userTable.curAssessmentVersion,
       })
       .from(userTable)
       .where(eq(userTable.email, email));
@@ -190,10 +190,8 @@ export const login = async (
     await db.delete(sessionTable).where(eq(sessionTable.userId, user.id));
 
     const { session, refreshCookie, accessJWT } = await createSession({
+      ...user,
       userId: user.id,
-      email: user.email,
-      username: user.username,
-      emailVerified: user.emailVerified,
     });
 
     if (!session) {
@@ -305,6 +303,8 @@ export const refresh = async (
             email: userTable.email,
             username: userTable.username,
             emailVerified: userTable.emailVerified,
+            role: userTable.role,
+            curAssessmentVersion: userTable.curAssessmentVersion,
           })
           .from(sessionTable)
           .innerJoin(userTable, eq(sessionTable.userId, userTable.id))
@@ -337,10 +337,7 @@ export const refresh = async (
         await db.delete(sessionTable).where(eq(sessionTable.id, sessionId));
 
         const { session, refreshCookie, accessJWT } = await createSession({
-          userId,
-          email: oldSession.email,
-          username: oldSession.username,
-          emailVerified: oldSession.emailVerified,
+          ...oldSession,
         });
 
         if (!session) {
@@ -512,10 +509,8 @@ export const verifyEmail = async (
     await db.delete(sessionTable).where(eq(sessionTable.userId, userId));
 
     const { session, refreshCookie, accessJWT } = await createSession({
+      ...updatedUser,
       userId: updatedUser.id,
-      email: updatedUser.email,
-      username: updatedUser.username,
-      emailVerified: updatedUser.emailVerified,
     });
 
     if (!session) {

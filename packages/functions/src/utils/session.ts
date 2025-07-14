@@ -13,9 +13,9 @@ import {
   REFRESH_TOKEN_EXPIRATION_SECONDS,
 } from "@/const";
 import {
-  accessJwtInputSchema,
   REFRESH_TOKEN,
-  refreshJWTInputSchema,
+  TAccessJwtPayload,
+  TRefreshJwtPayload,
 } from "@dododo/core";
 
 export type Session = z.infer<typeof selectSessionTableSchema>;
@@ -47,8 +47,6 @@ async function createDbSession(userId: string): Promise<Session> {
   return newSession;
 }
 
-type TAccessJwtPayload = z.infer<typeof accessJwtInputSchema>;
-
 const generateAccessToken = (payload: TAccessJwtPayload) => {
   const token = jwt.sign(payload, Resource.AccessTokenSecret.value, {
     expiresIn: ACCESS_TOKEN_EXPIRATION_SECONDS,
@@ -58,8 +56,6 @@ const generateAccessToken = (payload: TAccessJwtPayload) => {
     accessJWT: token,
   };
 };
-
-type TRefreshJwtPayload = z.infer<typeof refreshJWTInputSchema>;
 
 const generateRefreshToken = (payload: TRefreshJwtPayload) => {
   const token = jwt.sign(payload, Resource.RefreshTokenSecret.value, {
@@ -86,19 +82,20 @@ const generateRefreshToken = (payload: TRefreshJwtPayload) => {
 export const createSession = async (user: TAccessJwtPayload) => {
   const session = await createDbSession(user.userId);
 
-  // Generate brand-new tokens
-  const { accessJWT } = generateAccessToken({
+  const payload = {
     userId: user.userId,
     email: user.email,
     username: user.username,
     emailVerified: user.emailVerified,
-  });
+    role: user.role,
+    curAssessmentVersion: user.curAssessmentVersion,
+  };
+
+  // Generate brand-new tokens
+  const { accessJWT } = generateAccessToken({ ...payload });
 
   const { refreshCookie } = generateRefreshToken({
-    userId: user.userId,
-    email: user.email,
-    username: user.username,
-    emailVerified: user.emailVerified,
+    ...payload,
     sessionId: session?.id,
   });
 

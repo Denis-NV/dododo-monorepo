@@ -7,9 +7,15 @@ import {
   uuid,
   integer,
   json,
+  pgEnum,
 } from "drizzle-orm/pg-core";
 
-import { TAssesmentJson } from "@dododo/core";
+import {
+  ROLE_ADMIN,
+  ROLE_MANAGER,
+  ROLE_USER,
+  TAssesmentJson,
+} from "@dododo/core";
 
 import { timestamps } from "./columns";
 
@@ -18,6 +24,8 @@ const bytea = customType<{ data: Buffer; notNull: false; default: false }>({
     return "bytea";
   },
 });
+
+export const roleEnum = pgEnum("role", [ROLE_USER, ROLE_MANAGER, ROLE_ADMIN]);
 
 export const userTable = pgTable("user", {
   ...timestamps,
@@ -30,6 +38,7 @@ export const userTable = pgTable("user", {
   recoveryCode: bytea().notNull(),
   emailVerified: boolean().notNull().default(false),
   curAssessmentVersion: integer().notNull().default(0),
+  role: roleEnum().notNull().default("user"),
 });
 
 export const emailVerificationRequestTable = pgTable(

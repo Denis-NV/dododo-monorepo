@@ -8,8 +8,12 @@ const loader = async ({ request }: LoaderFunctionArgs) => {
     request.headers
   );
 
-  if (!user?.emailVerified) {
+  if (!user) {
     return redirect("/login", { headers });
+  }
+
+  if (!user?.emailVerified) {
+    return redirect("/verify-email", { headers });
   }
 
   const {
@@ -19,7 +23,7 @@ const loader = async ({ request }: LoaderFunctionArgs) => {
   } = await getProfile({
     reqHeaders: new Headers({ [AUTHORIZATION]: `Bearer ${accessToken}` }),
   });
-  console.log(fullUser, error, message);
+  console.log(user, error, message);
 
   return data({ user: fullUser }, { headers });
 };

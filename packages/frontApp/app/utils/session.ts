@@ -93,7 +93,6 @@ export const getCurrentSession = async (
       accessToken: newAccessToken,
       error,
       message,
-      details,
     } = await refreshSession({ reqHeaders });
 
     console.log(
@@ -105,8 +104,7 @@ export const getCurrentSession = async (
       Boolean(newAccessToken),
       newAccessToken,
       error,
-      message,
-      details
+      message
     );
 
     if (apiHeaders && newAccessToken) {

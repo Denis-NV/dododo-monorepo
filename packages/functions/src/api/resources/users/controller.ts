@@ -18,6 +18,8 @@ export const getAuthenticatedUser = async (
         username: userTable.username,
         firstName: userTable.firstName,
         lastName: userTable.lastName,
+        role: userTable.role,
+        curAssessmentVersion: userTable.curAssessmentVersion,
       })
       .from(userTable);
 
@@ -63,8 +65,10 @@ export const getAuthenticatedUser = async (
         id: users[0].id,
         email: users[0].email,
         username: users[0].username,
-        firstName: users[0].firstName || undefined,
-        lastName: users[0].lastName || undefined,
+        firstName: users[0].firstName,
+        lastName: users[0].lastName,
+        role: users[0].role,
+        curAssessmentVersion: users[0].curAssessmentVersion,
       },
     });
   } catch (error) {
