@@ -1,11 +1,10 @@
 import { MetaFunction } from "@remix-run/node";
 import { useLoaderData, Form, useActionData } from "@remix-run/react";
 import { useForm } from "@conform-to/react";
-import { parseWithZod } from "@conform-to/zod";
 import { useState } from "react";
 
 import assessmentLoader from "./loader";
-import assessmentAction, { assessmentSchema } from "./action";
+import assessmentAction from "./action";
 
 import {
   Heading,
@@ -42,11 +41,6 @@ const Assessment = () => {
   const [form, fields] = useForm({
     id: skill,
     lastResult: actionData,
-    onValidate({ formData }) {
-      return parseWithZod(formData, { schema: assessmentSchema });
-    },
-    shouldValidate: "onBlur",
-    shouldRevalidate: "onInput",
   });
 
   // Use questions from the skill data

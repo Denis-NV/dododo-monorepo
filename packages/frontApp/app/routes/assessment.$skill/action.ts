@@ -19,14 +19,6 @@ const generateAssessmentSchema = (skill: string) => {
   return z.object(schemaObject);
 };
 
-// Default schema (can be used as fallback)
-export const assessmentSchema = z.object({
-  question1: z.string().min(1, "Please select an answer for Question 1"),
-  question2: z.string().min(1, "Please select an answer for Question 2"),
-  question3: z.string().min(1, "Please select an answer for Question 3"),
-  question4: z.string().min(1, "Please select an answer for Question 4"),
-});
-
 const action = async ({ request, params }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const skill = params.skill || "emotions";
