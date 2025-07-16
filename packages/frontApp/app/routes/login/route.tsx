@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
-import { Form, Link, useActionData } from "@remix-run/react";
+import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 
 import logInAction from "./action";
 import logInLoader from "./loader";
@@ -16,12 +16,14 @@ export const action = logInAction;
 
 const Login = () => {
   const result = useActionData<typeof action>();
+  const { redirectTo } = useLoaderData<typeof loader>();
 
   return (
     <div className="p-4 flex justify-center items-center h-screen">
       <div>
         <h1 className="mb-6 text-2xl">Log In</h1>
         <Form method="post" className="flex flex-col space-y-2">
+          <input type="hidden" name="redirectTo" value={redirectTo} />
           <div>
             <div className="flex flex-row space-x-2">
               <label htmlFor="form-login.email" className="flex-1">

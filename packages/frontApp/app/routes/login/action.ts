@@ -9,6 +9,7 @@ import { updateSession } from "@/utils/session";
 const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const payload = Object.fromEntries(formData);
+  const redirectTo = (payload.redirectTo as string) || "/";
 
   const result = loginUserRequestSchema.safeParse(payload);
 
@@ -40,7 +41,7 @@ const action = async ({ request }: ActionFunctionArgs) => {
 
   const headers = await updateSession(propCookieHeaders, accessToken);
 
-  return redirect("/", { headers });
+  return redirect(redirectTo, { headers });
 };
 
 export default action;

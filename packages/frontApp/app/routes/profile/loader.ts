@@ -9,7 +9,10 @@ const loader = async ({ request }: LoaderFunctionArgs) => {
   );
 
   if (!user) {
-    return redirect("/login", { headers });
+    const url = new URL(request.url);
+    return redirect(`/login?redirectTo=${encodeURIComponent(url.pathname)}`, {
+      headers,
+    });
   }
 
   if (!user?.emailVerified) {

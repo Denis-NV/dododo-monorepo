@@ -1,7 +1,21 @@
-import { data, LoaderFunctionArgs } from "@remix-run/node";
+import { data, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { getSkillData, getAvailableSkills } from "@/utils/assessmentData";
+import { getCurrentSession } from "@/utils/session";
 
-const loader = async ({ params }: LoaderFunctionArgs) => {
+const loader = async ({ request, params }: LoaderFunctionArgs) => {
+  const { user, headers } = await getCurrentSession(request.headers);
+
+  if (!user) {
+    const url = new URL(request.url);
+    return redirect(`/login?redirectTo=${encodeURIComponent(url.pathname)}`, {
+      headers,
+    });
+  }
+
+  if (!user?.emailVerified) {
+    return redirect("/verify-email", { headers });
+  }
+
   const skill = params.skill;
 
   if (!skill) {
@@ -16,11 +30,14 @@ const loader = async ({ params }: LoaderFunctionArgs) => {
 
   const availableSkills = getAvailableSkills();
 
-  return data({
-    skill: params.skill,
-    skillData,
-    availableSkills,
-  });
+  return data(
+    {
+      skill: params.skill,
+      skillData,
+      availableSkills,
+    },
+    { headers }
+  );
 };
 
 export default loader;
