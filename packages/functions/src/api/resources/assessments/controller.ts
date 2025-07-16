@@ -11,6 +11,8 @@ export const createUpdateAssessment = async (
   res: Response<TAssessmentResponse>
 ) => {
   try {
+    console.log("[ API ] Creating/updating assessment...", body);
+
     // Validate the request body
     const parsedBody = createUpdateAssessmentRequestSchema.safeParse(body);
     if (!parsedBody.success) {
