@@ -88,7 +88,6 @@ export const createSession = async (user: TAccessJwtPayload) => {
     username: user.username,
     emailVerified: user.emailVerified,
     role: user.role,
-    curAssessmentVersion: user.curAssessmentVersion,
   };
 
   // Generate brand-new tokens

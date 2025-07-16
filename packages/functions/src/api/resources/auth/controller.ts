@@ -164,7 +164,6 @@ export const login = async (
         emailVerified: userTable.emailVerified,
         hashPassword: userTable.passwordHash,
         role: userTable.role,
-        curAssessmentVersion: userTable.curAssessmentVersion,
       })
       .from(userTable)
       .where(eq(userTable.email, email));
@@ -304,7 +303,6 @@ export const refresh = async (
             username: userTable.username,
             emailVerified: userTable.emailVerified,
             role: userTable.role,
-            curAssessmentVersion: userTable.curAssessmentVersion,
           })
           .from(sessionTable)
           .innerJoin(userTable, eq(sessionTable.userId, userTable.id))
@@ -509,8 +507,11 @@ export const verifyEmail = async (
     await db.delete(sessionTable).where(eq(sessionTable.userId, userId));
 
     const { session, refreshCookie, accessJWT } = await createSession({
-      ...updatedUser,
       userId: updatedUser.id,
+      email: updatedUser.email,
+      username: updatedUser.username,
+      emailVerified: updatedUser.emailVerified,
+      role: updatedUser.role,
     });
 
     if (!session) {
