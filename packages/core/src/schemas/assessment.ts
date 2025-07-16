@@ -46,7 +46,6 @@ export const assessmentSchema = z.object({
 
 export const createUpdateAssessmentRequestSchema = z.object({
   userId: z.string(),
-  version: z.number(),
   assessment: assessmentSchema,
 });
 

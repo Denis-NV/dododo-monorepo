@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import { db, eq, and, AssessmentTable } from "@dododo/db";
+import { db, eq, and, AssessmentTable, userTable } from "@dododo/db";
 import {
   createUpdateAssessmentRequestSchema,
   TAssessmentResponse,
@@ -19,18 +19,39 @@ export const createUpdateAssessment = async (
       });
     }
 
-    const { userId, version, assessment } = parsedBody.data;
+    const { userId, assessment } = parsedBody.data;
 
-    // Check if an assessment with the provided version already exists
-    const [existingAssessment] = await db
-      .select()
-      .from(AssessmentTable)
-      .where(
+    // Get user's current assessment version and existing assessment in a single query
+    const [result] = await db
+      .select({
+        curAssessmentVersion: userTable.curAssessmentVersion,
+        existingAssessment: {
+          id: AssessmentTable.id,
+          locked: AssessmentTable.locked,
+          assessment: AssessmentTable.assessment,
+          version: AssessmentTable.version,
+        },
+      })
+      .from(userTable)
+      .leftJoin(
+        AssessmentTable,
         and(
-          eq(AssessmentTable.userId, userId),
-          eq(AssessmentTable.version, version)
+          eq(AssessmentTable.userId, userTable.id),
+          eq(AssessmentTable.version, userTable.curAssessmentVersion)
         )
-      );
+      )
+      .where(eq(userTable.id, userId));
+
+    if (!result) {
+      return res.status(404).json({
+        error: "User not found",
+      });
+    }
+
+    const version = result.curAssessmentVersion;
+    const existingAssessment = result.existingAssessment?.id
+      ? result.existingAssessment
+      : null;
 
     // If assessment exists, check if it's locked
     if (existingAssessment) {
